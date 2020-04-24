@@ -1,0 +1,102 @@
+*{
+  margin:0;
+  padding:0;
+}
+.BackgroundContainer{
+    width: 100%;
+    height: 900px;
+    box-sizing: content-box;
+    display: block;
+    position: absolute;
+    
+
+    /*background-image: url(../assets/Pattern-Randomized.svg);*/
+  }
+
+  svg{
+    width: 100%;
+    position: absolute;
+    z-index: -1;
+  }
+
+  .WelcomeButton{
+    width: 80px;
+    height: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    width: max-content;
+  }
+  .TextContainer{
+    position: relative;
+    width: 900px;
+    height: 1055px;
+    margin-top: 60px;
+    margin-left: 500px;
+    background-color: rgba(228, 228, 228, 0.76);
+    /*position: absolute;*/
+    border-radius: 3rem;
+  }
+  .IntroText{
+    font-family: 'Playfair Display', serif;
+    font-size: x-large;
+    text-align: center;
+    text-overflow: ellipsis;
+  
+  }
+  .CreateAccountLink{
+      margin-right: auto;
+      margin-left: auto;
+      width: max-content;
+      margin-top: 15px;
+  }
+  .btn {
+    margin-right: auto;
+      margin-left: auto;
+      position: relative;
+      display: inline-block;
+      width: 277px;
+      height: 50px;
+      font-size: 1em;
+      font-weight: bold;
+      line-height: 60px;
+      text-align: center;
+      text-transform: uppercase;
+      background-color: transparent;
+      cursor: pointer;
+      text-decoration:none;
+      font-family: 'Roboto', sans-serif;
+      font-weight:900;
+      font-size:17px;
+      letter-spacing: 0.045em;
+  }
+  
+  .btn svg {
+      position: absolute;
+      top: -20%;
+      left: 0;
+  }
+  
+  .btn svg rect {
+      stroke: #EC0033;
+      stroke-width: 4;
+      stroke-dasharray: 353, 0;
+      stroke-dashoffset: 0;
+      transition: all 600ms ease;
+  }
+  
+  .btn span{
+    background: rgb(255,130,130);
+    background: linear-gradient(to right,  rgba(255,130,130,1) 0%,rgba(225,120,237,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff8282', endColorstr='#e178ed',GradientType=1 );
+    
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .btn:hover svg rect {
+      stroke-width: 4;
+      stroke-dasharray: 196, 543;
+      stroke-dashoffset: 437;
+  }
+  
+  

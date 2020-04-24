@@ -1,0 +1,56 @@
+.wrap {
+    width: 100%;
+    overflow:hidden;
+    height: auto;
+}
+
+.fleft {
+    float:left; 
+    width: 50%;
+    height: auto;
+    /*background-color: #ffffff;*/
+    background-color: rgb(37, 79, 158);
+}
+#fleft:hover #Title{
+    color: white;
+}
+
+#fright:hover #Title{
+    color: white;
+}
+.fright:hover{
+    /*background: rgba(187, 35, 207, 0.87);*/
+    
+}
+.fleft:hover{
+    /*background: #0077ffde;*/
+}
+
+.fright {
+float: right;
+    height: auto;
+    width: 50%;
+    /*background-color: #ffffff;*/
+    background-color: rgb(173, 16, 16);
+}
+.Title{
+    color: black;
+    width: 350px;
+    height: fit-content;
+    /*border-style: groove;*/
+    margin-left: 305px;
+    margin-top: 30px;
+    text-align: center;
+}
+.AccountType{
+    font-size: 3.5rem;
+    font-family: 'Roboto Slab', serif;
+}
+.Imagen1{
+    margin-left: 125px;
+    height: max-content;
+}
+.Imagen2{
+    height: 999px;
+    margin-left: 185px;
+}
