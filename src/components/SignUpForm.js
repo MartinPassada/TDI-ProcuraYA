@@ -54,6 +54,7 @@ export default function SignUpForm(signUpData, password2) {
         confirmButtonText: 'ACEPTAR',
         showCancelButton: true,
         cancelButtonText: 'CANCELAR',
+        focusConfirm: false,
         preConfirm: () => {
             var password2 = document.getElementById('swal-input3').value;
             var signUpData = {

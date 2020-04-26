@@ -1,5 +1,6 @@
 import React from 'react';
 import { MDBBtn, MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBCol } from 'mdbreact';
+import SignUpForm from './SignUpForm'
 
 export default function Card(props) {
 
@@ -15,7 +16,7 @@ export default function Card(props) {
                 <MDBCardBody>
                     <MDBCardTitle>{props.cardName}</MDBCardTitle>
                     <MDBCardText>{props.cardInfo}</MDBCardText>
-                    <MDBBtn href="#">Crear Cuenta</MDBBtn>
+                    <MDBBtn onClick={SignUpForm}>Crear Cuenta</MDBBtn>
                 </MDBCardBody>
             </MDBCard>
         </MDBCol>
