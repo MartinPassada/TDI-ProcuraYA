@@ -41,7 +41,7 @@ export default function SignUpForm(signUpData, password2) {
             document.getElementById("swal-input4").value = lastData.userName;
             document.getElementById("swal-input5").value = lastData.userLastName;
         },
-        imageUrl: 'https://raw.githubusercontent.com/MartinPassada/TDI-ProcuraYA/master/LOGO1.png',
+        imageUrl: 'https://raw.githubusercontent.com/MartinPassada/TDI-ProcuraYA/master/src/assets/LOGO1.png',
         imageWidth: 250,
         imageHeight: 250,
         title: <p>Registrarse</p>,

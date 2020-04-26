@@ -31,7 +31,7 @@ export default function LoginForm(loginData) {
             document.getElementById("swal-input1").value = LastEmail;
             document.getElementById("swal-input2").value = LastPassword;
         },
-        imageUrl: 'https://raw.githubusercontent.com/MartinPassada/TDI-ProcuraYA/master/LOGO1.png',
+        imageUrl: 'https://raw.githubusercontent.com/MartinPassada/TDI-ProcuraYA/master/src/assets/LOGO1.png',
         imageWidth: 250,
         imageHeight: 250,
         title: 'Iniciar Sesión',
@@ -48,8 +48,9 @@ export default function LoginForm(loginData) {
                 password: document.getElementById("swal-input2").value
 
             };
-            var passwordPattern = /^([a-zA-Z0-9_.-@*]{5, 15})$/gm;
-            var mailPattern = /^\w+([\.-]?\w{1, 10}){0, 3}@\w+\.{1, 1}\w{3, 3}$/ig;
+            var passwordPattern = /^([a-zA-Z0-9_.-@*]{5,15})$/gm;
+            var mailPattern = /^\w+([\.-]?\w{1,10}){0,3}@\w+\.{1,1}\w{3,3}$/ig;
+
 
             if (loginData.password == '') {
                 MySwal.fire({
