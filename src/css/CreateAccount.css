@@ -2,6 +2,7 @@
     width: 100%;
     overflow:hidden;
     height: auto;
+    margin-bottom: 20px;
 }
 
 .fleft {
@@ -9,14 +10,21 @@
     width: 50%;
     height: auto;
     /*background-color: #ffffff;*/
-    background-color: rgb(37, 79, 158);
+    background-color: white
 }
+.fright {
+    float: right;
+        height: auto;
+        width: 50%;
+        /*background-color: #ffffff;*/
+        background-color: white
+    }
 #fleft:hover #Title{
-    color: white;
+    /*color: white;*/
 }
 
 #fright:hover #Title{
-    color: white;
+    /*color: white;*/
 }
 .fright:hover{
     /*background: rgba(187, 35, 207, 0.87);*/
@@ -24,14 +32,6 @@
 }
 .fleft:hover{
     /*background: #0077ffde;*/
-}
-
-.fright {
-float: right;
-    height: auto;
-    width: 50%;
-    /*background-color: #ffffff;*/
-    background-color: rgb(173, 16, 16);
 }
 .Title{
     color: black;
@@ -44,7 +44,7 @@ float: right;
 }
 .AccountType{
     font-size: 3.5rem;
-    font-family: 'Roboto Slab', serif;
+    font-family: 'Roboto', sans-serif;
 }
 .Imagen1{
     margin-left: 125px;
@@ -53,4 +53,14 @@ float: right;
 .Imagen2{
     height: 999px;
     margin-left: 185px;
+}
+.CardContainer{
+    margin-top: 50px;
+    /*border-style: groove;*/
+    justify-content: center;
+    display: flex;
+    width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+    align-self: center;
 }

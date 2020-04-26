@@ -22,7 +22,7 @@ function App() {
     <Router>
       <Switch>
         <Route path='/'>
-          <CreateAccount />
+          <LandingPage />
         </Route>
         <Route path='/Home'>
           <Home />

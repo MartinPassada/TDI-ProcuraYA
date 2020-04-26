@@ -2,8 +2,8 @@ import React from 'react';
 import WelcomeButton from '../components/WelcomeButton'
 import { Link } from 'react-router-dom';
 import '../css/LandingPage.css'
-import FooterPage from '../components/FooterPage';
-
+import SignUpForm from '../components/SignUpForm'
+import CreateAccount from './CreateAccount';
 
 export default function LandingPage() {
     return (
@@ -29,7 +29,7 @@ export default function LandingPage() {
                 <span>Que lo disfrutes!!!</span>
                     </p>
                     <WelcomeButton />
-                    <h4 class='CreateAccountLink'>No tienes una cuenta ? <Link to='/CreateAccount'>Crea una aquí</Link></h4>
+                    <h4 class='CreateAccountLink'>No tienes una cuenta ? <span onClick={SignUpForm}><Link to="/CreateAccount">Crea una aquí</Link></span></h4>
                 </div>
             </div>
         </>

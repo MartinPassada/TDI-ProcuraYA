@@ -6,7 +6,7 @@ import mongoLogo from '../assets/MongoLogo.png'
 import expressLogo from '../assets/ExpressLogo.png'
 import '../css/Footer.css'
 
-const FooterPage = () => {
+const Footer = () => {
     return (
         <MDBFooter color="cyan" className="Footer">
             <MDBContainer fluid className="text-center text-md-left">
@@ -39,10 +39,10 @@ const FooterPage = () => {
                                 <a href="#!">Politica de Privacidad</a>
                             </li>
                             <li className="list-unstyled">
-                                <a href="#!">Aguante Firefox !</a>
+                                <a href="#!">Link 3</a>
                             </li>
                             <li className="list-unstyled">
-                                <a href="#!">Me voy a recibir en cuarentena</a>
+                                <a href="#!">Link 4</a>
                             </li>
                         </ul>
                     </MDBCol>
@@ -57,4 +57,4 @@ const FooterPage = () => {
     );
 }
 
-export default FooterPage;
+export default Footer;

@@ -1,33 +1,12 @@
 import React, { useState } from 'react';
-import Swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
+import LoginForm from '../components/LoginForm'
 
 
 export default function WelcomeButton() {
-
-    const MySwal = withReactContent(Swal);
-    const [loginFormState, setLoginFormState] = useState(false);
-    const showLoginForm = () => {
-        MySwal.fire({
-            title: <p>Login</p>,
-            input: 'text',
-            inputPlaceholder: 'Ingresa tu email',
-            confirmButtonText: 'Listo',
-
-            onClose: () => {
-                MySwal.fire({
-                    title: <p>Ingresa tu password</p>,
-                    input: 'password',
-                    inputPlaceholder: 'Ingresa tu password',
-                    confirmButtonText: 'Listo',
-                })
-            }
-        })
-    }
     return (
 
         <div class='WelcomeButton'>
-            <a class="btn" onClick={showLoginForm}>
+            <a class="btn" onClick={LoginForm}>
                 <svg width="277" height="62">
                     <defs>
                         <linearGradient id="grad1">
