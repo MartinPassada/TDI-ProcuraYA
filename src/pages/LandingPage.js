@@ -29,7 +29,7 @@ export default function LandingPage() {
                 <span>Que lo disfrutes!!!</span>
                     </p>
                     <WelcomeButton />
-                    <h4 class='CreateAccountLink'>No tienes una cuenta ? <span onClick={SignUpForm}><Link to="/CreateAccount">Crea una aquí</Link></span></h4>
+                    <h4 class='CreateAccountLink'>No tienes una cuenta ? <Link to="/CreateAccount"><span>Crea una aquí</span></Link></h4>
                 </div>
             </div>
         </>

@@ -21,13 +21,13 @@ function App() {
 
     <Router>
       <Switch>
-        <Route path='/'>
+        <Route exact path='/'>
           <LandingPage />
         </Route>
         <Route path='/Home'>
           <Home />
         </Route>
-        <Route path='/CreateAccount'>
+        <Route exact path='/CreateAccount'>
           <CreateAccount />
         </Route>
       </Switch >
