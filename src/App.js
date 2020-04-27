@@ -1,42 +1,34 @@
-import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import React from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 //pages
-import Home from './pages/Home';
-import CreateAccount from './pages/CreateAccount';
-import LandingPage from './pages/LandingPage'
+import Home from "./pages/Home";
+import CreateAccount from "./pages/CreateAccount";
+import LandingPage from "./pages/LandingPage";
 
 //components
-import LoginForm from './components/LoginForm'
-import SignUpForm from './components/SignUpForm'
+import LoginForm from "./components/LoginForm";
+import SignUpForm from "./components/SignUpForm";
 
 //css
-import './css/App.css';
+import "./css/App.css";
 
 function App() {
   return (
-
-
-
-
     <Router>
       <Switch>
-        <Route exact path='/'>
+        <Route path="/">
           <LandingPage />
         </Route>
         <Route exact path='/Home'>
           <Home />
         </Route>
-        <Route exact path='/CreateAccount'>
+        <Route path="/CreateAccount">
           <CreateAccount />
         </Route>
-      </Switch >
-    </Router >
-
-
-  )
-
+      </Switch>
+    </Router>
+  );
 }
-
 
 export default App;
