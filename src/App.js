@@ -17,13 +17,13 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route path="/">
+        <Route exact path="/">
           <LandingPage />
         </Route>
         <Route exact path='/Home'>
           <Home />
         </Route>
-        <Route path="/CreateAccount">
+        <Route exact path="/CreateAccount">
           <CreateAccount />
         </Route>
       </Switch>

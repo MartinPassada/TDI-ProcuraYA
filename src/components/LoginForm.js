@@ -1,8 +1,5 @@
-import React, { Component } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import ProcuraYaLogo from '../assets/LOGO1.png'
-import { render } from '@testing-library/react';
 const MySwal = withReactContent(Swal);
 const Toast = MySwal.mixin({
     toast: true,
@@ -13,6 +10,9 @@ const Toast = MySwal.mixin({
     onOpen: (toast) => {
         toast.addEventListener('mouseenter', Swal.stopTimer)
         toast.addEventListener('mouseleave', Swal.resumeTimer)
+    },
+    onAfterClose: () => {
+        window.location.replace('/Home');
     }
 })
 

@@ -11,6 +11,9 @@ const Toast = MySwal.mixin({
     onOpen: (toast) => {
         toast.addEventListener('mouseenter', Swal.stopTimer)
         toast.addEventListener('mouseleave', Swal.resumeTimer)
+    },
+    onAfterClose: () => {
+        window.location.replace('/Home');
     }
 
 })
@@ -170,7 +173,6 @@ export default function SignUpForm(signUpData, password2) {
                     title: '"Registro Exitoso" (aún no hay backend)'
                 })
             }
-
         }
     })
 
