@@ -24,7 +24,7 @@ function App() {
         <Route exact path='/'>
           <LandingPage />
         </Route>
-        <Route path='/Home'>
+        <Route exact path='/Home'>
           <Home />
         </Route>
         <Route exact path='/CreateAccount'>

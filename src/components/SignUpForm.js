@@ -6,14 +6,14 @@ const Toast = MySwal.mixin({
     toast: true,
     position: 'top-end',
     showConfirmButton: false,
-    timer: 4000,
+    timer: 3500,
     timerProgressBar: true,
     onOpen: (toast) => {
         toast.addEventListener('mouseenter', Swal.stopTimer)
         toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
-})
 
+})
 
 export default function SignUpForm(signUpData, password2) {
     if (signUpData.email == undefined || signUpData.password == undefined || signUpData.userName == undefined || signUpData.userLastName == undefined || password2 == undefined) {
@@ -167,9 +167,10 @@ export default function SignUpForm(signUpData, password2) {
             } else {
                 Toast.fire({
                     icon: 'success',
-                    title: 'Registro Exitoso (aún no hay backend)'
+                    title: '"Registro Exitoso" (aún no hay backend)'
                 })
             }
+
         }
     })
 

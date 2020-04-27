@@ -2,8 +2,6 @@ import React from 'react';
 import WelcomeButton from '../components/WelcomeButton'
 import { Link } from 'react-router-dom';
 import '../css/LandingPage.css'
-import SignUpForm from '../components/SignUpForm'
-import CreateAccount from './CreateAccount';
 
 export default function LandingPage() {
     return (
