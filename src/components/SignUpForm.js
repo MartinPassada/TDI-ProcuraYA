@@ -55,8 +55,10 @@ export default function SignUpForm(signUpData, password2) {
             '<input id="swal-input4" class="swal2-input" type="text" placeholder="Nombre">' +
             '<input id="swal-input5" class="swal2-input" type="text" placeholder="Apellido">',
         confirmButtonText: 'ACEPTAR',
+        confirmButtonColor: '#ea5f32',
         showCancelButton: true,
         cancelButtonText: 'CANCELAR',
+        cancelButtonColor: '#999999',
         focusConfirm: false,
         preConfirm: () => {
             var password2 = document.getElementById('swal-input3').value;
@@ -74,6 +76,7 @@ export default function SignUpForm(signUpData, password2) {
                     icon: 'error',
                     title: 'Algo salió mal :(',
                     text: 'Debes introducir una password',
+                    confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         SignUpForm(signUpData, password2);
                     }
@@ -84,6 +87,7 @@ export default function SignUpForm(signUpData, password2) {
                     icon: 'error',
                     title: 'Algo salió mal :(',
                     text: 'Debes confirmar tu password',
+                    confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         SignUpForm(signUpData, password2);
                     }
@@ -94,6 +98,7 @@ export default function SignUpForm(signUpData, password2) {
                     icon: 'error',
                     title: 'Algo salió mal :(',
                     text: 'Debes introducir un e-mail',
+                    confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         SignUpForm(signUpData, password2);
                     }
@@ -104,6 +109,7 @@ export default function SignUpForm(signUpData, password2) {
                     icon: 'error',
                     title: 'Algo salió mal :(',
                     text: 'Debes introducir tu nombre',
+                    confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         SignUpForm(signUpData, password2);
                     }
@@ -114,6 +120,7 @@ export default function SignUpForm(signUpData, password2) {
                     icon: 'error',
                     title: 'Algo salió mal :(',
                     text: 'Debes introducir tu apellido',
+                    confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         SignUpForm(signUpData, password2);
                     }
@@ -124,6 +131,7 @@ export default function SignUpForm(signUpData, password2) {
                     icon: 'error',
                     title: 'Algo salió mal :(',
                     text: 'E-mail invalido',
+                    confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         SignUpForm(signUpData, password2);
                     }
@@ -134,6 +142,7 @@ export default function SignUpForm(signUpData, password2) {
                     icon: 'error',
                     title: 'Algo salió mal :(',
                     text: 'La password debe tener entre 5 y 15 caracteres y no debe contener caracteres invalidos',
+                    confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         SignUpForm(signUpData, password2);
                     }
@@ -144,6 +153,7 @@ export default function SignUpForm(signUpData, password2) {
                     icon: 'error',
                     title: 'Algo salió mal :(',
                     text: 'La password debe tener entre 5 y 15 caracteres y no debe contener caracteres invalidos',
+                    confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         SignUpForm(signUpData, password2);
                     }
@@ -153,7 +163,8 @@ export default function SignUpForm(signUpData, password2) {
                 MySwal.fire({
                     icon: 'error',
                     title: 'Algo salió mal :(',
-                    text: 'Ambas passwords deben que coincidir',
+                    text: 'Ambas passwords deben coincidir',
+                    confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         SignUpForm(signUpData, password2);
                     }
@@ -163,6 +174,7 @@ export default function SignUpForm(signUpData, password2) {
                     icon: 'question',
                     title: 'Es en serio?',
                     text: 'Tu password no puede ser igual que tu email, piensa en tu seguridad!!',
+                    confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         SignUpForm(signUpData, password2);
                     }

@@ -39,8 +39,10 @@ export default function LoginForm(loginData) {
             '<input id="swal-input1" class="swal2-input" type="email" placeholder="Email">' +
             '<input id="swal-input2" class="swal2-input" type="password" placeholder="Password">',
         confirmButtonText: 'ACEPTAR',
+        confirmButtonColor: '#ea5f32',
         showCancelButton: true,
         cancelButtonText: 'CANCELAR',
+        cancelButtonColor: '#999999',
         focusConfirm: false,
         preConfirm: () => {
             var loginData = {
@@ -57,6 +59,7 @@ export default function LoginForm(loginData) {
                     icon: 'error',
                     title: 'Algo salió mal :(',
                     text: 'Debes introducir una password',
+                    confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         LoginForm(loginData);
                     }
@@ -67,6 +70,7 @@ export default function LoginForm(loginData) {
                     icon: 'error',
                     title: 'Algo salió mal :(',
                     text: 'Debes introducir un e-mail',
+                    confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         LoginForm(loginData);
                     }
@@ -77,6 +81,7 @@ export default function LoginForm(loginData) {
                     icon: 'error',
                     title: 'Algo salió mal :(',
                     text: 'E-mail invalido',
+                    confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         LoginForm(loginData);
                     }
@@ -88,6 +93,7 @@ export default function LoginForm(loginData) {
                     icon: 'error',
                     title: 'Algo salió mal :(',
                     text: 'La password debe tener entre 5 y 15 caracteres y no debe contener caracteres invalidos',
+                    confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         LoginForm(loginData);
                     }
@@ -98,6 +104,7 @@ export default function LoginForm(loginData) {
                     icon: 'question',
                     title: 'Es en serio?',
                     text: 'Tu password no puede ser igual que tu email, piensa en tu seguridad!',
+                    confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         LoginForm(loginData);
                     }

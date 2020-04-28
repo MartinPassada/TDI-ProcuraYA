@@ -16,7 +16,7 @@ export default function Card(props) {
                 <MDBCardBody>
                     <MDBCardTitle>{props.cardName}</MDBCardTitle>
                     <MDBCardText>{props.cardInfo}</MDBCardText>
-                    <MDBBtn onClick={SignUpForm}>Crear Cuenta</MDBBtn>
+                    <MDBBtn gradient="peach" onClick={SignUpForm}>Crear Cuenta</MDBBtn>
                 </MDBCardBody>
             </MDBCard>
         </MDBCol>

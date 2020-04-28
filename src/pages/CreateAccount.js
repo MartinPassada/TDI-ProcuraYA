@@ -24,7 +24,7 @@ export default function CreateAccount() {
                     </div>
                     <div class='CardContainer'>
                         <Card cardName='Crear cuenta Procurador'
-                            cardInfo='Encargado de acudir a los juzgados para efectuar tramites administrativos y diligencias'
+                            cardInfo='Encargado de acudir a los juzgados para efectuar tramites administrativos, diligencias, envio y retiro de expedientes'
                             cardImage={lawyer1Img} />
                     </div>
                 </div>
