@@ -182,7 +182,7 @@ export default function SignUpForm(signUpData, password2) {
             } else {
                 Toast.fire({
                     icon: 'success',
-                    title: '"Registro Exitoso" (aún no hay backend)'
+                    title: '"Registro Exitoso" (aún no hay backend) Seras direccionado al home...'
                 })
             }
         }

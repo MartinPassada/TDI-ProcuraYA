@@ -1,0 +1,93 @@
+.Hwrap {
+    width: 100%;
+    overflow:hidden;
+    height: 100%;
+    margin-bottom: 0px;
+}
+.Hfleft { 
+    float: left;
+    width: 32%;
+    height: 800px;
+    background-color: whitesmoke;
+    overflow-y: scroll;
+    
+}
+
+.Hfright {
+    float: right;
+    height: 800px;
+    width: 68%;
+    max-width: 60%;
+    background-color: white
+}
+
+/**/
+.ListItemWrapDiv{
+    overflow: hidden;
+    height: auto;
+    margin-bottom: 0px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.RinnerDiv {
+    float: right;
+    height: auto;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    justify-items: center;
+    
+}
+
+.FilesListButton{
+    max-width: 45px;
+    max-height: 45px;
+    width: auto;
+    height: auto;
+    cursor: pointer;
+    display: none;
+   
+    
+}
+
+.list-group-item{
+    
+    width: 60%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    
+}
+/*control panel title*/
+.ControlPanelTitle{
+    display: flex;
+    align-self: flex-start;
+    justify-content: left;
+}
+.refreshButton{
+    max-width: 45px;
+    max-height: 45px;
+    width: auto;
+    height: auto;
+    cursor: pointer;
+    float: inline-end;
+    margin-top: 5px;
+}
+.TitleDiv{
+    display: block ruby;
+    margin-bottom: 5px;
+}
+.titleIcon{
+    max-width: 40px;
+    max-height: 40px;
+    width: auto;
+    height: auto;
+    margin-left: 45px;
+    margin-bottom: 5px;
+}
+

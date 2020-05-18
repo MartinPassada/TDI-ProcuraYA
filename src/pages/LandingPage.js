@@ -1,6 +1,7 @@
 import React from 'react';
 import WelcomeButton from '../components/WelcomeButton'
 import { Link } from 'react-router-dom';
+import IntroText from '../components/IntroText'
 import '../css/LandingPage.css'
 
 export default function LandingPage() {
@@ -30,6 +31,7 @@ export default function LandingPage() {
                     <h4 class='CreateAccountLink'>No tienes una cuenta ? <Link to="/CreateAccount"><span>Crea una aquí</span></Link></h4>
                 </div>
             </div>
+            {/*<IntroText />*/}
         </>
     );
 }

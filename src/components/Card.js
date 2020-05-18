@@ -1,6 +1,7 @@
 import React from 'react';
 import { MDBBtn, MDBCard, MDBCardBody, MDBCardImage, MDBCardTitle, MDBCardText, MDBCol } from 'mdbreact';
 import SignUpForm from './SignUpForm'
+import 'mdbreact/dist/css/mdb.css';
 
 export default function Card(props) {
 
