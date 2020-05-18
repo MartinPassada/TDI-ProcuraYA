@@ -1,0 +1,51 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.76);
+    z-index: 2;
+}
+
+.background-image-login {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background: src="img/nouser.png";
+    background-size: cover;
+}
+
+.login-h1 {
+    color: #fff;
+    z-index: 2;
+    font-weight: 300;
+    font-size: 1.6em;
+    margin: 0;
+    font-size: 1.35em;
+    padding-bottom: 1em;
+    margin-bottom: 0.8em;
+    margin-top: 1.1em;
+    border-bottom: 1px solid #ddd;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 340px;
+    background-color: #fff;
+    padding: 1em;
+    margin-top: 1em;
+    position: relative;
+    padding-top: 1.em;
+    z-index: 3;
+}
+
+.login>img {
+    width: 20%;
+    display: table;
+    margin: 0.6em auto 1.4em;
+}
+

@@ -12,7 +12,7 @@ const Toast = MySwal.mixin({
         toast.addEventListener('mouseleave', Swal.resumeTimer)
     },
     onAfterClose: () => {
-
+        window.location.replace('/Home');
     }
 })
 
