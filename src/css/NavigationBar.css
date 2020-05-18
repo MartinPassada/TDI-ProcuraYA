@@ -1,3 +1,43 @@
 #Navbar{
     background-color: #ea5f32;
+    color: white;
 }
+#NavBarsearchButton{
+    background-color: whitesmoke !important;
+    border-color: #ea5f32;
+    color: black;
+    margin-left: 10px;
+    width: 200px;
+}
+#NavBarsearchButton :active{
+   border-color: #ea5f32;
+}
+#NavBarSearchForm{
+    /*margin-right: 550px;*/
+    
+}
+#NavBarUserImg{
+    border-radius: 2.5rem;
+}
+#basic-nav-dropdown{
+    color: black;
+}
+#NavBarLink1{
+    color: black
+}
+#NavBarLink2{
+    color: black
+}
+#NavBarDropdown1:active{
+    background-color: #ea5f32;
+    color: white;
+}
+#NavBarDropdown2:active{
+    background-color: #ea5f32;
+    color: white;
+}
+#NavBarDropdown3:active{
+    background-color: #ea5f32;
+    color: white;
+}
+

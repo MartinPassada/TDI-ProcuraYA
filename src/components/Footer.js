@@ -4,6 +4,7 @@ import reactLogo from '../assets/logo192.png'
 import nodeLogo from '../assets/NodeLogo.png'
 import mongoLogo from '../assets/MongoLogo.png'
 import expressLogo from '../assets/ExpressLogo.png'
+import 'mdbreact/dist/css/mdb.css';
 import '../css/Footer.css'
 
 const Footer = () => {
@@ -15,16 +16,16 @@ const Footer = () => {
                         <h3 className="title">SPONSORS</h3>
                         <div class="container">
                             <div class='LeftColumnDiv'>
-                                <img class='Logo' src={mongoLogo}></img>
+                                <img class='Logo' src={mongoLogo} atl=''></img>
                             </div>
                             <div class='CenterColumnDiv'>
-                                <img class='Logo' src={expressLogo}></img>
+                                <img class='Logo' src={expressLogo} atl=''></img>
                             </div>
                             <div class='CenterColumnDiv'>
-                                <img class='Logo' src={reactLogo}></img>
+                                <img class='Logo' src={reactLogo} atl=''></img>
                             </div>
                             <div class='RightColumnDiv'>
-                                <img class='Logo' src={nodeLogo}></img>
+                                <img class='Logo' src={nodeLogo} atl=''></img>
                             </div>
                         </div>
 
