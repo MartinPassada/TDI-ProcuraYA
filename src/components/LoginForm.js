@@ -5,14 +5,14 @@ const Toast = MySwal.mixin({
     toast: true,
     position: 'top-end',
     showConfirmButton: false,
-    timer: 4000,
+    timer: 3500,
     timerProgressBar: true,
     onOpen: (toast) => {
         toast.addEventListener('mouseenter', Swal.stopTimer)
         toast.addEventListener('mouseleave', Swal.resumeTimer)
     },
     onAfterClose: () => {
-
+        window.location.replace('/Home')
     }
 })
 
@@ -111,9 +111,11 @@ export default function LoginForm(loginData) {
                 })
             }
             else {
+
+                //ajax
                 Toast.fire({
                     icon: 'success',
-                    title: 'Logueo Exitoso (aún no hay backend)'
+                    title: 'Logueo Exitoso, redireccionando al Home...'
                 })
             }
         }

@@ -6,12 +6,6 @@ import Home from "./pages/Home";
 import CreateAccount from "./pages/CreateAccount";
 import LandingPage from "./pages/LandingPage";
 
-//components
-import LoginForm from "./components/LoginForm";
-import SignUpForm from "./components/SignUpForm";
-
-//css
-import "./css/App.css";
 
 function App() {
   return (

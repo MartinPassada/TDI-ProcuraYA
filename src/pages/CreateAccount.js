@@ -25,7 +25,8 @@ export default function CreateAccount() {
                     <div class='CardContainer'>
                         <Card cardName='Crear cuenta Procurador'
                             cardInfo='Encargado de acudir a los juzgados para efectuar tramites administrativos, diligencias, envio y retiro de expedientes'
-                            cardImage={lawyer1Img} />
+                            cardImage={lawyer1Img}
+                            type='attorney' />
                     </div>
                 </div>
                 <div class="fright" id='fright'>
@@ -35,7 +36,8 @@ export default function CreateAccount() {
                     <div class='CardContainer'>
                         <Card cardName='Crear cuenta Mandatario'
                             cardInfo='Encarga tareas a sus procuradores, esta es una cuenta recomendada para abogados, peritos, contadores etc'
-                            cardImage={hammerImg} />
+                            cardImage={hammerImg}
+                            type='representative' />
                     </div>
                 </div>
             </div>

@@ -13,7 +13,7 @@
             "type": "firefox",
             "request": "launch",
             "name": "Launch Chrome against localhost",
-            "url": "http://localhost:9000",
+            "url": "http://localhost:8001",
             "webRoot": "${workspaceFolder}"
         }
     ]

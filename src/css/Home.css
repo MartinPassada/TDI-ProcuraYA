@@ -51,15 +51,12 @@
     cursor: pointer;
     display: none;
    
-    
 }
 
 .list-group-item{
     
     width: 60%;
     height: auto;
-    display: flex;
-    justify-content: center;
     cursor: pointer;
     
 }

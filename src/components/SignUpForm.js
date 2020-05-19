@@ -1,7 +1,8 @@
 import React from 'react';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-const MySwal = withReactContent(Swal)
+import doSignUp from '../ajax/Ajax'
+const MySwal = withReactContent(Swal);
 const Toast = MySwal.mixin({
     toast: true,
     position: 'top-end',
@@ -12,13 +13,13 @@ const Toast = MySwal.mixin({
         toast.addEventListener('mouseenter', Swal.stopTimer)
         toast.addEventListener('mouseleave', Swal.resumeTimer)
     },
-    onAfterClose: () => {
+    /*onAfterClose: () => {
         window.location.replace('/Home');
-    }
+    }*/
 
 })
 
-export default function SignUpForm(signUpData, password2) {
+export default function SignUpForm(type, signUpData, password2) {
     if (signUpData.email == undefined || signUpData.password == undefined || signUpData.userName == undefined || signUpData.userLastName == undefined || password2 == undefined) {
         var lastData = {
             email: '',
@@ -55,19 +56,46 @@ export default function SignUpForm(signUpData, password2) {
             '<input id="swal-input4" class="swal2-input" type="text" placeholder="Nombre">' +
             '<input id="swal-input5" class="swal2-input" type="text" placeholder="Apellido">',
         confirmButtonText: 'ACEPTAR',
+        showLoaderOnConfirm: true,
         confirmButtonColor: '#ea5f32',
         showCancelButton: true,
         cancelButtonText: 'CANCELAR',
         cancelButtonColor: '#999999',
         focusConfirm: false,
-        preConfirm: () => {
+        preConfirm: (type) => {
             var password2 = document.getElementById('swal-input3').value;
-            var signUpData = {
-                email: document.getElementById("swal-input1").value,
-                password: document.getElementById("swal-input2").value,
-                userName: document.getElementById("swal-input4").value,
-                userLastName: document.getElementById("swal-input5").value
-            };
+            if (type === 'representative') {
+                var signUpData = {
+                    email: document.getElementById("swal-input1").value,
+                    password: document.getElementById("swal-input2").value,
+                    userName: document.getElementById("swal-input4").value,
+                    userLastName: document.getElementById("swal-input5").value,
+                    attorneys: [],
+                    representatives: [],
+                    files: [],
+                    notes: [],
+                    inbox: [],
+                };
+            } else if (type === 'attorney') {
+                var signUpData = {
+                    email: document.getElementById("swal-input1").value,
+                    password: document.getElementById("swal-input2").value,
+                    userName: document.getElementById("swal-input4").value,
+                    userLastName: document.getElementById("swal-input5").value,
+                    moviesLiked: [],
+                    commentsLiked: [],
+                    commentsUnliked: []
+                };
+
+            } else {
+                MySwal.fire({
+                    icon: 'error',
+                    title: 'Algo salió mal :(',
+                    text: 'Hubo un problema con el formulario, intenta de nuevo',
+                    confirmButtonColor: '#ea5f32',
+                })
+            }
+
             var passwordPattern = /^([a-zA-Z0-9_.-@*]{5,15})$/gm;
             var mailPattern = /^\w+([\.-]?\w{1,10}){0,3}@\w+\.{1,1}\w{3,3}$/ig;
 
@@ -78,7 +106,7 @@ export default function SignUpForm(signUpData, password2) {
                     text: 'Debes introducir una password',
                     confirmButtonColor: '#ea5f32',
                     onClose: () => {
-                        SignUpForm(signUpData, password2);
+                        SignUpForm(type, signUpData, password2);
                     }
                 })
 
@@ -89,7 +117,7 @@ export default function SignUpForm(signUpData, password2) {
                     text: 'Debes confirmar tu password',
                     confirmButtonColor: '#ea5f32',
                     onClose: () => {
-                        SignUpForm(signUpData, password2);
+                        SignUpForm(type, signUpData, password2);
                     }
                 })
 
@@ -100,7 +128,7 @@ export default function SignUpForm(signUpData, password2) {
                     text: 'Debes introducir un e-mail',
                     confirmButtonColor: '#ea5f32',
                     onClose: () => {
-                        SignUpForm(signUpData, password2);
+                        SignUpForm(type, signUpData, password2);
                     }
                 })
 
@@ -111,7 +139,7 @@ export default function SignUpForm(signUpData, password2) {
                     text: 'Debes introducir tu nombre',
                     confirmButtonColor: '#ea5f32',
                     onClose: () => {
-                        SignUpForm(signUpData, password2);
+                        SignUpForm(type, signUpData, password2);
                     }
                 })
 
@@ -122,7 +150,7 @@ export default function SignUpForm(signUpData, password2) {
                     text: 'Debes introducir tu apellido',
                     confirmButtonColor: '#ea5f32',
                     onClose: () => {
-                        SignUpForm(signUpData, password2);
+                        SignUpForm(type, signUpData, password2);
                     }
                 })
 
@@ -133,7 +161,7 @@ export default function SignUpForm(signUpData, password2) {
                     text: 'E-mail invalido',
                     confirmButtonColor: '#ea5f32',
                     onClose: () => {
-                        SignUpForm(signUpData, password2);
+                        SignUpForm(type, signUpData, password2);
                     }
                 })
 
@@ -144,7 +172,7 @@ export default function SignUpForm(signUpData, password2) {
                     text: 'La password debe tener entre 5 y 15 caracteres y no debe contener caracteres invalidos',
                     confirmButtonColor: '#ea5f32',
                     onClose: () => {
-                        SignUpForm(signUpData, password2);
+                        SignUpForm(type, signUpData, password2);
                     }
                 })
 
@@ -155,7 +183,7 @@ export default function SignUpForm(signUpData, password2) {
                     text: 'La password debe tener entre 5 y 15 caracteres y no debe contener caracteres invalidos',
                     confirmButtonColor: '#ea5f32',
                     onClose: () => {
-                        SignUpForm(signUpData, password2);
+                        SignUpForm(type, signUpData, password2);
                     }
                 })
 
@@ -166,7 +194,7 @@ export default function SignUpForm(signUpData, password2) {
                     text: 'Ambas passwords deben coincidir',
                     confirmButtonColor: '#ea5f32',
                     onClose: () => {
-                        SignUpForm(signUpData, password2);
+                        SignUpForm(type, signUpData, password2);
                     }
                 })
             } else if (signUpData.password === signUpData.email) {
@@ -176,17 +204,33 @@ export default function SignUpForm(signUpData, password2) {
                     text: 'Tu password no puede ser igual que tu email, piensa en tu seguridad!!',
                     confirmButtonColor: '#ea5f32',
                     onClose: () => {
-                        SignUpForm(signUpData, password2);
+                        SignUpForm(type, signUpData, password2);
                     }
                 })
             } else {
-                Toast.fire({
-                    icon: 'success',
-                    title: '"Registro Exitoso" (aún no hay backend) Seras direccionado al home...'
-                })
+
+                return fetch(`/signUp${signUpData}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(response.statusText)
+                        }
+                        return response.json()
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(
+                            `Request failed: ${error}`
+                        )
+                    })
             }
+            /*doSignUp(signUpData, Toast);*/
+
+            /*Toast.fire({
+                icon: 'success',
+                title: 'Registro Exitoso redireccionando al Home...'
+            })*/
         }
-    })
+    }, type)
+
 
 }
 

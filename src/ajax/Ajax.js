@@ -1,24 +1,39 @@
-function getLatestFiles(success, failure) {
+/*
 
-    req = new XMLHttpRequest();
+export default function doSignUp(userData, Toast) {
+
+    var req = new XMLHttpRequest();
 
     req.onload = function () {
 
-        let respObj = JSON.parse(this.responseText);
+        Toast.fire()
 
-        if (this.status == 200) {
+        if (req.status == 200) {
 
-            success(respObj);
+            Toast.fire({
+                icon: 'success',
+                title: 'Registro Exitoso redireccionando al Home...'
+            })
+
+            window.location.replace(req.responseURL);
+
+        } else if (req.status == 403) {
+            //Mail ya existe
+
+
+        } else if (req.status == 999) {
+            // Nombre Usuario ya esta en uso
 
         } else {
-
-            failure(respObj.error);
+            //otro error
         }
-
-
     }
 
-    req.open("GET", "/latestfiles");
-    req.send();
-
+    req.open("POST", "/signUp");
+    req.setRequestHeader('Content-type', 'application/json');
+    req.send(JSON.stringify(userData));
 }
+*/
+
+
+

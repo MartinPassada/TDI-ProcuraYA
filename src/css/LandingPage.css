@@ -8,8 +8,6 @@
     box-sizing: content-box;
     display: block;
     position: absolute;
-    
-
     /*background-image: url(../assets/Pattern-Randomized.svg);*/
   }
 
@@ -19,17 +17,10 @@
     z-index: -1;
   }
 
-  .WelcomeButton{
-    width: 80px;
-    height: 40px;
-    margin-left: auto;
-    margin-right: auto;
-    width: max-content;
-  }
   .TextContainer{
     position: relative;
     width: 900px;
-    height: 1055px;
+    height: auto;
     margin-top: 60px;
     margin-left: 500px;
     background-color: rgba(228, 228, 228, 0.76);
@@ -55,10 +46,10 @@
       position: relative;
       display: inline-block;
       width: 277px;
-      height: 50px;
+      height: auto;
       font-size: 1em;
       font-weight: bold;
-      line-height: 60px;
+      line-height: inherit;
       text-align: center;
       text-transform: uppercase;
       background-color: transparent;
@@ -97,6 +88,13 @@
       stroke-width: 4;
       stroke-dasharray: 196, 543;
       stroke-dashoffset: 437;
+  }
+
+  .buttonsDiv{
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    height: 150px;
   }
   
   

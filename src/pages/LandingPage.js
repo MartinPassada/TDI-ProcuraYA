@@ -1,7 +1,8 @@
 import React from 'react';
-import WelcomeButton from '../components/WelcomeButton'
 import { Link } from 'react-router-dom';
-import IntroText from '../components/IntroText'
+//import IntroText from '../components/IntroText'
+import Button from 'react-bootstrap/Button'
+import LoginForm from '../components/LoginForm';
 import '../css/LandingPage.css'
 
 export default function LandingPage() {
@@ -25,10 +26,12 @@ export default function LandingPage() {
                 Por ejemplo, entre otras funciones podrás hacer listas de los expedienes pendientes y tareas que tienes en cada uno de los organismos….o también tendrás la posibilidad de enviar y recibir las tareas asignadas a tu empleador….
                 <br></br>
                 En el ambiente integrado, optimizado y de alta capacidad tecnológica en que vivimos, este software de gestión se transformará en una de tus herramientas de trabajo mas importantes, porque podrás gestionar toda tu rutina de manera organizada, visible, y sin usar papeles ni carpetas adicionales.
-                <span>Que lo disfrutes!!!</span>
-                    </p>
-                    <WelcomeButton />
-                    <h4 class='CreateAccountLink'>No tienes una cuenta ? <Link to="/CreateAccount"><span>Crea una aquí</span></Link></h4>
+                Que lo disfrutes!!!
+                </p>
+                    <div class='buttonsDiv'>
+                        <Button size="lg" variant="outline-warning" onClick={LoginForm}>Ingresar a la Web</Button>
+                        <h4 class='CreateAccountLink'>No tienes una cuenta ? <Link to="/CreateAccount"><span>Crea una aquí</span></Link></h4>
+                    </div>
                 </div>
             </div>
             {/*<IntroText />*/}
