@@ -90,15 +90,18 @@ app.post('/signUp', (req, res) => {
 
             res.sendStatus(403);
 
-        } else if (`${cbOK}` == 999) {
+        } else if (`${cbOK}` == 500) {
 
-            res.sendStatus(999);
+            res.sendStatus(500);
 
-        } else if (`${cbOK}` !== 403 && `${cbOK}` !== 999) {
+        } else if (`${cbOK}` !== 403 && `${cbOK}` !== 500) {
 
             req.session.user = (`${cbOK}`);
-            res.redirect('/');
+            res.sendStatus(200);
 
         }
     });
 });
+
+app.listen(8001);
+console.log('listening on port 8001');

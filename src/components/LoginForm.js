@@ -1,5 +1,7 @@
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import Logo from '../assets/LOGO1.png';
+const logo = Logo;
 const MySwal = withReactContent(Swal);
 const Toast = MySwal.mixin({
     toast: true,
@@ -31,7 +33,8 @@ export default function LoginForm(loginData) {
             document.getElementById("swal-input1").value = LastEmail;
             document.getElementById("swal-input2").value = LastPassword;
         },
-        imageUrl: 'https://raw.githubusercontent.com/MartinPassada/TDI-ProcuraYA/master/src/assets/LOGO1.png',
+        //imageUrl: 'https://raw.githubusercontent.com/MartinPassada/TDI-ProcuraYA/master/src/assets/LOGO1.png',
+        imageUrl: logo,
         imageWidth: 250,
         imageHeight: 250,
         title: 'Iniciar Sesión',
