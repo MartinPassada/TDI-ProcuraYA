@@ -433,10 +433,10 @@ export default function SaveType(typeofuser) {
                                     .then(response => {
                                         if (response.status === 200) {
                                             console.log('success');
-                                            /*Toast.fire({
+                                            Toast.fire({
                                                 icon: 'success',
                                                 title: 'Registro Exitoso redireccionando al Home...'
-                                            })*/
+                                            })
                                         } else if (response.status === 403) {
                                             MySwal.fire({
                                                 icon: 'error',

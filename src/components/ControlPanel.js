@@ -20,7 +20,6 @@ function showButtons(e) {
 
 }
 
-
 export default class ControlPanel extends Component {
     state = {
         files: []

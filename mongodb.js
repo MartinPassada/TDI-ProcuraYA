@@ -1,6 +1,7 @@
 module.exports.validateLogin = validateLogin;
 module.exports.addNewUser = addNewUser;
 module.exports.blockUser = blockUser;
+module.exports.getUserDataFromMail = blockUser;
 
 const mongodb = require("mongodb");
 const mongoClient = mongodb.MongoClient;
@@ -9,7 +10,6 @@ const fs = require("fs");
 const path = require('path');
 
 // LOGIN
-
 function validateLogin(loginData, cbOK) {
     mongoClient.connect(mongoURL, function (err, client) {
         if (err) {
@@ -49,7 +49,6 @@ function validateLogin(loginData, cbOK) {
 }
 
 // SIGNUP
-
 function addNewUser(signUpData, cbOK) {
     mongoClient.connect(mongoURL, function (err, client) {
         if (err) {
@@ -140,3 +139,37 @@ function blockUser(loginData, cbOK) {
     });
 }
 
+function getUserDataFromMail(RPautData, cbOK) {
+    mongoClient.connect(mongoURL, function (err, client) {
+        if (err) {
+            cbError("No se pudo conectar a la DB. " + err);
+        } else {
+            var db = client.db("ProcuraYaDatabase");
+            var collection = db.collection("users");
+            collection.find({ "email": `${RPautData.email}` }).limit(1).toArray((err, data) => {
+
+                if (data == '') {
+                    cbOK(404);
+                    //no existe el mail
+
+                } else if (data !== '') {
+
+                    if (RPautData.userName === data.userName && RPautData.userLastName === data.userLastName) {
+                        cbOK(200);
+                    } else {
+                        cbOK(403);
+                    }
+                    //se devuelven los datos del usuario
+
+                } else {
+                    cbOK(500);
+                    //El servidor explotó
+                }
+
+            });
+        }
+
+    });
+
+
+}

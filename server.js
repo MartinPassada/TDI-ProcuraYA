@@ -39,8 +39,9 @@ app.get('/Home', (req, res) => {
 app.get('/CreateAccount', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
-
-
+app.get('/ResetPassword', (req, res) => {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 //CHECK AUTH
 app.get('/checkAuth', (req, res) => {
 
@@ -158,6 +159,24 @@ app.post('/captcha', function (req, res) {
     }
 
 });
+//RESET PASSWORD
+app.post('/rpAuth', (req, res) => {
+    let RPautData = req.body;
+    mongoDatabase.getUserDataFromMail(RPautData, cbOK => {
+        if (`${cbOK}` == 404) {
 
+            res.sendStatus(404);
+
+        } else if (`${cbOK}` == 500) {
+
+            res.sendStatus(500);
+
+        } else if (`${cbOK}` == 200) {
+
+            res.sendStatus(200);
+
+        }
+    });
+});
 app.listen(8001);
 console.log('listening on port 8001');
