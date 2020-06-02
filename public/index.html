@@ -14,6 +14,10 @@
   <link href='https://fonts.googleapis.com/css?family=Lato|Roboto:400,900' rel='stylesheet' type='text/css'>
   <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <link rel="stylesheet" type='text/css' href="@sweetalert2/theme-bootstrap-4/bootstrap-4.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css" />
+  <?xml version="1.0" standalone="no"?>
+  <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+
 
   <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -37,6 +41,238 @@
     <meta http-equiv="refresh" content="0;url=noscript.html">
   </noscript>
   <div id="root"></div>
+
+  <script>
+    const passwordPattern = /([a-zA-Z0-9_.\-\/@*]{5,30})$/gm;
+    const mailPattern = /^\w+([\.-]?\w{1,10}){0,3}@\w+\.{1,1}\w{2,3}$/ig;
+    const namePattern = /^([a-zA-Z]{3,14}){1}\s?([a-zA-Z]{3,14}){0,1}$/ig;
+    var checked = false;
+    const showPasswordIcon = (input) => {
+      let seePasswordImg = document.getElementById('seePasswordImg');
+      seePasswordImg.src = 'assets/eyeOrange.png';
+      input.style.width = '90%';
+      seePasswordImg.style.display = "inline-block";
+    }
+    const hidePasswordIcon = (input) => {
+      seePasswordImg.style.display = "none";
+      input.style.width = '100%'
+    }
+    const showPassword = () => {
+      if (checked) {
+        checked = false;
+        let seePasswordImg = document.getElementById('seePasswordImg');
+        seePasswordImg.src = 'assets/eyeOrange.png';
+        let input = document.getElementById('swal-input2');
+        input.type = 'password';
+
+      } else {
+        checked = true;
+        let seePasswordImg = document.getElementById('seePasswordImg');
+        seePasswordImg.src = 'assets/eyeGrey.png';
+        let input = document.getElementById('swal-input2');
+        input.type = 'text';
+      }
+    }
+    var onTheFlyCheck = (id) => {
+      let split = id.split('swal-input');
+      let selector = split[1];
+      let written = document.getElementById(id).value;
+      let input = document.getElementById(id);
+      let message = document.getElementById("onTheFlyMessage" + selector);
+
+      if (selector == 1) {
+        if (written == '') {
+          message.style.color = 'red';
+          input.style.borderColor = 'red';
+          message.innerHTML = "✘ Debes introducir un e-mail";
+          message.style.display = 'block';
+        } else if (written.search(mailPattern)) {
+          message.style.color = 'red';
+          input.style.borderColor = 'red';
+          message.innerHTML = "✘ El email es invalido";
+          message.style.display = 'block';
+        } else {
+          message.style.color = 'green';
+          input.style.borderColor = 'green';
+          message.innerHTML = "✔ Ese email es correcto!, Bien Hecho 👍";
+          message.style.display = 'block';
+        }
+      } else if (selector == 2) {
+        showPasswordIcon(input);
+        if (written == '') {
+          hidePasswordIcon(input);
+          message.style.color = 'red';
+          input.style.borderColor = 'red';
+          message.innerHTML = "✘ Debes introducir una password";
+          message.style.display = 'block';
+        } else if (written.search(passwordPattern)) {
+          message.style.color = 'red';
+          input.style.borderColor = 'red';
+          message.innerHTML = "✘ Entre 5 y 30 caracteres, sin < > { } [ ]";
+          message.style.display = 'block';
+        } else {
+          message.style.color = 'green';
+          input.style.borderColor = 'green';
+          message.innerHTML = "✔ La contraseña es correcta!";
+          message.style.display = 'block';
+        }
+      } else if (selector == 3) {
+        if (written == '') {
+          message.style.color = 'red';
+          input.style.borderColor = 'red';
+          message.innerHTML = "✘ Debes repetir la password";
+          message.style.display = 'block';
+        } else if (written.search(passwordPattern)) {
+          message.style.color = 'red';
+          input.style.borderColor = 'red';
+          message.innerHTML = "✘ Entre 5 y 30 caracteres, sin < > { } [ ]";
+          message.style.display = 'block';
+        } else {
+          message.style.color = 'green';
+          input.style.borderColor = 'green';
+          message.innerHTML = "✔ La contraseña es correcta!";
+          message.style.display = 'block';
+        }
+      } else if (selector == 4) {
+        if (written == '') {
+          message.style.color = 'red';
+          input.style.borderColor = 'red';
+          message.innerHTML = "✘ Debes introducir nombre";
+          message.style.display = 'block';
+        } else if (written.search(namePattern)) {
+          message.style.color = 'red';
+          input.style.borderColor = 'red';
+          message.innerHTML = "✘ Maximo 2 palabras entre 3 y 14 caracteres, solo letras";
+          message.style.display = 'block';
+        } else {
+          message.style.color = 'green';
+          input.style.borderColor = 'green';
+          message.innerHTML = "✔ El nombre es correcto!";
+          message.style.display = 'block';
+        }
+      } else if (selector == 5) {
+        if (written == '') {
+          message.style.color = 'red';
+          input.style.borderColor = 'red';
+          message.innerHTML = "✘ Debes introducir apellido";
+          message.style.display = 'block';
+        } else if (written.search(namePattern)) {
+          message.style.color = 'red';
+          input.style.borderColor = 'red';
+          message.innerHTML = "✘ Maximo 2 palabras entre 3 y 14 caracteres, solo letras";
+          message.style.display = 'block';
+        } else {
+          message.style.color = 'green';
+          input.style.borderColor = 'green';
+          message.innerHTML = "✔ El apellido es correcto!";
+          message.style.display = 'block';
+        }
+      }
+
+    }
+    function passwordStrength(password) {
+      var desc = new Array();
+      desc[0] = "Very Weak";
+      desc[1] = "Weak";
+      desc[2] = "Better";
+      desc[3] = "Good";
+      desc[4] = "Strong";
+      var score = 0;
+      if (password.length > 7) score++; //+7 caracteres 
+      if ((password.match(/[a-z]/)) && (password.match(/[A-Z]/))) score++; //mayusculas y minusculas
+      if (password.match(/[0-9]/)) score++; //contiene numeros
+      if (password.match(/.[!,@,#,$,%,^,&,*,?,_,~,-,(,)]/)) score++; //contiene caracteres especiales
+      document.getElementById("passwordStrength").style.display = 'block';
+      document.getElementById("passwordStrength").className = "strength" + score;
+    }
+    var getCaptcha = async () => {
+      document.getElementById('refreshCaptchaIcon').src = '../assets/refreshGif.gif';
+      var response = await fetch("/captcha");
+      var data = await response.text();
+      document.getElementById('captchaImg').src = data + '?' + new Date().getTime();
+      document.getElementById('refreshCaptchaIcon').src = '../assets/refresh.png';
+    }
+    var callAndSelfDestruct = () => {
+      getCaptcha();
+      var heroicImage = document.getElementById('heroicImage');
+      heroicImage.parentNode.removeChild(heroicImage);
+      return false;
+    }
+
+  </script>
+
+  <style type="text/css">
+    #checkbox {
+      margin-right: 5px;
+    }
+
+    #seePasswordImg {
+      margin-left: 10px;
+      margin-right: 3px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+    }
+
+    #captchaContainer {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    #captchaImg {
+      display: block;
+      width: 50%;
+      height: 50%;
+
+    }
+
+    #refreshCaptchaIcon {
+      margin-left: 10px;
+      margin-right: 3px;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    .registerFormContent {
+      text-align: left;
+    }
+
+    #passwordStrength {
+      margin-bottom: 10px;
+      height: 7px;
+      /*display: none;*/
+      /*float: left;*/
+    }
+
+    .strength0 {
+      width: 100%;
+      background: #cccccc;
+    }
+
+    .strength1 {
+      width: 25%;
+      background: #ff0000;
+    }
+
+    .strength2 {
+      width: 50%;
+      background: #ffed50
+    }
+
+    .strength3 {
+      width: 80%;
+      background: #8ee601;
+    }
+
+    .strength4 {
+      background: #399800;
+      width: 100%;
+    }
+  </style>
+
 </body>
 
 </html>

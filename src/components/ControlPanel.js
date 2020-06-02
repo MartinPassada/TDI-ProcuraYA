@@ -10,12 +10,7 @@ import refreshButtonGif from '../assets/refreshGif.gif'
 import $ from 'jquery';
 import fileIcon from '../assets/paper.png'
 
-/*function hideFileListButtons() {
-    var allButtons = document.querySelectorAll('FilesListButton');
-    allButtons.forEach(e => {
-        $(e).hide();
-    })
-}*/
+
 function showButtons(e) {
     e = e || window.event;
     var row = e.target.parentNode.childNodes[1];
@@ -35,7 +30,7 @@ export default class ControlPanel extends Component {
         RB.src = refreshButtonGif;
         const res = await fetch('https://jsonplaceholder.typicode.com/albums');
         const data = await res.json();
-        console.log(data);
+        //console.log(data);
         this.setState({ files: data });
         RB.src = refreshButton;
     }
@@ -45,7 +40,7 @@ export default class ControlPanel extends Component {
         RB.src = refreshButtonGif;
         const res = await fetch('https://jsonplaceholder.typicode.com/posts');
         const data = await res.json();
-        console.log(data);
+        //console.log(data);
         this.setState({ files: data });
         RB.src = refreshButton;
     };

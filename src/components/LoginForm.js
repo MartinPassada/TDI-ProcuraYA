@@ -13,10 +13,17 @@ const Toast = MySwal.mixin({
         toast.addEventListener('mouseenter', Swal.stopTimer)
         toast.addEventListener('mouseleave', Swal.resumeTimer)
     },
+    showClass: {
+        popup: 'animate__animated animate__bounceIn'
+    },
+    hideClass: {
+        popup: 'animate__animated animate__bounceOut'
+    },
     onAfterClose: () => {
         window.location.replace('/Home')
     }
 })
+
 
 
 export default function LoginForm(loginData) {
@@ -42,11 +49,20 @@ export default function LoginForm(loginData) {
             '<input id="swal-input1" class="swal2-input" type="email" placeholder="Email">' +
             '<input id="swal-input2" class="swal2-input" type="password" placeholder="Password">',
         confirmButtonText: 'ACEPTAR',
+        showLoaderOnConfirm: true,
         confirmButtonColor: '#ea5f32',
         showCancelButton: true,
         cancelButtonText: 'CANCELAR',
         cancelButtonColor: '#999999',
         focusConfirm: false,
+        allowEnterKey: true,
+        footer: '<a href>Restablecer contraseña</a>',
+        showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutDown'
+        },
         preConfirm: () => {
             var loginData = {
                 email: document.getElementById("swal-input1").value,
@@ -114,12 +130,63 @@ export default function LoginForm(loginData) {
                 })
             }
             else {
-
-                //ajax
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Logueo Exitoso, redireccionando al Home...'
+                return fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
                 })
+                    .then(response => {
+                        if (response.status === 200) {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Logueo exitoso redireccionando al Home...'
+                            })
+                        } else if (response.status === 403 || response.status === 404) {
+                            MySwal.fire({
+                                icon: 'error',
+                                title: 'Oh no !!',
+                                text: 'Las credenciales no son validas',
+                                confirmButtonColor: '#ea5f32',
+                                onClose: () => {
+                                    LoginForm(loginData);
+                                }
+                            })
+                        } else if (response.status === 500) {
+                            MySwal.fire({
+                                icon: 'error',
+                                title: 'Server Error',
+                                text: 'Tuvimos un problemita...',
+                                confirmButtonColor: '#ea5f32',
+                                onClose: () => {
+                                    LoginForm(loginData);
+                                }
+                            })
+                        } else if (response.status === 603) {
+                            MySwal.fire({
+                                icon: 'error',
+                                title: 'Usuario Bloqueado',
+                                text: 'Debido a los intentos fallidos, hemos bloqueado tu cuenta por razones de seguridad',
+                                confirmButtonColor: '#ea5f32',
+                                onClose: () => {
+                                    LoginForm(loginData);
+                                }
+                            })
+                        }
+
+
+
+                    })
+                    .catch(error => {
+                        Swal.showValidationMessage(
+                            `Algo falló: ${error}`
+                        )
+                    })
+
+                //toast exito
+
             }
         }
     })

@@ -1,5 +1,6 @@
 module.exports.validateLogin = validateLogin;
 module.exports.addNewUser = addNewUser;
+module.exports.blockUser = blockUser;
 
 const mongodb = require("mongodb");
 const mongoClient = mongodb.MongoClient;
@@ -16,21 +17,30 @@ function validateLogin(loginData, cbOK) {
         } else {
             var db = client.db("ProcuraYaDatabase");
             var collection = db.collection("users");
-            collection.find({ "$or": [{ "email": `${loginData.user}` }, { "userName": `${loginData.user}` }] }).limit(1).toArray((err, data) => {
-
+            collection.find({ "email": `${loginData.email}` }).limit(1).toArray((err, data) => {
                 if (data == '') {
 
+                    cbOK(404);
+                    //no existe el mail
+
+                } else if (data[0].userIsBlocked) {
+                    cbOK(603)
+                    //usuario bloqueado
+
+                } else if (data[0].password === loginData.password) {
+                    let completeUserName = data[0].userName + ' ' + data[0].userLastName;
+                    cbOK(`${completeUserName}`);
+                    //credenciales validas
+
+                } else if (data[0].password !== loginData.password) {
+                    let completeUserName = data[0].userName + ' ' + data[0].userLastName;
                     cbOK(403);
-
-                } else if (data[0].email === loginData.user || data[0].userName === loginData.user && data[0].password === loginData.password) {
-
-
-                    cbOK(`${data[0].userName}`);
-
+                    //credenciales invalidas
                 } else {
-
-                    cbOK(403);
+                    cbOK(500);
+                    //Server or DB issues
                 }
+
             });
         }
 
@@ -61,7 +71,8 @@ function addNewUser(signUpData, cbOK) {
                         files: signUpData.files,
                         inbox: signUpData.inbox,
                         userType: `${signUpData.userType}`,
-                        emailConfirmed: false
+                        emailConfirmed: signUpData.emailConfirmed,
+                        userIsBlocked: signUpData.userIsBlocked,
                     });
 
                     let completeUserName = signUpData.userName + ' ' + signUpData.userLastName;
@@ -76,7 +87,8 @@ function addNewUser(signUpData, cbOK) {
                         files: signUpData.files,
                         inbox: signUpData.inbox,
                         userType: `${signUpData.userType}`,
-                        emailConfirmed: false
+                        emailConfirmed: signUpData.emailConfirmed,
+                        userIsBlocked: signUpData.userIsBlocked,
                     });
 
                     let completeUserName = signUpData.userName + ' ' + signUpData.userLastName;
@@ -89,6 +101,38 @@ function addNewUser(signUpData, cbOK) {
                 } else {
                     cbOK(500)  //server or BD problem
                 }
+            });
+        }
+
+        //client.close();
+    });
+}
+
+// BLOCK CREDENTIALS
+function blockUser(loginData, cbOK) {
+    mongoClient.connect(mongoURL, function (err, client) {
+        if (err) {
+            cbError("No se pudo conectar a la DB. " + err);
+        } else {
+            var db = client.db("ProcuraYaDatabase");
+            var collection = db.collection("users");
+            collection.find({ "email": `${loginData.email}` }).limit(1).toArray((err, data) => {
+
+                if (data == '') {
+
+                    cbOK(404);
+                    //no existe el mail
+
+                } else if (data !== '') {
+                    collection.updateOne({ 'email': `${loginData.email}` }, { $set: { userIsBlocked: true } });
+                    cbOK(603);
+                    //existe el mail y se bloquea violentamente
+
+                } else {
+                    cbOK(500);
+                    //se rompio algo
+                }
+
             });
         }
 
