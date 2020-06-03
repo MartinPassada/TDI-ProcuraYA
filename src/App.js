@@ -12,7 +12,7 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/ProcuraYA.herokuapp.com">
+        <Route exact path="/">
           <LandingPage />
         </Route>
         <Route exact path='/Home'>

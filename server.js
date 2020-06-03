@@ -30,7 +30,7 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'src')));
 
 // GET REACT PAGES
-app.get('/ProcuraYA.herokuapp.com', (req, res) => {
+app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 app.get('/Home', (req, res) => {
@@ -178,5 +178,5 @@ app.post('/rpAuth', (req, res) => {
         }
     });
 });
-app.listen(8001);
-console.log('listening on port 8001');
+app.listen(5000);
+console.log('listening on port 5000');
