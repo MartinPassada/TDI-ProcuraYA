@@ -30,7 +30,7 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'src')));
 
 // GET REACT PAGES
-app.get('/', (req, res) => {
+app.get('/ProcuraYA.herokuapp.com', (req, res) => {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 app.get('/Home', (req, res) => {
