@@ -1,5 +1,6 @@
 **Changelog**
 
+**The project was never intended to work in chromium based browsers, use Firefox**
 **Link to project:** https://procuraya-hdemo.herokuapp.com/
 **For more info check public Trello Roadmap at:** https://trello.com/b/Nk5HrWOk/procura-ya
 
