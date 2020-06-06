@@ -434,7 +434,7 @@ export default function SaveType(typeofuser) {
                                 })
                                     .then(response => {
                                         if (response.status === 200) {
-                                            console.log('success');
+                                            console.log('Registro exitoso');
                                             Toast.fire({
                                                 icon: 'success',
                                                 title: 'Registro Exitoso redireccionando al Home...'
