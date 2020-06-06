@@ -54,4 +54,3 @@ export default class NavigationBar extends Component {
     }
 }
 
-/*title={<img src={AltUserImg}*/

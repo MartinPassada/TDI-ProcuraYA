@@ -114,10 +114,10 @@ export default function SaveType(typeofuser) {
                 '<span class="onTheFlyMessage" id="onTheFlyMessage4" style="display:none;"></span>' +
                 '<input maxlength="29" oninput="onTheFlyCheck(this.id)" id="swal-input5" class="swal2-input" type="text" placeholder="Apellido">' +
                 '<span class="onTheFlyMessage" id="onTheFlyMessage5" style="display:none;"></span>' +
-                '<div id="captchaContainer"> <img src="" id="captchaImg"></img > </div>' +
+                '<div id="captchaContainer"> <img id="captchaImg"></img > </div>' +
                 '<input style="width: 90%" id="swal-input6" class="swal2-input" type="text" placeholder="Solución Captcha">' +
                 '<img src="../assets/refresh.png" id="refreshCaptchaIcon" onclick="getCaptcha()"></img>' +
-                '<img src="../assets/refresh.png" onload="callAndSelfDestruct()" id="heroicImage" style="display:none"></img>',
+                '<img src="../assets/refresh2.png" onload="callAndSelfDestruct()" id="heroicImage" style="display:none"></img>',
             confirmButtonText: 'ACEPTAR',
             showLoaderOnConfirm: true,
             confirmButtonColor: '#ea5f32',
