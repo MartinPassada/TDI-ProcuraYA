@@ -178,7 +178,7 @@
       var response = await fetch("/captcha");
       var data = await response.text();
       document.getElementById('captchaImg').src = data + '?' + new Date().getTime();
-      document.getElementById('refreshCaptchaIcon').src = '../assets/refresh.png';
+      document.getElementById('refreshCaptchaIcon').src = '../assets/refreshIcon.png';
     }
     var callAndSelfDestruct = () => {
       getCaptcha();

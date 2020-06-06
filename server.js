@@ -29,8 +29,13 @@ app.use(session({
 
 // Recursos estaticos
 app.use(express.static(path.join(__dirname, 'src')));
+app.use(express.static(path.join(__dirname, 'build')));
+
 //Entry point
 app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+app.get('/CreateAccount', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 

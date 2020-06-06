@@ -2,7 +2,9 @@ import React from 'react';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import Logo from '../assets/LOGO1.png';
-import eyeOrange from '../assets/eyeOrange.png'
+import refreshIcon from '../assets/refreshIcon.png';
+import refreshIconGif from '../assets/refreshGif.gif';
+import eyeOrange from '../assets/eyeOrange.png';
 const MySwal = withReactContent(Swal);
 const Toast = MySwal.mixin({
     toast: true,
@@ -116,8 +118,8 @@ export default function SaveType(typeofuser) {
                 '<span class="onTheFlyMessage" id="onTheFlyMessage5" style="display:none;"></span>' +
                 '<div id="captchaContainer"> <img id="captchaImg"></img > </div>' +
                 '<input style="width: 90%" id="swal-input6" class="swal2-input" type="text" placeholder="Solución Captcha">' +
-                '<img src="../assets/refresh.png" id="refreshCaptchaIcon" onclick="getCaptcha()"></img>' +
-                '<img src="../assets/refresh2.png" onload="callAndSelfDestruct()" id="heroicImage" style="display:none"></img>',
+                '<img src="../assets/refreshIcon.png" id="refreshCaptchaIcon" onclick="getCaptcha()"></img>' +
+                '<img src="../assets/refreshIcon.png" onload="callAndSelfDestruct()" id="heroicImage" style="display:none"></img>',
             confirmButtonText: 'ACEPTAR',
             showLoaderOnConfirm: true,
             confirmButtonColor: '#ea5f32',

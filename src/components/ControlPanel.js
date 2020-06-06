@@ -5,7 +5,7 @@ import crossIcon from '../assets/cross.png'
 import trashIcon from '../assets/trash.png'
 import sendIcon from '../assets/send.png'
 import backIcon from '../assets/back.png'
-import refreshButton from '../assets/refresh.png'
+import refreshButton from '../assets/refreshIcon.png'
 import refreshButtonGif from '../assets/refreshGif.gif'
 import $ from 'jquery';
 import fileIcon from '../assets/paper.png'
