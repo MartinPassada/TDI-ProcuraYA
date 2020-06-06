@@ -7,6 +7,7 @@ const session = require('express-session');
 const fs = require('fs');
 const sharp = require("sharp")
 const svgCaptcha = require('svg-captcha');
+const favicon = require('express-favicon');
 
 // JS propios
 const mongoDatabase = require('./mongodb.js');
@@ -25,23 +26,20 @@ app.use(session({
 },
     loginattemps = 0,
 ))
+app.use(favicon(__dirname + '/build/favicon.ico'));
+
 
 // Recursos estaticos
-app.use(express.static(path.join(__dirname, 'src')));
+//app.use(express.static(__dirname));
+app.use(express.static(path.join(__dirname, 'build')));
 
 // GET REACT PAGES
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+-app.get('/', function (req, res) {
+    +app.get('/*', function (req, res) {
+        res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    });
 });
-app.get('/Home', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-app.get('/CreateAccount', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-app.get('/ResetPassword', (req, res) => {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+
 //CHECK AUTH
 app.get('/checkAuth', (req, res) => {
 
@@ -178,5 +176,9 @@ app.post('/rpAuth', (req, res) => {
         }
     });
 });
-app.listen(5000);
-console.log('listening on port 5000');
+app.listen(process.env.PORT || 3000,
+    () => console.log("Server is running..."));
+
+
+
+
