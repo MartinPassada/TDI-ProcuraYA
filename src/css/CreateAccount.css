@@ -9,15 +9,17 @@
     float:left; 
     width: 50%;
     height: auto;
-    /*background-color: #ffffff;*/
-    background-color: white
+    background-color: white;
+    display: grid;
+    justify-content: center;
 }
 .fright {
     float: right;
-        height: auto;
-        width: 50%;
-        /*background-color: #ffffff;*/
-        background-color: white
+    height: auto;
+    width: 50%;
+    background-color: white;
+    display: grid;
+    justify-content: center;
     }
 #fleft:hover #Title{
     /*color: white;*/
@@ -37,9 +39,6 @@
     color: black;
     width: 350px;
     height: fit-content;
-    /*border-style: groove;*/
-    margin-left: 305px;
-    margin-top: 30px;
     text-align: center;
 }
 .AccountType{
