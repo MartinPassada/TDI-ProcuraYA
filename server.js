@@ -38,6 +38,12 @@ app.get('/', function (req, res) {
 app.get('/CreateAccount', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
+app.get('/Home', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+app.get('/ResetPassword', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 
 //CHECK AUTH
