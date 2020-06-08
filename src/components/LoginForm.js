@@ -69,8 +69,8 @@ export default function LoginForm(loginData) {
                 password: document.getElementById("swal-input2").value
 
             };
-            var passwordPattern = /^([a-zA-Z0-9_.-@*]{5,15})$/gm;
-            var mailPattern = /^\w+([\.-]?\w{1,10}){0,3}@\w+\.{1,1}\w{3,3}$/ig;
+            var passwordPattern = /([a-zA-Z0-9_.\-\/@*]{5,30})$/gm;
+            var mailPattern = /^\w+([\.-]?\w{1,10}){0,3}@\w+\.{1,1}\w{2,3}$/ig;
 
 
             if (loginData.password == '') {
@@ -111,7 +111,7 @@ export default function LoginForm(loginData) {
                 MySwal.fire({
                     icon: 'error',
                     title: 'Algo salió mal :(',
-                    text: 'La password debe tener entre 5 y 15 caracteres y no debe contener caracteres invalidos',
+                    text: 'La password debe tener entre 5 y 30 caracteres y no debe contener caracteres invalidos',
                     confirmButtonColor: '#ea5f32',
                     onClose: () => {
                         LoginForm(loginData);
