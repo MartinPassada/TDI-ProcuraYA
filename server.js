@@ -71,7 +71,7 @@ app.post('/login', (req, res) => {
             if (`${cbOK}` == 500) {
                 res.sendStatus(500);
             } else if (`${cbOK}` == 404) {
-                req.sendStatus(404);
+                res.sendStatus(404);
             } else if (`${cbOK}` == 603) {
                 res.sendStatus(603);
             }
@@ -83,7 +83,7 @@ app.post('/login', (req, res) => {
                 //console.log('loginattemps:' + req.session.loginattemps);
                 res.sendStatus(403);
             } else if (`${cbOK}` == 404) {
-                req.sendStatus(404);
+                res.sendStatus(404);
             } else if (`${cbOK}` == 500) {
                 res.sendStatus(500);
             } else if (`${cbOK}` == 603) {
