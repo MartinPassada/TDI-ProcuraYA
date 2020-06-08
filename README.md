@@ -1,8 +1,12 @@
 **Changelog**
 
-**The project was never intended to work in chromium based browsers, use Firefox**
+**The project was never intended to work on chromium based browsers, use Firefox instead**
 **Link to project:** https://procuraya-hdemo.herokuapp.com/
 **For more info check public Trello Roadmap at:** https://trello.com/b/Nk5HrWOk/procura-ya
+
+Update #11
+
+1. Online Mongo DB Cluster is now connected to Heroku
 
 Update #10
 

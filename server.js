@@ -154,8 +154,8 @@ app.get('/captcha', function (req, res) {
 //CHECK CAPTCHA
 app.post('/captcha', function (req, res) {
     let captchaSolution = req.query.captchaSolution
-    console.log('solucion correcta = ' + req.session.captcha);
-    console.log('solucion enviada = ' + req.query.captchaSolution);
+    //console.log('solucion correcta = ' + req.session.captcha);
+    //console.log('solucion enviada = ' + req.query.captchaSolution);
     if (captchaSolution === req.session.captcha) {
         res.status(200).send(true);
     } else {
@@ -168,17 +168,13 @@ app.post('/rpAuth', (req, res) => {
     let RPautData = req.body;
     mongoDatabase.getUserDataFromMail(RPautData, cbOK => {
         if (`${cbOK}` == 404) {
-
             res.sendStatus(404);
-
         } else if (`${cbOK}` == 500) {
-
             res.sendStatus(500);
-
+        } else if (`${cbOK}` == 403) {
+            res.sendStatus(403);
         } else if (`${cbOK}` == 200) {
-
             res.sendStatus(200);
-
         }
     });
 });

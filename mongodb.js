@@ -1,21 +1,40 @@
 module.exports.validateLogin = validateLogin;
 module.exports.addNewUser = addNewUser;
 module.exports.blockUser = blockUser;
-module.exports.getUserDataFromMail = blockUser;
-
-const mongodb = require("mongodb");
-const mongoClient = mongodb.MongoClient;
-const mongoURL = 'mongodb://localhost:27017';
+module.exports.getUserDataFromMail = getUserDataFromMail;
+/******************************************************************** */
 const fs = require("fs");
 const path = require('path');
+var usingOnlineCluster = true;
+var mongodb = '';
+var mongoURL = '';
+var mongoClient = '';
+
+if (usingOnlineCluster) {
+    //Online Mongo BD Atlas
+    mongodb = require("mongodb").MongoClient;
+    mongoURL = "mongodb+srv://Tincho:7eR6JDjR8FrHqWPO@procurayadatabase-ghqe3.mongodb.net/ProcuraYaDatabase?retryWrites=true&w=majority";
+    mongoClient = new mongodb(mongoURL, { useNewUrlParser: true });
+} else {
+    // New Local Mongo DB config
+    mongodb = require("mongodb").MongoClient;
+    mongoURL = 'mongodb://localhost:27017';
+    mongoClient = new mongodb(mongoURL, { useNewUrlParser: true });
+}
+// Old Local Mongo BD config
+
+/*const mongodb = require("mongodb");
+const mongoClient = mongodb.MongoClient;
+const mongoURL = 'mongodb://localhost:27017';*/
+/************************************************************************** */
 
 // LOGIN
 function validateLogin(loginData, cbOK) {
-    mongoClient.connect(mongoURL, function (err, client) {
+    mongoClient.connect(err => {
         if (err) {
             cbError("No se pudo conectar a la DB. " + err);
         } else {
-            var db = client.db("ProcuraYaDatabase");
+            var db = mongoClient.db("ProcuraYaDatabase");
             var collection = db.collection("users");
             collection.find({ "email": `${loginData.email}` }).limit(1).toArray((err, data) => {
                 if (data == '') {
@@ -50,11 +69,11 @@ function validateLogin(loginData, cbOK) {
 
 // SIGNUP
 function addNewUser(signUpData, cbOK) {
-    mongoClient.connect(mongoURL, function (err, client) {
+    mongoClient.connect(err => {
         if (err) {
             console.log(err);
         } else {
-            var db = client.db("ProcuraYaDatabase");
+            var db = mongoClient.db("ProcuraYaDatabase");
             var collection = db.collection("users");
 
             collection.find({ "email": `${signUpData.email}` }).limit(1).toArray((err, data) => {
@@ -109,11 +128,11 @@ function addNewUser(signUpData, cbOK) {
 
 // BLOCK CREDENTIALS
 function blockUser(loginData, cbOK) {
-    mongoClient.connect(mongoURL, function (err, client) {
+    mongoClient.connect(err => {
         if (err) {
             cbError("No se pudo conectar a la DB. " + err);
         } else {
-            var db = client.db("ProcuraYaDatabase");
+            var db = mongoClient.db("ProcuraYaDatabase");
             var collection = db.collection("users");
             collection.find({ "email": `${loginData.email}` }).limit(1).toArray((err, data) => {
 
@@ -140,11 +159,11 @@ function blockUser(loginData, cbOK) {
 }
 
 function getUserDataFromMail(RPautData, cbOK) {
-    mongoClient.connect(mongoURL, function (err, client) {
+    mongoClient.connect(err => {
         if (err) {
             cbError("No se pudo conectar a la DB. " + err);
         } else {
-            var db = client.db("ProcuraYaDatabase");
+            var db = mongoClient.db("ProcuraYaDatabase");
             var collection = db.collection("users");
             collection.find({ "email": `${RPautData.email}` }).limit(1).toArray((err, data) => {
 
@@ -156,10 +175,12 @@ function getUserDataFromMail(RPautData, cbOK) {
 
                     if (RPautData.userName === data.userName && RPautData.userLastName === data.userLastName) {
                         cbOK(200);
+                        //Existe el usuario y los datos ingresados coinciden
                     } else {
                         cbOK(403);
+                        //Existe el usuario pero los datos ingresados no coinciden
                     }
-                    //se devuelven los datos del usuario
+
 
                 } else {
                     cbOK(500);

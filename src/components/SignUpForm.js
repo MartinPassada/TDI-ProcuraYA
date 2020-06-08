@@ -2,6 +2,7 @@ import React from 'react';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import Logo from '../assets/LOGO1.png';
+import $ from 'jquery';
 import refreshIcon from '../assets/refreshIcon.png';
 import refreshIconGif from '../assets/refreshGif.gif';
 import eyeOrange from '../assets/eyeOrange.png';
@@ -21,6 +22,7 @@ const Toast = MySwal.mixin({
     }
 
 })
+
 
 export default function SaveType(typeofuser) {
     const logo = Logo;
@@ -128,9 +130,6 @@ export default function SaveType(typeofuser) {
             cancelButtonColor: '#999999',
             focusConfirm: false,
             footer: '<input type="checkbox" id="checkbox"><a href>He leido y acepto los terminos y condiciones</a>',
-            customClass: {
-                content: '',
-            },
             showClass: {
                 popup: openAnimation
             },
@@ -462,11 +461,11 @@ export default function SaveType(typeofuser) {
                                         }
 
                                     })
-                                    .catch(error => {
-                                        Swal.showValidationMessage(
-                                            `Algo falló: ${error}`
-                                        )
-                                    })
+                                /*.catch(error => {
+                                    Swal.showValidationMessage(
+                                        `Algo falló: ${error}`
+                                    )
+                                })*/
 
                             } else if (failOn.passwordEqualMail) {
                                 MySwal.fire({
@@ -504,9 +503,6 @@ export default function SaveType(typeofuser) {
 
     }
 }
-
-
-
 
 
 
