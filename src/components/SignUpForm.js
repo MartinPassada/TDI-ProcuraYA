@@ -403,101 +403,108 @@ export default function SaveType(typeofuser) {
                 } else {
                     failOn.passwordEqualMail = false;
                 }
-                var checkChaptchaAndDoSignUp = async () => {
-                    let captchaInput = await document.getElementById('swal-input6').value;
-                    console.log('valor tomado como input del form = ' + captchaInput);
-                    return fetch(`/captcha?captchaSolution=${captchaInput}`, {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
+
+                let captchaInput = document.getElementById('swal-input6').value;
+                return fetch(`/captcha?captchaSolution=${captchaInput}`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                })
+                    .then(captchaResultResponse => {
+                        if (captchaResultResponse.status === 200) {
+                            failOn.captcha = false;
+                            //do signUp fecht
+                        } else if (captchaResultResponse.status === 403) {
+                            failOn.captcha = true;
+                        } else if (captchaResultResponse.status === 500) {
+                            failOn.captcha = true;
+                            MySwal.fire({
+                                icon: 'error',
+                                title: 'Server Error',
+                                text: 'Tuvimos un problemita...',
+                                confirmButtonColor: '#ea5f32',
+                                onClose: () => {
+                                    SignUpForm(signUpData, password2);
+                                }
+                            })
+                        }
+                        // checking if all inputs were ok
+                        if (Object.values(failOn).every(isFalse)) {
+
+                            return fetch('/signUp', {
+                                method: 'POST',
+                                headers: {
+                                    'Accept': 'application/json',
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(signUpData)
+                            })
+                                .then(response => {
+                                    if (response.status === 200) {
+                                        console.log('Registro exitoso');
+                                        Toast.fire({
+                                            icon: 'success',
+                                            title: 'Registro Exitoso redireccionando al Home...'
+                                        })
+                                    } else if (response.status === 403) {
+                                        MySwal.fire({
+                                            icon: 'error',
+                                            title: 'Oh no !!',
+                                            text: 'El email ya esta en uso',
+                                            confirmButtonColor: '#ea5f32',
+                                            onClose: () => {
+                                                SignUpForm(signUpData, password2);
+                                            }
+                                        })
+                                    } else if (response.status === 500) {
+                                        MySwal.fire({
+                                            icon: 'error',
+                                            title: 'Server Error',
+                                            text: 'Tuvimos un problemita...',
+                                            confirmButtonColor: '#ea5f32',
+                                            onClose: () => {
+                                                SignUpForm(signUpData, password2);
+                                            }
+                                        })
+                                    }
+
+                                })
+                            /*.catch(error => {
+                                Swal.showValidationMessage(
+                                    `Algo falló: ${error}`
+                                )
+                            })*/
+
+                        } else if (failOn.passwordEqualMail) {
+                            MySwal.fire({
+                                icon: 'question',
+                                title: 'Es en serio?',
+                                text: 'Tu password no puede ser igual que tu email, piensa en tu seguridad!!',
+                                confirmButtonColor: '#ea5f32',
+                                onClose: () => {
+                                    openAnimation = 'animate__animated animate__shakeX';
+                                    SignUpForm(signUpData, password2);
+                                }
+                            })
+                        } else if (failOn.passwordsCombinationAreIncorrect) {
+                            MySwal.fire({
+                                icon: 'error',
+                                title: 'Algo salió mal :(',
+                                text: 'Ambas passwords deben coincidir',
+                                confirmButtonColor: '#ea5f32',
+                                onClose: () => {
+                                    openAnimation = 'animate__animated animate__shakeX';
+                                    SignUpForm(signUpData, password2);
+                                }
+                            })
+                        } else {
+                            //console.log(failOn);
+                            openAnimation = 'animate__animated animate__shakeX';
+                            SignUpForm(signUpData, password2);
+                        }
                     })
-                        .then(captchaResultResponse => {
-                            if (captchaResultResponse.status === 200) {
-                                failOn.captcha = false;
-                                //do signUp fecht
-                            } else if (captchaResultResponse.status === 403) {
-                                failOn.captcha = true;
-                            }
-                            // checking if all inputs were ok
-                            if (Object.values(failOn).every(isFalse)) {
-
-                                return fetch('/signUp', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Accept': 'application/json',
-                                        'Content-Type': 'application/json'
-                                    },
-                                    body: JSON.stringify(signUpData)
-                                })
-                                    .then(response => {
-                                        if (response.status === 200) {
-                                            console.log('Registro exitoso');
-                                            Toast.fire({
-                                                icon: 'success',
-                                                title: 'Registro Exitoso redireccionando al Home...'
-                                            })
-                                        } else if (response.status === 403) {
-                                            MySwal.fire({
-                                                icon: 'error',
-                                                title: 'Oh no !!',
-                                                text: 'El email ya esta en uso',
-                                                confirmButtonColor: '#ea5f32',
-                                                onClose: () => {
-                                                    SignUpForm(signUpData, password2);
-                                                }
-                                            })
-                                        } else if (response.status === 500) {
-                                            MySwal.fire({
-                                                icon: 'error',
-                                                title: 'Server Error',
-                                                text: 'Tuvimos un problemita...',
-                                                confirmButtonColor: '#ea5f32',
-                                                onClose: () => {
-                                                    SignUpForm(signUpData, password2);
-                                                }
-                                            })
-                                        }
-
-                                    })
-                                /*.catch(error => {
-                                    Swal.showValidationMessage(
-                                        `Algo falló: ${error}`
-                                    )
-                                })*/
-
-                            } else if (failOn.passwordEqualMail) {
-                                MySwal.fire({
-                                    icon: 'question',
-                                    title: 'Es en serio?',
-                                    text: 'Tu password no puede ser igual que tu email, piensa en tu seguridad!!',
-                                    confirmButtonColor: '#ea5f32',
-                                    onClose: () => {
-                                        openAnimation = 'animate__animated animate__shakeX';
-                                        SignUpForm(signUpData, password2);
-                                    }
-                                })
-                            } else if (failOn.passwordsCombinationAreIncorrect) {
-                                MySwal.fire({
-                                    icon: 'error',
-                                    title: 'Algo salió mal :(',
-                                    text: 'Ambas passwords deben coincidir',
-                                    confirmButtonColor: '#ea5f32',
-                                    onClose: () => {
-                                        openAnimation = 'animate__animated animate__shakeX';
-                                        SignUpForm(signUpData, password2);
-                                    }
-                                })
-                            } else {
-                                //console.log(failOn);
-                                openAnimation = 'animate__animated animate__shakeX';
-                                SignUpForm(signUpData, password2);
-                            }
-                        })
-
-                }
-                checkChaptchaAndDoSignUp();
             }
         })
 

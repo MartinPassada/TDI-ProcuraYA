@@ -148,6 +148,7 @@ app.get('/captcha', function (req, res) {
         })
         .catch(function (err) {
             console.log(err)
+            res.sendStatus(500);
         })
     //res.contentType('text');
 })
