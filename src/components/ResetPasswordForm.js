@@ -136,8 +136,9 @@ function showSteppedRPForm() {
             },
             icon: 'question',
             title: 'Ingresa el código',
-            text: 'Te hemos enviado un código a tu email',
-            html: '<input maxlength="4" id="swal-input7" class="swal2-input" type="text" placeholder="Código de confirmación">' +
+            html:
+                '<p>Te hemos enviado un código a tu email</p>' +
+                '<input maxlength="4" id="swal-input7" class="swal2-input" type="text" placeholder="Código de confirmación">' +
                 '<p id=codeMessage style="display:none"></p>',
             footer: '<a onclick="reSendEmail()" href="#"> Reenviar código</a>',
             preConfirm: async () => {
@@ -177,8 +178,8 @@ function showSteppedRPForm() {
                 })
             },
             title: 'Restablecer contraseña',
-            text: 'Ingresa tu contraseña nueva',
             html:
+                '<p>Ingresa tu contraseña nueva</p>' +
                 '<input maxlength="30" oncut="return false" onpaste="return false" oncopy="return false" oninput="onTheFlyCheck(this.id);passwordStrength(this.value)" id="swal-input2" class="swal2-input" type="password" placeholder="Nueva contraseña">' +
                 '<img onclick="showPassword()" id="seePasswordImg" style="display:none"></img>' +
                 '<div id="passwordStrength" style="display:none"></div>' +
