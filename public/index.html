@@ -32,19 +32,32 @@
 
   <script type="text/javascript">
     const passwordPattern = /([a-zA-Z0-9_.\-\/@*]{5,30})$/gm;
-    const mailPattern = /^\w+([\.-]?\w{1,10}){0,3}@\w+\.{1,1}\w{2,3}$/ig;
+    const mailPattern = /^\w+([\.-]?\w{1,10}){0,3}@\w+\.{1,1}\w{2,4}$/ig;
     const namePattern = /^([a-zA-Z]{3,14}){1}\s?([a-zA-Z]{3,14}){0,1}$/ig;
     var checked = false;
+    var resendEmailCount = 0;
     const showPasswordIcon = (input) => {
-      let seePasswordImg = document.getElementById('seePasswordImg');
-      seePasswordImg.src = 'assets/eyeOrange.png';
-      input.style.width = '90%';
-      seePasswordImg.style.display = "inline-block";
+      if (checked) {
+        let seePasswordImg = document.getElementById('seePasswordImg');
+        seePasswordImg.src = 'assets/eyeGrey.png';
+        input.style.width = '90%';
+        seePasswordImg.style.display = "inline-block";
+      } else {
+        let seePasswordImg = document.getElementById('seePasswordImg');
+        seePasswordImg.src = 'assets/eyeOrange.png';
+        input.style.width = '90%';
+        seePasswordImg.style.display = "inline-block";
+      }
+
+
     }
-    const hidePasswordIcon = (input) => {
+    /*const hidePasswordIcon = (input) => {
       seePasswordImg.style.display = "none";
       input.style.width = '100%'
-    }
+      checked = false;
+      let seePasswordImg = document.getElementById('seePasswordImg');
+      seePasswordImg.src = 'assets/eyeOrange.png';
+    }*/
     const showPassword = () => {
       if (checked) {
         checked = false;
@@ -52,7 +65,6 @@
         seePasswordImg.src = 'assets/eyeOrange.png';
         let input = document.getElementById('swal-input2');
         input.type = 'password';
-
       } else {
         checked = true;
         let seePasswordImg = document.getElementById('seePasswordImg');
@@ -88,7 +100,6 @@
       } else if (selector == 2) {
         showPasswordIcon(input);
         if (written == '') {
-          hidePasswordIcon(input);
           message.style.color = 'red';
           input.style.borderColor = 'red';
           message.innerHTML = "✘ Debes introducir una password";
@@ -157,6 +168,40 @@
         }
       }
 
+    }
+    var reSendEmail = async () => {
+      resendEmailCount++;
+      let response = await fetch('/srcte');
+      var cmessage = document.getElementById('codeMessage');
+      if (response.status === 200) {
+        switch (resendEmailCount) {
+          case 1:
+            cmessage.innerText = '✔ Código reenviado';
+            break;
+          case 2:
+            cmessage.innerText = '✔ Código re-reenviado';
+            break;
+          case 3:
+            cmessage.innerText = '✔ Código recontra-reenviado';
+            break;
+          case 4:
+            cmessage.innerText = '✔ Código archi-mega-super-recontra-reenviado';
+            break;
+          case 0:
+            cmessage.innerText = '✔ Código enviado';
+            break;
+          default:
+            cmessage.innerText = '✔ SPAM!';
+            break;
+        }
+        cmessage.style.display = 'block';
+        cmessage.style.color = 'green';
+      } else if (response.status === 500) {
+        cmessage.innerHTML = '✘ Algo fallo';
+        cmessage.style.display = 'block';
+        cmessage.style.color = 'red';
+        console.log('error 500');
+      }
     }
     function passwordStrength(password) {
       var desc = new Array();

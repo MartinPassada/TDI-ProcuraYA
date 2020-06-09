@@ -3,6 +3,20 @@
 **The project was never intended to work on chromium based browsers, use Firefox instead**
 **Link to project:** https://procuraya-hdemo.herokuapp.com/
 **For more info check public Trello Roadmap at:** https://trello.com/b/Nk5HrWOk/procura-ya
+**Email sender was succesfully tested with the following emails:**
+ Protonmail
+ Outlook
+ Gmail
+ 
+
+Update #12
+
+1. Minor fixes on signUp Form
+2. Reset Password Form can now guide users trough steps to restore password and unblock their accounts
+3. Unblock user api is now working as expected
+4. A brand new update password api was violently added
+5. We added an api for sending random codes to users emails
+6. We added an api for validate those codes sended
 
 Update #11
 
@@ -28,6 +42,7 @@ Update #8
 Update #7
 
 1. Login Api v1.1
+2. Message when user deactivates javascript
 
 Update #6
 

@@ -1,7 +1,9 @@
 module.exports.validateLogin = validateLogin;
 module.exports.addNewUser = addNewUser;
 module.exports.blockUser = blockUser;
-module.exports.getUserDataFromMail = getUserDataFromMail;
+module.exports.rpAuth = rpAuth;
+module.exports.unBlockUser = unBlockUser;
+module.exports.resetPassword = resetPassword;
 /******************************************************************** */
 const fs = require("fs");
 const path = require('path');
@@ -14,12 +16,12 @@ if (usingOnlineCluster) {
     //Online Mongo BD Atlas
     mongodb = require("mongodb").MongoClient;
     mongoURL = "mongodb+srv://Tincho:7eR6JDjR8FrHqWPO@procurayadatabase-ghqe3.mongodb.net/ProcuraYaDatabase?retryWrites=true&w=majority";
-    mongoClient = new mongodb(mongoURL, { useNewUrlParser: true });
+    mongoClient = new mongodb(mongoURL, { useNewUrlParser: true }, { useUnifiedTopology: true });
 } else {
     // New Local Mongo DB config
     mongodb = require("mongodb").MongoClient;
     mongoURL = 'mongodb://localhost:27017';
-    mongoClient = new mongodb(mongoURL, { useNewUrlParser: true });
+    mongoClient = new mongodb(mongoURL, { useNewUrlParser: true }, { useUnifiedTopology: true });
 }
 // Old Local Mongo BD config
 
@@ -66,7 +68,6 @@ function validateLogin(loginData, cbOK) {
         //client.close();
     });
 }
-
 // SIGNUP
 function addNewUser(signUpData, cbOK) {
     mongoClient.connect(err => {
@@ -125,7 +126,6 @@ function addNewUser(signUpData, cbOK) {
         //client.close();
     });
 }
-
 // BLOCK CREDENTIALS
 function blockUser(loginData, cbOK) {
     mongoClient.connect(err => {
@@ -157,8 +157,67 @@ function blockUser(loginData, cbOK) {
         //client.close();
     });
 }
+// UNBLOCK CREDENTIALS
+function unBlockUser(email, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError("No se pudo conectar a la DB. " + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var collection = db.collection("users");
+            collection.find({ "email": `${email}` }).limit(1).toArray((err, data) => {
+                if (data == '') {
+                    cbOK(404);
+                    //no existe el mail
+                } else if (data !== '') {
+                    collection.updateOne({ 'email': `${email}` }, { $set: { userIsBlocked: false } });
+                    cbOK(200);
+                    //existe el mail y se desbloquea violentamente
+                } else {
+                    cbOK(500);
+                    //se rompio algo
+                }
 
-function getUserDataFromMail(RPautData, cbOK) {
+            });
+        }
+
+        //client.close();
+    });
+}
+//RESET PASSWORD
+function resetPassword(email, np, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError("No se pudo conectar a la DB. " + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var collection = db.collection("users");
+            collection.find({ "email": `${email}` }).limit(1).toArray((err, data) => {
+                if (data == '') {
+                    cbOK(404);
+                    //no existe el mail
+                } else if (data !== '') {
+                    if (np !== data[0].password) {
+                        collection.updateOne({ 'email': `${email}` }, { $set: { password: `${np}` } });
+                        cbOK(200);
+                        //existe el mail y se resetea la password
+                    } else if (np === data[0].password) {
+                        cbOK(403)
+                        //el usuario intentó cambiar su contraseña por la misma que tenia
+                    }
+                } else {
+                    cbOK(500);
+                    //se rompio algo
+                }
+
+            });
+        }
+
+        //client.close();
+    });
+}
+// RESET PASSWORD AUTH
+function rpAuth(RPautData, cbOK) {
     mongoClient.connect(err => {
         if (err) {
             cbError("No se pudo conectar a la DB. " + err);
@@ -169,19 +228,14 @@ function getUserDataFromMail(RPautData, cbOK) {
 
                 if (data == '') {
                     cbOK(404);
-                    //no existe el mail
-
                 } else if (data !== '') {
-
-                    if (RPautData.userName === data.userName && RPautData.userLastName === data.userLastName) {
+                    if (RPautData.userName === data[0].userName && RPautData.userLastName === data[0].userLastName) {
                         cbOK(200);
-                        //Existe el usuario y los datos ingresados coinciden
+                        //console.log('Existe el usuario y los datos ingresados coinciden');
                     } else {
                         cbOK(403);
-                        //Existe el usuario pero los datos ingresados no coinciden
+                        //console.log('Existe el usuario pero los datos ingresados no coinciden');
                     }
-
-
                 } else {
                     cbOK(500);
                     //El servidor explotó

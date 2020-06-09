@@ -138,7 +138,7 @@ export default function SaveType(typeofuser) {
             },
             preConfirm: () => {
                 var passwordPattern = /([a-zA-Z0-9_.\-\/@*]{5,30})$/gm;
-                var mailPattern = /^\w+([\.-]?\w{1,10}){0,3}@\w+\.{1,1}\w{2,3}$/ig;
+                var mailPattern = /^\w+([\.-]?\w{1,10}){0,3}@\w+\.{1,1}\w{2,4}$/ig;
                 var namePattern = /^([a-zA-Z]{3,14}){1}\s?([a-zA-Z]{3,14}){0,1}$/ig;
                 var password2 = document.getElementById('swal-input3').value;
                 if (type === 'representative') {
@@ -443,7 +443,6 @@ export default function SaveType(typeofuser) {
                             })
                                 .then(response => {
                                     if (response.status === 200) {
-                                        console.log('Registro exitoso');
                                         Toast.fire({
                                             icon: 'success',
                                             title: 'Registro Exitoso redireccionando al Home...'

@@ -8,10 +8,11 @@ const fs = require('fs');
 const sharp = require("sharp")
 const svgCaptcha = require('svg-captcha');
 const favicon = require('express-favicon');
-
 // JS propios
 const mongoDatabase = require('./mongodb.js');
 const hash = require('./hash.js');
+const mailer = require('./mailer.js');
+
 
 
 //Middlewares
@@ -164,10 +165,10 @@ app.post('/captcha', function (req, res) {
     }
 
 });
-//RESET PASSWORD
+//CHECK RESET PASSWORD AUTH
 app.post('/rpAuth', (req, res) => {
     let RPautData = req.body;
-    mongoDatabase.getUserDataFromMail(RPautData, cbOK => {
+    mongoDatabase.rpAuth(RPautData, cbOK => {
         if (`${cbOK}` == 404) {
             res.sendStatus(404);
         } else if (`${cbOK}` == 500) {
@@ -175,10 +176,69 @@ app.post('/rpAuth', (req, res) => {
         } else if (`${cbOK}` == 403) {
             res.sendStatus(403);
         } else if (`${cbOK}` == 200) {
-            res.sendStatus(200);
+            let rPcode = Math.floor(Math.random() * 1001);
+            req.session.rPcode = `${rPcode}`;
+            req.session.rPEmail = RPautData.email;
+            console.log(rPcode);
+            console.log('se esta enviando el mail')
+            if (mailer.sendRandomCodeToEmail(RPautData.email, rPcode)) {
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(500);
+            }
         }
     });
 });
+//SEND RANDOM CODE TO EMAIL
+app.get('/srcte', function (req, res) {
+    let rPcode = Math.floor(Math.random() * 1001);
+    req.session.rPcode = `${rPcode}`;
+    if (mailer.sendRandomCodeToEmail(req.session.rPEmail, rPcode)) {
+        res.sendStatus(200);
+    } else {
+        res.sendStatus(500);
+    }
+
+});
+//CHECK RESET PASSWORD CODE
+app.post('/crpc', function (req, res) {
+    let rpc = req.query.rpc
+    if (rpc === req.session.rPcode) {
+        res.status(200).send(true);
+    } else {
+        res.status(403).send(false);
+    }
+});
+app.post('/resetPassword/:rpc', function (req, res) {
+    if (req.params.rpc !== req.session.rPcode) {
+        req.session.destroy();
+        res.sendStatus(403);
+    }
+    let data = req.body;
+    data.password = hash.SHA1(data.password);
+    mongoDatabase.resetPassword(req.session.rPEmail, data.password, cbOK => {
+        if (`${cbOK}` == 403) {
+            res.sendStatus(403);
+        } else if (`${cbOK}` == 500) {
+            res.sendStatus(500);
+        } else if (`${cbOK}` == 200) {
+            mongoDatabase.unBlockUser(req.session.rPEmail, cbOK => {
+                if (`${cbOK}` == 404) {
+                    res.sendStatus(404);
+                } else if (`${cbOK}` == 500) {
+                    res.sendStatus(500);
+                } else if (`${cbOK}` == 200) {
+                    req.session.destroy();
+                    res.sendStatus(200);
+                }
+            });
+
+        }
+    });
+
+});
+
+
 app.listen(process.env.PORT || 8001,
     () => console.log("Server is running..."));
 

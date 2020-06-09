@@ -70,7 +70,7 @@ export default function LoginForm(loginData) {
 
             };
             var passwordPattern = /([a-zA-Z0-9_.\-\/@*]{5,30})$/gm;
-            var mailPattern = /^\w+([\.-]?\w{1,10}){0,3}@\w+\.{1,1}\w{2,3}$/ig;
+            var mailPattern = /^\w+([\.-]?\w{1,10}){0,3}@\w+\.{1,1}\w{2,4}$/ig;
 
 
             if (loginData.password == '') {
