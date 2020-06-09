@@ -1,8 +1,11 @@
 **Changelog**
 
 **The project was never intended to work on chromium based browsers, use Firefox instead**
+
 **Link to project:** https://procuraya-hdemo.herokuapp.com/
+
 **For more info check public Trello Roadmap at:** https://trello.com/b/Nk5HrWOk/procura-ya
+
 **Email sender was succesfully tested with the following emails:**
  Protonmail
  Outlook
