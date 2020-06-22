@@ -45,16 +45,17 @@ app.get('/Home', function (req, res) {
 app.get('/ResetPassword', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
-
+//********************************************************* */
 
 //CHECK AUTH
-app.get('/checkAuth', (req, res) => {
-
-    if (req.session.user == undefined) {
-        res.status(403).send('no session');
-
+app.get('/getUserName', (req, res) => {
+    console.log('llego acá')
+    if (req.session.user === undefined) {
+        console.log('respondio 403')
+        res.sendStatus(403);
     } else if (req.session.user !== undefined) {
-        res.send(req.session.user);
+        console.log('respondio 403')
+        res.sendStatus(200).send(req.session.user);
 
     } else {
         res.sendStatus(500);
@@ -91,6 +92,8 @@ app.post('/login', (req, res) => {
                 res.sendStatus(603);
             } else if (`${cbOK}` !== 403 && `${cbOK}` !== 404 && `${cbOK}` !== 603 && `${cbOK}` !== 500) {
                 req.session.user = (`${cbOK}`);
+                req.session.email = loginData.email;
+                //req.session.userType =
                 res.sendStatus(200);
             }
         })
@@ -163,7 +166,6 @@ app.post('/captcha', function (req, res) {
     } else {
         res.status(403).send(false);
     }
-
 });
 //CHECK RESET PASSWORD AUTH
 app.post('/rpAuth', (req, res) => {
@@ -179,8 +181,6 @@ app.post('/rpAuth', (req, res) => {
             let rPcode = Math.floor(Math.random() * 1001);
             req.session.rPcode = `${rPcode}`;
             req.session.rPEmail = RPautData.email;
-            console.log(rPcode);
-            console.log('se esta enviando el mail')
             if (mailer.sendRandomCodeToEmail(RPautData.email, rPcode)) {
                 res.sendStatus(200);
             } else {
@@ -204,7 +204,15 @@ app.get('/srcte', function (req, res) {
 app.post('/crpc', function (req, res) {
     let rpc = req.query.rpc
     if (rpc === req.session.rPcode) {
-        res.status(200).send(true);
+        mongoDatabase.emailConfirmation(req.session.rPEmail, cbOK => {
+            if (`${cbOK}` == 404) {
+                res.sendStatus(404);
+            } else if (`${cbOK}` == 500) {
+                res.sendStatus(500);
+            } else if (`${cbOK}` == 200) {
+                res.status(200).send(true);
+            }
+        });
     } else {
         res.status(403).send(false);
     }

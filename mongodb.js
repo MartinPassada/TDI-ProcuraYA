@@ -4,6 +4,7 @@ module.exports.blockUser = blockUser;
 module.exports.rpAuth = rpAuth;
 module.exports.unBlockUser = unBlockUser;
 module.exports.resetPassword = resetPassword;
+module.exports.emailConfirmation = emailConfirmation;
 /******************************************************************** */
 const fs = require("fs");
 const path = require('path');
@@ -173,6 +174,32 @@ function unBlockUser(email, cbOK) {
                     collection.updateOne({ 'email': `${email}` }, { $set: { userIsBlocked: false } });
                     cbOK(200);
                     //existe el mail y se desbloquea violentamente
+                } else {
+                    cbOK(500);
+                    //se rompio algo
+                }
+
+            });
+        }
+
+        //client.close();
+    });
+}
+function emailConfirmation(email, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError("No se pudo conectar a la DB. " + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var collection = db.collection("users");
+            collection.find({ "email": `${email}` }).limit(1).toArray((err, data) => {
+                if (data == '') {
+                    cbOK(404);
+                    //no existe el mail
+                } else if (data !== '') {
+                    collection.updateOne({ 'email': `${email}` }, { $set: { emailConfirmed: true } });
+                    cbOK(200);
+                    //existe el mail y se confirma
                 } else {
                     cbOK(500);
                     //se rompio algo

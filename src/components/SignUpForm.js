@@ -129,6 +129,7 @@ export default function SaveType(typeofuser) {
             cancelButtonText: 'CANCELAR',
             cancelButtonColor: '#999999',
             focusConfirm: false,
+            allowOutsideClick: false,
             footer: '<input type="checkbox" id="checkbox"><a href>He leido y acepto los terminos y condiciones</a>',
             showClass: {
                 popup: openAnimation
@@ -454,6 +455,9 @@ export default function SaveType(typeofuser) {
                                             text: 'El email ya esta en uso',
                                             confirmButtonColor: '#ea5f32',
                                             onClose: () => {
+                                                failOn.emailIsEmpty = false;
+                                                failOn.emailIsIncorrect = true;
+                                                openAnimation = 'animate__animated animate__shakeX';
                                                 SignUpForm(signUpData, password2);
                                             }
                                         })

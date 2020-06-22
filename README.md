@@ -10,6 +10,18 @@
  Protonmail
  Outlook
  Gmail
+ Mohmal
+ 
+
+
+Update #13
+
+1. Various fixes in the following forms: SignUp Form, Reset Password Form, Login Form.
+2. Trello roadmap updated
+3. Reset password feature now has it's own diagram design
+4. An api will confirm users email when they unblock their accounts
+5. NavBar fixed: now it shows user name
+6. Some images sizes were reduced for faster loading
  
 
 Update #12

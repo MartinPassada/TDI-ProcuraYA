@@ -31,6 +31,10 @@ function showSteppedRPForm() {
             let progressStepBar = document.getElementsByClassName('swal2-progress-steps');
             progressStepBar[0].childNodes[0].style.background = '#ea5f32';
         },
+        onAfterClose: () => {
+            window.location.replace('/');
+        },
+        allowOutsideClick: false,
         confirmButtonText: 'ACEPTAR',
         confirmButtonColor: '#ea5f32',
         focusConfirm: true,
@@ -154,8 +158,10 @@ function showSteppedRPForm() {
                         if (rpcResultResponse.status === 200) {
                             correctRpc = rpc;
                         } else if (rpcResultResponse.status === 403) {
-                            Swal.showValidationMessage('Codigo incorrecto')
+                            rpc = '';
+                            Swal.showValidationMessage('Codigo incorrecto');
                         } else if (rpcResultResponse.status === 500) {
+                            rpc = '';
                             MySwal.fire({
                                 icon: 'error',
                                 title: 'Server Error',
@@ -185,54 +191,52 @@ function showSteppedRPForm() {
                 '<div id="passwordStrength" style="display:none"></div>' +
                 '<span class="onTheFlyMessage" id="onTheFlyMessage2" style="display:none;"></span>',
             preConfirm: async () => {
+                const passwordPattern = /([a-zA-Z0-9_.\-\/@*]{5,30})$/gm;
                 var np = document.getElementById('swal-input2').value;
                 var data = {
                     password: np
                 }
-                await fetch('/resetPassword/' + `${correctRpc}`, {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                    .then(response => {
-                        if (response.status === 200) {
-                            MySwal.fire({
-                                icon: 'success',
-                                title: 'Contraseña reestablecida',
-                                text: 'Ahora puedes intentar loguearte con tu contraseña nueva',
-                                confirmButtonColor: '#ea5f32',
-                                onClose: () => {
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: 'Volviendo a la pagina principal..'
-                                    })
-                                }
-                            })
-                        } else if (response.status === 500) {
-                            MySwal.fire({
-                                icon: 'error',
-                                title: 'Server Error',
-                                text: 'Tuvimos un problemita...',
-                                confirmButtonColor: '#ea5f32',
-                                onClose: () => {
-                                    window.location.replace('/ResetPassword');
-                                }
-                            })
-                        } else if (response.status === 403) {
-                            MySwal.fire({
-                                icon: 'error',
-                                title: 'Selecciona otra contraseña',
-                                text: 'No puedes utilizar la misma contraseña que tenias antes',
-                                confirmButtonColor: '#ea5f32',
-                                onClose: () => {
-                                    showSteppedRPForm();
-                                }
-                            })
-                        }
+                if (data.password.search(passwordPattern)) {
+                    Swal.showValidationMessage('Contraseña incorrecta');
+                } else {
+                    await fetch('/resetPassword/' + `${correctRpc}`, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
                     })
+                        .then(response => {
+                            if (response.status === 200) {
+                                MySwal.fire({
+                                    icon: 'success',
+                                    title: 'Contraseña reestablecida',
+                                    text: 'Ahora puedes intentar loguearte con tu contraseña nueva',
+                                    confirmButtonColor: '#ea5f32',
+                                    onClose: () => {
+                                        Toast.fire({
+                                            icon: 'success',
+                                            title: 'Volviendo a la pagina principal..'
+                                        })
+                                    }
+                                })
+                            } else if (response.status === 500) {
+                                MySwal.fire({
+                                    icon: 'error',
+                                    title: 'Server Error',
+                                    text: 'Tuvimos un problemita...',
+                                    confirmButtonColor: '#ea5f32',
+                                    onClose: () => {
+                                        window.location.replace('/ResetPassword');
+                                    }
+                                })
+                            } else if (response.status === 403) {
+                                Swal.showValidationMessage('No puedes utilizar una contraseña igual a la anterior');
+                            }
+                        })
+                }
+
 
 
             }

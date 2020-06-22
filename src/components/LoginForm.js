@@ -1,6 +1,7 @@
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import Logo from '../assets/LOGO1.png';
+import { state } from './isAuthenticated'
 const logo = Logo;
 const MySwal = withReactContent(Swal);
 const Toast = MySwal.mixin({
@@ -12,6 +13,7 @@ const Toast = MySwal.mixin({
     onOpen: (toast) => {
         toast.addEventListener('mouseenter', Swal.stopTimer)
         toast.addEventListener('mouseleave', Swal.resumeTimer)
+        console.log('antes de cambiar');
     },
     showClass: {
         popup: 'animate__animated animate__bounceIn'
@@ -19,13 +21,11 @@ const Toast = MySwal.mixin({
     hideClass: {
         popup: 'animate__animated animate__bounceOut'
     },
+
     onAfterClose: () => {
         window.location.replace('/Home')
     }
 })
-
-
-
 export default function LoginForm(loginData) {
     if (loginData.email == undefined || loginData.password == undefined) {
         var LastEmail = '';
@@ -56,6 +56,7 @@ export default function LoginForm(loginData) {
         cancelButtonColor: '#999999',
         focusConfirm: false,
         allowEnterKey: true,
+        allowOutsideClick: false,
         footer: '<a href=/ResetPassword> Restablecer contraseña</a>',
         showClass: {
             popup: 'animate__animated animate__fadeInDown'
