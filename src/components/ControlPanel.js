@@ -19,8 +19,6 @@ function showButtons(e) {
     });
 
 }
-
-
 export default class ControlPanel extends Component {
     state = {
         files: []
@@ -34,7 +32,6 @@ export default class ControlPanel extends Component {
         this.setState({ files: data });
         RB.src = refreshButton;
     }
-
     handleUpdate = async () => {
         let RB = document.getElementById('refreshButton');
         RB.src = refreshButtonGif;
@@ -44,7 +41,6 @@ export default class ControlPanel extends Component {
         this.setState({ files: data });
         RB.src = refreshButton;
     };
-
     render() {
         return (
             <div>

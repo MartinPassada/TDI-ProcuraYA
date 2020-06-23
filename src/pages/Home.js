@@ -4,7 +4,6 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import NavigationBar from '../components/NavigationBar'
 import ControlPanel from '../components/ControlPanel'
-import RightPanel from '../components/RightPanel'
 import '../css/Home.css';
 const MySwal = withReactContent(Swal);
 const Toast = MySwal.mixin({
@@ -21,6 +20,7 @@ const Toast = MySwal.mixin({
         window.location.replace('/Home')
     }
 })
+
 
 /*const checkAuth = () => {
     fetch('/checkAuth', {
@@ -68,7 +68,7 @@ export default function Home() {
                     <ControlPanel />
                 </div>
                 <div class="Hfright" id='fright'>
-                    <RightPanel />
+
                 </div>
             </div>
             <Footer fixed='bottom' />

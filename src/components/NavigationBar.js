@@ -10,7 +10,6 @@ import ProcuraYaLogo from '../assets/LOGO1.png'
 import AltUserImg from '../assets/nouser.png'
 import UploadFileImg from '../assets/paper.png'
 import SearchImg from '../assets/mglass.png'
-import RightPanel from '../components/RightPanel'
 import FileUploadForm from '../components/FileUploadForm'
 import '../css/NavigationBar.css'
 const logout = () => {
@@ -25,15 +24,22 @@ export default class NavigationBar extends Component {
     state = {
         name: ''
     }
-
     //set user name in navbar
     async componentDidMount() {
         const response = await fetch('/getUserName');
         const data = await response.text();
         this.setState({ name: data });
     }
+    //render component in right panel
     uploadFileFn = () => {
-        //<RightPanel />
+        ReactDOM.render(<FileUploadForm />, document.getElementById("fright"))
+    }
+    openSearchEngine() {
+        document.getElementById("myNav").style.height = "100%";
+        document.getElementById('searchInput').focus();
+    }
+    closeSearchEngine() {
+        document.getElementById("myNav").style.height = "0%";
     }
     render() {
         return (
@@ -47,8 +53,8 @@ export default class NavigationBar extends Component {
                             <NavDropdown.Item id='NavBarDropdown1' href="#action/3.1">Mis Expedientes</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
-                    <img src={UploadFileImg} height='50px' width='50px' onClick={this.uploadFileFn()}></img>
-                    <img src={SearchImg} height='50px' width='50px'></img>
+                    <img class='navBarIcons' id='uploadFileButton' src={UploadFileImg} height='50px' width='50px' onClick={this.uploadFileFn}></img>
+                    {/*<img class='navBarIcons' id='searchEngineButton' src={SearchImg} height='50px' width='50px' onClick={this.openSearchEngine}></img>*/}
                     {/*<Form inline id='NavBarSearchForm'>
                         <FormControl type="text" placeholder="Buscar..." id='NavBarSearchInput' />
                     </Form>*/}
@@ -59,6 +65,12 @@ export default class NavigationBar extends Component {
                     </NavDropdown>
 
                 </Navbar >
+                <div id="myNav" class="overlay">
+                    <a href="javascript:void(0)" class="closebtn" onClick={this.closeSearchEngine}>&times;</a>
+                    <div class="overlay-content">
+                        <input id='searchInput' placeholder='busca algo..'></input>
+                    </div>
+                </div>
             </>
         )
     }
