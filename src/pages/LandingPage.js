@@ -2,10 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 //import IntroText from '../components/IntroText'
 import Button from 'react-bootstrap/Button'
-import LoginForm from '../components/LoginForm';
+import Login from '../components/LoginForm'
 import '../css/LandingPage.css'
 
-export default function LandingPage() {
+export default function LandingPage(props) {
+    const handleEvent = () => {
+        Login(props.handleLogin);
+    }
     return (
         <>
             <div class='BackgroundContainer'>
@@ -29,7 +32,7 @@ export default function LandingPage() {
                 Que lo disfrutes!!!
                 </p>
                     <div class='buttonsDiv'>
-                        <Button size="lg" variant="outline-warning" onClick={LoginForm}>Ingresar a la Web</Button>
+                        <Button size="lg" variant="outline-warning" onClick={handleEvent}>Ingresar a la Web</Button>
                         <h4 class='CreateAccountLink'>No tienes una cuenta ? <Link to="/CreateAccount"><span>Crea una aquí</span></Link></h4>
                     </div>
                 </div>

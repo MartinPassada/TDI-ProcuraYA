@@ -1,0 +1,16 @@
+.sun-editor .se-svg, .sun-editor button > svg{
+    position: static;
+}
+.sun-editor .se-list-layer{
+    z-index: unset;
+    width: auto;
+}
+.sun-editor .se-btn-list > .se-list-icon > svg {
+    position: unset;
+}
+.se-btn-select.se-btn-tool-size{
+    width: unset;
+}
+.sun-editor .se-btn-select.se-btn-tool-font{
+    width: unset;
+}

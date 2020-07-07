@@ -11,10 +11,26 @@
  Outlook
  Gmail
  Mohmal
- 
+
+Update #15
+
+1. The Api that gets user's files list is now working
+2. An Api will get a file on demand
+3. Fixed an issue were server didn't save user info in session after signUp
+4. Upload file Api
+5. Implemented protected react routes, now direct access to /Home will redirect to an unauthorized page
+6. New unauthorized page, watch out ! Gandalf is blocking the way !
+7. Control panel now will display an image with a message if no file were found for logged user
+8. Now you can see the files you uploaded using a button in Control panel
+9. Fixed some css issues with Text Editor in File Upload Form
+10. Added fields validation to the File Upload Form
+11. Css fixes
+12. The posibility for creating a "representative account" was paused
+13. Added some messages for user based on his interaction with diferent components
+
 Update #14
 
-1. Frontend side of Upload File Form feature
+1. Upload File Form
 
 Update #13
 

@@ -14,7 +14,7 @@ const Footer = () => {
                 <MDBRow>
                     <MDBCol md="6">
                         <h3 className="title">SPONSORS</h3>
-                        <div class="container">
+                        <div class="logosContainer">
                             <div class='LeftColumnDiv'>
                                 <img class='Logo' src={mongoLogo} atl=''></img>
                             </div>
@@ -31,21 +31,23 @@ const Footer = () => {
 
                     </MDBCol>
                     <MDBCol md="6">
-                        <h5 className="title">Links</h5>
-                        <ul>
-                            <li className="list-unstyled">
-                                <a href="#!">Terminos y Condiciones</a>
-                            </li>
-                            <li className="list-unstyled">
-                                <a href="#!">Politica de Privacidad</a>
-                            </li>
-                            <li className="list-unstyled">
-                                <a href="#!">Link 3</a>
-                            </li>
-                            <li className="list-unstyled">
-                                <a href="#!">Link 4</a>
-                            </li>
-                        </ul>
+                        <h5 className="title">LINKS</h5>
+                        <div class='linkList'>
+                            <ul>
+                                <li className="list-unstyled">
+                                    <a href="#!">Terminos y Condiciones</a>
+                                </li>
+                                <li className="list-unstyled">
+                                    <a href="#!">Politica de Privacidad</a>
+                                </li>
+                                <li className="list-unstyled">
+                                    <a href="#!">Link 3</a>
+                                </li>
+                                <li className="list-unstyled">
+                                    <a href="#!">Link 4</a>
+                                </li>
+                            </ul>
+                        </div>
                     </MDBCol>
                 </MDBRow>
             </MDBContainer>

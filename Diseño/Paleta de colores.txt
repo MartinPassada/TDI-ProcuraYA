@@ -1,0 +1,2 @@
+color principal #ea5f32
+gris		#818181

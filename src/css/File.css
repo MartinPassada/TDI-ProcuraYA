@@ -1,0 +1,61 @@
+.fileContainer{
+
+}
+.fileHeaderDiv{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.fileBodyDiv{
+
+}
+.fileLabel{
+    display: block;
+}
+.fileLabel > p{
+    display: inline;
+}
+.division{
+    width: 66%;
+    border-width: medium;
+    margin-left: 16.5%;
+}
+.headerTitle{
+    padding-top: 15px;
+    display: flex;
+    justify-content: center;
+    color: #ea5f32;
+}
+.headerTable{
+    display: flex;
+    justify-content: center;
+    width: auto;
+}
+.headerTable tbody{
+    border-style: solid;
+    border-radius: 0.5em;
+    border-color: orange;
+    border-width: 0.3ch;
+    padding: 10px;
+}
+.headerTable tr{
+    
+}
+.headerTable td{
+    font-size: large;
+}
+.tableCellTitle{
+    width: auto;
+    display: flex;
+    justify-content: left;
+    padding-right: 50px;
+    font-weight: bold;
+    font-style: oblique;
+}
+.spinnerDiv{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+

@@ -59,9 +59,9 @@
     background-color: rgba(0,0,0, 0.9);
     overflow-x: hidden;
     transition: 0.5s;
-  }
+}
   
-  .overlay-content {
+.overlay-content {
     display: flex;
     justify-content: center;
     position: relative;
@@ -69,17 +69,23 @@
     width: 100%;
     text-align: center;
     margin-top: 30px;
-  }
-  
-  .overlay a {
+}
+.container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+
+.overlay a {
     text-decoration: none;
     font-size: 36px;
     color: #818181;
     display: block;
     transition: 0.3s;
-  }
+}
 
-  .overlay input {
+.overlay input {
     text-decoration: none;
     font-size: 36px;
     color: #818181;
@@ -88,18 +94,33 @@
     border-style: none;
     background: transparent;
     border-bottom-style: solid;
-    
-    
-  }
-  
-  .overlay a:hover, .overlay a:focus {
+}
+
+.overlay input:focus{
+    border-color: #ea5f32;
+}
+
+.overlay a:hover, .overlay a:focus {
     color: #f1f1f1;
-  }
-  
-  .overlay .closebtn {
+}
+
+.overlay .closebtn {
     position: absolute;
     top: 20px;
     right: 45px;
     font-size: 60px;
-  }
+}
+.searchEngineIcons{
+    /*display: block;*/
+    cursor: pointer;
+    width: 85px;
+    height: 85px;
+}
+
+#userImage{
+    border-radius: 2.3rem;
+    height: 58px;
+    width: 58px;
+}
+
   

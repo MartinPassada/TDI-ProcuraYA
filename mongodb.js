@@ -5,6 +5,9 @@ module.exports.rpAuth = rpAuth;
 module.exports.unBlockUser = unBlockUser;
 module.exports.resetPassword = resetPassword;
 module.exports.emailConfirmation = emailConfirmation;
+module.exports.saveFile = saveFile;
+module.exports.getUserFiles = getUserFiles;
+module.exports.getFile = getFile;
 /******************************************************************** */
 const fs = require("fs");
 const path = require('path');
@@ -41,28 +44,21 @@ function validateLogin(loginData, cbOK) {
             var collection = db.collection("users");
             collection.find({ "email": `${loginData.email}` }).limit(1).toArray((err, data) => {
                 if (data == '') {
-
                     cbOK(404);
                     //no existe el mail
-
                 } else if (data[0].userIsBlocked) {
                     cbOK(603)
                     //usuario bloqueado
-
                 } else if (data[0].password === loginData.password) {
-                    let completeUserName = data[0].userName + ' ' + data[0].userLastName;
-                    cbOK(`${completeUserName}`);
+                    cbOK(data[0]);
                     //credenciales validas
-
                 } else if (data[0].password !== loginData.password) {
-                    let completeUserName = data[0].userName + ' ' + data[0].userLastName;
                     cbOK(403);
                     //credenciales invalidas
                 } else {
                     cbOK(500);
                     //Server or DB issues
                 }
-
             });
         }
 
@@ -87,6 +83,7 @@ function addNewUser(signUpData, cbOK) {
                         password: `${signUpData.password}`,
                         userName: `${signUpData.userName}`,
                         userLastName: `${signUpData.userLastName}`,
+                        userImg: `${signUpData.userImg}`,
                         attorneys: signUpData.attorneys,
                         files: signUpData.files,
                         inbox: signUpData.inbox,
@@ -94,9 +91,7 @@ function addNewUser(signUpData, cbOK) {
                         emailConfirmed: signUpData.emailConfirmed,
                         userIsBlocked: signUpData.userIsBlocked,
                     });
-
-                    let completeUserName = signUpData.userName + ' ' + signUpData.userLastName;
-                    cbOK(completeUserName);
+                    cbOK(200);
 
                 } else if (data == '' && signUpData.userType === 'attorney') {
                     collection.insertOne({
@@ -104,15 +99,15 @@ function addNewUser(signUpData, cbOK) {
                         password: `${signUpData.password}`,
                         userName: `${signUpData.userName}`,
                         userLastName: `${signUpData.userLastName}`,
+                        userImg: `${signUpData.userImg}`,
+                        representatives: signUpData.representatives,
                         files: signUpData.files,
                         inbox: signUpData.inbox,
                         userType: `${signUpData.userType}`,
                         emailConfirmed: signUpData.emailConfirmed,
                         userIsBlocked: signUpData.userIsBlocked,
                     });
-
-                    let completeUserName = signUpData.userName + ' ' + signUpData.userLastName;
-                    cbOK(completeUserName);
+                    cbOK(200);
 
                 } else if (data[0].email === signUpData.email) {
 
@@ -185,6 +180,7 @@ function unBlockUser(email, cbOK) {
         //client.close();
     });
 }
+// EMAIL CONFIRMATION
 function emailConfirmation(email, cbOK) {
     mongoClient.connect(err => {
         if (err) {
@@ -274,4 +270,100 @@ function rpAuth(RPautData, cbOK) {
     });
 
 
+}
+//SAVE NEW FILE
+function saveFile(file, email, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            console.log(err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var files = db.collection("files");
+            var users = db.collection("users");
+            files.find({ "fileID": `${file.header.fileID}` }).limit(1).toArray((err, data) => {
+                if (data == '') {
+                    let lastItem = file.body.length - 1;
+                    console.log(lastItem)
+                    files.insertOne({
+                        fileID: `${file.header.fileID}`,
+                        fileLocation: `${file.header.fileLocation}`,
+                        locationRoom: `${file.header.locationRoom}`,
+                        fileState: `${file.header.fileState}`,
+                        fileTitle: `${file.header.fileTitle}`,
+                        bodies: file.body[lastItem],
+                    });
+                    users.updateOne({ 'email': `${email}` }, { $push: { files: `${file.header.fileID}` } });
+
+                    cbOK(200)
+
+                } else if (data[0].fileID === file.header.fileID) {
+                    cbOK(403)
+                    //el expediente ya existe
+                } else {
+                    cbOK(500)
+
+                    //server error
+                }
+
+            });
+
+
+
+
+        }
+
+        //client.close();
+    });
+}
+//GET USER FILES
+function getUserFiles(email, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError("No se pudo conectar a la DB. " + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var users = db.collection("users");
+            users.find({ "email": `${email}` }).limit(1).toArray((err, data) => {
+                if (data == '') {
+                    cbOK(404);
+                    //no existe el mail
+                } else if (data !== '') {
+                    //console.log(data[0].files);
+                    cbOK(data[0].files)
+                } else {
+                    cbOK(500);
+
+                }
+
+            });
+        }
+
+        //client.close();
+    });
+}
+//GET SINGLE FILE
+function getFile(id, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError("No se pudo conectar a la DB. " + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var files = db.collection("files");
+            files.find({ "fileID": `${id}` }).project({ "_id": 0.0 }).toArray((err, data) => {
+                if (data == '') {
+                    cbOK(404);
+                    //no existe el expediente
+                } else if (data !== '') {
+                    cbOK(data[0])
+
+                } else {
+                    cbOK(500);
+
+                }
+
+            });
+        }
+
+        //client.close();
+    });
 }

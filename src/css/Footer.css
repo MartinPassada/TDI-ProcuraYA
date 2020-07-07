@@ -10,15 +10,23 @@
     color: white;
     text-decoration: none;
 }
-.container {
-    display: grid;
+.logosContainer {
+    background-color: #000000;
+    display: flex;
+    justify-content: center;
     grid-template-columns: 1fr 1fr 1fr 1fr; /* fraction*/
     height: auto;
     width: 100%;
     margin-bottom: 15px;
     margin-top: 15px;
 }
+.linkList{
+    display: flex;
+    justify-content: center;
+}
 .CenterColumnDiv{
+    padding-right: 15px;
+    padding-left: 15px;
     border-right-style: solid;
     border-right-width: 0.1rem;
     border-right-color: white;
@@ -26,6 +34,8 @@
     display: flex;
 }
 .LeftColumnDiv{
+    padding-right: 15px;
+    padding-left: 15px;
     border-right-style: solid;
     border-right-color: white;
     border-right-width: 0.1rem;
@@ -33,6 +43,8 @@
     display: flex;
 }
 .RightColumnDiv{
+    padding-right: 15px;
+    padding-left: 15px;
     justify-content: center;
     display: flex;
 }

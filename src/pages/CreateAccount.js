@@ -18,7 +18,7 @@ export default function CreateAccount() {
     return (
         <>
             <div class="wrap">
-                <div class="fleft" id='fleft'>
+                {/*<div class="fleft" id='fleft'>
                     <div class='Title' id='Title'>
                         <h1 class='AccountType'>Crear Cuenta Procurador</h1>
                     </div>
@@ -39,10 +39,20 @@ export default function CreateAccount() {
                             cardImage={hammerImg}
                             type='representative' />
                     </div>
+                </div>*/}
+                <div class='fcentral'>
+                    <div class='Title' id='Title'>
+                        <h1 class='AccountType'>Crear Cuenta Procurador</h1>
+                    </div>
+                    <div class='CardContainer'>
+                        <Card cardName='Crear cuenta Procurador'
+                            cardInfo='Encargado de acudir a los juzgados para efectuar tramites administrativos, diligencias, envio y retiro de expedientes'
+                            cardImage={lawyer1Img}
+                            type='attorney' />
+                    </div>
                 </div>
             </div>
             <FooterPage />
-
         </>
 
     );

@@ -36,27 +36,50 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
-app.get('/CreateAccount', function (req, res) {
+/*app.get('/CreateAccount', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-app.get('/Home', function (req, res) {
+});*/
+/*app.get('/Home', function (req, res) {
+    console.log('url directa a home');
+    if (req.session.user === undefined) {
+        res.redirect(403, '/Unauthorized')
+        console.log('devolvio a unautorized')
+    } else if (req.session.user !== undefined) {
+        console.log('devolvio a home')
+        res.redurect('/Home')
+    } else {
+        res.sendStatus(500);
+    }
+    //res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});*/
+/*app.get('/ResetPassword', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-app.get('/ResetPassword', function (req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
+});*/
 //********************************************************* */
 
 //CHECK AUTH
-app.get('/getUserName', (req, res) => {
-    console.log('llego acá')
+app.get('/getUserInfo', (req, res) => {
     if (req.session.user === undefined) {
-        console.log('respondio 403')
         res.sendStatus(403);
     } else if (req.session.user !== undefined) {
-        console.log('respondio 403')
-        res.sendStatus(200).send(req.session.user);
+        if (req.session.userType === 'attorney') {
+            let data = {
+                name: req.session.user,
+                attorney: [req.session.userType],
+                representative: [],
+                img: req.session.userImg,
+            }
+            res.send(data);
 
+        } else if (req.session.userType === 'representative') {
+            let data = {
+                name: req.session.user,
+                attorney: [],
+                representative: [req.session.userType],
+                img: req.session.userImg,
+            }
+            res.send(data);
+        }
     } else {
         res.sendStatus(500);
     }
@@ -82,7 +105,6 @@ app.post('/login', (req, res) => {
         mongoDatabase.validateLogin(loginData, cbOK => {
             if (`${cbOK}` == 403) {
                 req.session.loginattemps++;
-                //console.log('loginattemps:' + req.session.loginattemps);
                 res.sendStatus(403);
             } else if (`${cbOK}` == 404) {
                 res.sendStatus(404);
@@ -91,9 +113,11 @@ app.post('/login', (req, res) => {
             } else if (`${cbOK}` == 603) {
                 res.sendStatus(603);
             } else if (`${cbOK}` !== 403 && `${cbOK}` !== 404 && `${cbOK}` !== 603 && `${cbOK}` !== 500) {
-                req.session.user = (`${cbOK}`);
-                req.session.email = loginData.email;
-                //req.session.userType =
+                let userData = cbOK;
+                req.session.user = userData.userName + ' ' + userData.userLastName;
+                req.session.email = userData.email;
+                req.session.userType = userData.userType;
+                req.session.userImg = userData.userImg;
                 res.sendStatus(200);
             }
         })
@@ -113,18 +137,15 @@ app.post('/signUp', (req, res) => {
     signUpData.password = hash.SHA1(signUpData.password);
     mongoDatabase.addNewUser(signUpData, cbOK => {
         if (`${cbOK}` == 403) {
-
             res.sendStatus(403);
-
         } else if (`${cbOK}` == 500) {
-
             res.sendStatus(500);
-
         } else if (`${cbOK}` !== 403 && `${cbOK}` !== 500) {
-
-            req.session.user = (`${cbOK}`);
+            req.session.user = signUpData.userName + ' ' + signUpData.userLastName;
+            req.session.email = signUpData.email;
+            req.session.userType = signUpData.userType;
+            req.session.userImg = signUpData.userImg;
             res.sendStatus(200);
-
         }
     });
 });
@@ -217,6 +238,7 @@ app.post('/crpc', function (req, res) {
         res.status(403).send(false);
     }
 });
+//UPDATE PASSWORD
 app.post('/resetPassword/:rpc', function (req, res) {
     if (req.params.rpc !== req.session.rPcode) {
         req.session.destroy();
@@ -245,6 +267,45 @@ app.post('/resetPassword/:rpc', function (req, res) {
     });
 
 });
+//UPLOAD FILE
+app.post('/uploadFile', function (req, res) {
+    let file = req.body
+    let email = req.session.email;
+    mongoDatabase.saveFile(file, email, cbOK => {
+        if (`${cbOK}` == 200) {
+            res.sendStatus(200);
+        } else if (`${cbOK}` == 403) {
+            res.sendStatus(403);
+        } else if (`${cbOK}` == 500) {
+            res.sendStatus(500);
+        }
+    })
+});
+// GET USER FILES
+app.get('/getUserFiles', function (req, res) {
+    let email = req.session.email;
+    mongoDatabase.getUserFiles(email, cbOK => {
+        if (`${cbOK}` == 404) {
+            res.sendStatus(404);
+        } else if (`${cbOK}` == 500) {
+            res.sendStatus(500);
+        } else if (`${cbOK}` !== 500 && `${cbOK}` !== 404) {
+            res.send(cbOK);
+        }
+    })
+})
+app.post('/getFile', function (req, res) {
+    let id = req.query.id;
+    mongoDatabase.getFile(id, cbOK => {
+        if (`${cbOK}` == 404) {
+            res.sendStatus(404);
+        } else if (`${cbOK}` == 500) {
+            res.sendStatus(500);
+        } else if (`${cbOK}` !== 500 && `${cbOK}` !== 404) {
+            res.send(cbOK);
+        }
+    })
+})
 
 
 app.listen(process.env.PORT || 8001,
