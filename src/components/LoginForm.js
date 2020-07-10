@@ -21,7 +21,7 @@ const Toast = MySwal.mixin({
     },
 
     onAfterClose: () => {
-        //window.location.replace('/Home')
+        window.location.replace('/Home')
     }
 })
 

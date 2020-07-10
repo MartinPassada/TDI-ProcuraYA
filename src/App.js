@@ -23,7 +23,7 @@ function App() {
   const handleLogin = async () => {
     console.log('volvio a app');
     setUser(1)
-    window.location.replace('/Home')
+    //window.location.replace('/Home')
   }
 
   const handleLogout = async () => {
