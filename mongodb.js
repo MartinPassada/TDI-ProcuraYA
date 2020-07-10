@@ -19,7 +19,7 @@ var mongoClient = '';
 if (usingOnlineCluster) {
     //Online Mongo BD Atlas
     mongodb = require("mongodb").MongoClient;
-    mongoURL = "mongodb+srv://Tincho:7eR6JDjR8FrHqWPO@procurayadatabase-ghqe3.mongodb.net/ProcuraYaDatabase?retryWrites=true&w=majority";
+    mongoURL = "mongodb+srv://Tincho:76UdKBJtXvX4JkGU@procurayadatabase-ghqe3.mongodb.net/ProcuraYaDatabase?retryWrites=true&w=majority";
     mongoClient = new mongodb(mongoURL, { useNewUrlParser: true }, { useUnifiedTopology: true });
 } else {
     // New Local Mongo DB config
@@ -27,12 +27,7 @@ if (usingOnlineCluster) {
     mongoURL = 'mongodb://localhost:27017';
     mongoClient = new mongodb(mongoURL, { useNewUrlParser: true }, { useUnifiedTopology: true });
 }
-// Old Local Mongo BD config
 
-/*const mongodb = require("mongodb");
-const mongoClient = mongodb.MongoClient;
-const mongoURL = 'mongodb://localhost:27017';*/
-/************************************************************************** */
 
 // LOGIN
 function validateLogin(loginData, cbOK) {
