@@ -36,9 +36,9 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
-/*app.get('/CreateAccount', function (req, res) {
+app.get('/CreateAccount', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});*/
+});
 /*app.get('/Home', function (req, res) {
     console.log('url directa a home');
     if (req.session.user === undefined) {
@@ -52,9 +52,12 @@ app.get('/', function (req, res) {
     }
     //res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });*/
-/*app.get('/ResetPassword', function (req, res) {
+app.get('/ResetPassword', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});*/
+});
+app.get('/Home', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 //********************************************************* */
 
 //CHECK AUTH
