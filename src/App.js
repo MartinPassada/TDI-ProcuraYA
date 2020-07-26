@@ -11,6 +11,7 @@ import LandingPage from "./pages/LandingPage";
 import ResetPassword from './pages/ResetPassword'
 import ProtectedRoute from './pages/ProtectedRoute'
 import Unauthorized from './pages/Unauthorized'
+import NewLandingPage from './pages/NewLandingPage'
 
 
 function App() {
@@ -39,7 +40,7 @@ function App() {
   return (
     <Router>
       <Switch>
-        <LandingPage exact path="/" handleLogin={handleLogin} />
+        <NewLandingPage exact path="/" handleLogin={handleLogin} />
         <ProtectedRoute exact path='/Home' user={user} handleLogout={handleLogout} component={Home} />
         <Route exact path='/Unauthorized' component={Unauthorized} />
         <Route exact path="/CreateAccount" handleLogin={handleLogin} component={CreateAccount} />

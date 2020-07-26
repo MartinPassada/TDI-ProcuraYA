@@ -1,0 +1,490 @@
+.ItemWrapper{
+    height: 700px;
+    background-color: whitesmoke;
+    position: relative;
+    width: 100%;
+    display: block;
+    overflow: hidden;
+}
+.ItemContainer1{
+    width: 100%;
+    display: flex;
+    height: 700px;
+    justify-content: center;
+    opacity: 0;    
+}
+.TitleContainer1 h1 {
+    text-align: left;
+    margin-bottom: 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 54px;
+    font-weight: 700;
+    line-height: 64px;
+}
+.TitleContainer1 h2 {
+    text-align: left;
+    font-family: Montserrat;
+    font-size: 24px;
+    font-weight: 300;
+    line-height: 32px;
+    
+}
+.TitleContainer1{
+   text-align: left;
+    width: 25%;
+    align-self: center;
+    position: relative;
+    height: auto;
+}
+
+.LottieDiv1{
+    width: 50%;
+    position: relative;
+    height: auto;
+    margin-right: -10%;
+    z-index: 2;
+    display: flex;
+}
+
+.LottieDiv2{
+    width: 50%;
+    position: relative;
+    height: auto;
+    margin-left: -15%;
+    z-index: 2;
+    margin-right: 10%;
+    display: flex;
+}
+
+.what--title{
+    color: #000;
+    font-family: Montserrat;
+    text-align: center;
+    font-size: 50px;
+    font-weight: 600;
+    line-height: 50px;
+    margin-bottom: 60px;
+}
+
+.what--container{
+    opacity: 0;
+    list-style: none;
+    width: 85%;
+    max-width: 1366px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.what--section .what--container .what--list .top--container .anim--container {
+    width: 100px;
+}
+.what--section .what--container .what--list .bottom--container .text--description {
+    max-width: 100%;
+    color: #414141;
+    font-family: Montserrat;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 22px;
+    padding: 0 15px;
+}
+.what--section .what--container .what--list .top--container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.what--section .what--container .what--list .top--container .anim--container {
+    width: 100px;
+}
+.what--section .what--container .what--list .bottom--container {
+    width: 100%;
+    justify-content: space-between;
+}
+.what--section .what--container .what--list .top--container .top--text {
+    width: 50%;
+    color: #000;
+    font-family: Montserrat;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24px;
+}
+
+.what--list {
+    width: 100%;
+    max-width: 302px;
+    margin-bottom: 50px;
+}
+.top--container {
+    display:flex;
+    justify-content:space-around;
+    align-items:center
+}
+.anim--container {
+    width:100px;
+    z-index: 2;
+    position: relative;
+    display: flex;
+}
+.top--text {
+    width: 50%;
+    color: #000;
+    font-family: Montserrat;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24px;
+}
+.text--description {
+    max-width: 100%;
+    color: #414141;
+    font-family: Montserrat;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 22px;
+    padding: 0 15px;
+}
+
+#ItemContainer1{
+display: flex;
+opacity: 1;
+}
+#svgWrapper1{
+    height: 240px;
+    background-color: transparent;
+}
+
+#svgWrapper2{
+    height: 320px;
+    background-color: white;
+}
+#svgWrapper2 svg{
+    z-index: 3;
+}
+
+#svgWrapper3{
+    height: 280px;
+    background-color: transparent;
+}
+#svgWrapper3 svg path{
+    background-color: aquamarine;
+}
+
+#svgWrapper4{
+    height: 290px;
+    background-color: white;
+}
+#svgWrapper4 svg{
+    z-index: 3;
+}
+
+#Wrapper1{
+    background: rgb(237,133,99);
+    background: linear-gradient(180deg, rgba(237,133,99,1) 45%, rgba(234,95,50,1) 67%); 
+
+}
+#Title1{
+    color: white
+}
+#SubTitle1{
+    color: white;
+}
+#Title5{
+    color: white;
+}
+#SubTitle5{
+    color:white 
+}
+#Wrapper2{
+    background-color: #fff;
+}
+#Wrapper4{
+    background-color: white;
+}
+#Wrapper3{
+    background: rgb(29,56,124);
+    background: linear-gradient(0deg, rgba(29,56,124,1) 7%, rgba(88,134,245,1) 55%);
+}
+#Wrapper5{
+background: linear-gradient(360deg, rgba(85,67,146,1) 5%, rgba(106,121,195,1) 49%);
+}
+#Wrapper6 {
+    background-color: white;
+}
+#Title3{
+    color: white;
+}
+#Title2{
+    color: black;
+}
+#SubTitle3{
+    color: white;
+}
+#SubTitle2 {
+    color: black;
+}
+#Wrapper6{
+    height: 550px;
+}
+
+@media only screen and (max-width: 1600px) {
+    .LottieDiv1 {
+      width: 50%
+    }
+    .LottieDiv2 {
+        width: 50%
+    }
+}
+
+@media only screen and (max-width: 1366px) {
+    .TitleContainer{
+        margin-left: auto;
+    }
+    .LottieDiv1 {
+        width: 60%;
+    }
+    .TitleContainer2{
+        margin-left: auto;
+    }
+    .LottieDiv2 {
+        width: 60%;
+        margin-right: 0;
+    }
+    #svgWrapper1{
+        height: 220px;
+    }
+}
+
+@media screen and (max-width:1024px) {
+    #ItemContainerFooter{
+        height: 100%;
+    }
+    .ItemContainer1{
+        height: auto;
+        flex-wrap: wrap;
+    }
+    .LottieDiv1{
+        display: inline-table;
+        height: 700px;
+    }
+    .LottieDiv2{
+        display: inline-table;
+        height: 700px;
+    }
+    
+    .what--list {
+     width:50%
+    }
+    .what--container {
+        width: 90%;
+    }
+    #svgWrapper3{
+        height: 150px;
+    }
+    #svgWrapper1{
+        height: 150px;
+    }
+   }
+   @media screen and (max-width:1280px) {        
+    .TitleContainer1{
+        text-align: center;
+        align-self: center;
+        position: relative;
+        height: auto;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .TitleContainer1 h1 {   
+        font-size: 34px;
+        align-self: center;
+    }
+    .TitleContainer1 h2 {   
+        font-size: 14px;
+        align-self: center;
+    }
+    
+    .ItemWrapper{
+        height: auto;
+    }
+    #Wrapper5{
+        height: auto;
+    }
+    #Wrapper6{
+        height: auto;
+    }
+    #svgWrapper3{
+        height: 175px;
+    }
+    
+   }
+   @media screen and (max-width:768px) {
+    .TitleContainer1{
+        width: auto;
+    }
+    .what--list {
+     width:50%
+    }
+    .what--container {
+        width: 88%;
+        justify-content: space-between;
+    }
+    #svgWrapper1{
+        height: 90px;
+    }
+    #svgWrapper3{
+        height: 80px;
+    }
+    
+   }
+
+   @media screen and (max-width:920px) {
+    .LottieDiv1{
+        display: inline-table;
+        height: 450px;
+        width: 450px;
+    }
+    .LottieDiv2{
+        display: inline-table;
+        height: 450px;
+        width: 450px;
+    }
+    }
+   
+   @media screen and (min-width:1280px) {
+    .what--list {
+     width:33%;
+     flex-grow:1;
+     max-width:100%;
+     padding:0 20px
+    }
+    #svgWrapper3{
+        height: 270px;
+    }
+    
+    
+   }
+   @media screen and (max-width:414px) {
+    #Lootie1{
+        margin-right: 2%;
+    }
+    #svgWrapper4{
+        height: 120px;
+    }
+    #svgWrapper2 {
+        height: 120px;
+        background-color: white;
+    }
+    #Lootie4{
+        margin-left: 2.5%;
+        height: 450px;
+        width: 450px;
+
+    }
+    .TitleContainer1{
+        width: auto;
+    }
+    .TitleContainer1 h1 {
+        text-align: center;
+    }
+    .TitleContainer1 h2 {
+        text-align: center;
+    }
+    
+    .TitleContainer1{
+        text-align: center;
+    }
+    
+    .what--title{
+        font-size: 34px;
+    }
+    .anim--container {
+     width:70px
+    }
+    .what--container {
+        width: 85%;
+    }
+    .what--list {
+        width: 100%;
+    }
+    #svgWrapper3{
+        height: 60px;
+    }
+    #svgWrapper1{
+        height: 80px;
+   }
+   }
+   @media screen and (max-width:320px) {
+       #Lottie1{
+           margin-right: 5%;
+       }
+        #svgWrapper1{
+            height: 70px;
+       }
+   }
+   @media screen and (max-width:360px) {
+    #svgWrapper1{
+         height: 50px;
+    }
+}
+
+
+
+.waves{
+position: relative;
+z-index: 2;
+}
+.waves svg{
+    background-color: white;
+}
+#Wrapper7{
+width: 100%;
+height: 700px;
+background: rgb(69,69,153);
+background: linear-gradient(180deg, rgba(69,69,153,1) 51%, rgba(60,140,154,1) 100%);
+}
+#FooterTitleContainer{
+    text-align: center;
+    width: auto;
+    align-self: center;
+    position: relative;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+
+}
+#FooterTitleContainer h1{
+    color: white;
+    text-align: center;
+}
+.LoginButton{
+    width: 250px;
+    height: 60px;
+    align-self: center;
+    position: relative;
+    color: #fff;
+    background-color: transparent;
+    font-family: Montserrat;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 4px;
+    border: 2px solid #fff;
+    outline: 0;
+}
+
+.LoginButton:hover{
+    border: 2px solid #6a79c3;
+    background-color: #fff;
+    color: #6a79c3;
+    
+}
+
+
+
+   
+
