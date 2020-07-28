@@ -13,7 +13,7 @@ import TrackFiles from '../looties/location.json'
 import { useEffect } from 'react'
 import Login from '../components/LoginForm'
 import $ from 'jquery'
-import '../css/NewLandingPage..css'
+import '../css/NewLandingPage.css'
 import LottieConstructor from '../looties/LottieConstructor'
 
 
