@@ -12,6 +12,10 @@
  Gmail
  Mohmal
 
+Update #16
+
+1. New Landing Page
+
 Update #15
 
 1. The Api that gets user's files list is now working
