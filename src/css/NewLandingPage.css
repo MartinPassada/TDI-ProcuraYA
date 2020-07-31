@@ -481,7 +481,27 @@ background: linear-gradient(180deg, rgba(69,69,153,1) 51%, rgba(60,140,154,1) 10
     border: 2px solid #6a79c3;
     background-color: #fff;
     color: #6a79c3;
-    
+}
+.CreateAccountButton{
+    width: 250px;
+    height: 60px;
+    align-self: center;
+    position: relative;
+    color: #fff;
+    background-color: transparent;
+    font-family: Montserrat;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 4px;
+    border: 2px solid #fff;
+    outline: 0;
+}
+
+.CreateAccountButton:hover{
+    border: 2px solid #ea5f32;
+    background-color: #fff;
+    color: #ea5f32;
 }
 
 

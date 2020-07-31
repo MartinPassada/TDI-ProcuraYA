@@ -54,6 +54,7 @@ export default function NewLandingPage(props) {
                     <div class='TitleContainer1'>
                         <h1 class='TitleH1' id='Title1'>Haz más con ProcuraYA</h1>
                         <h2 id='SubTitle1'>Potencia tu productividad utilizando nuestras herramientas</h2>
+                        <button class='CreateAccountButton' onClick={() => { window.location.replace('/CreateAccount') }}>CREAR CUENTA</button>
                     </div >
                     <div class="LottieDiv1" id='Lottie1'><LottieConstructor animation={GuyFloatingAnim} /></div>
                 </div >
