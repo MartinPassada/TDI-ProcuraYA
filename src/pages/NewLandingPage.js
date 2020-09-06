@@ -43,7 +43,7 @@ export default function NewLandingPage(props) {
     }, [])
 
     const handleEvent = () => {
-        Login(props.handleLogin);
+        Login();
     }
 
 
@@ -203,7 +203,7 @@ export default function NewLandingPage(props) {
                             <p class="top--text">Servicio de Mensajería In-App</p>
                         </div>
                         <div class="bottom--container">
-                            <p class="text--description">Gracias este servicio in-app podrás comunicarte con tus subordinados y asignarles tareas.</p>
+                            <p class="text--description">Con este servicio in-app podrás comunicarte con tus subordinados y asignarles tareas.</p>
                         </div>
                     </li>
 

@@ -58,7 +58,7 @@
     width: auto;
     height: auto;
     cursor: pointer;
-    display: none;
+    display: flex;
    
 }
 
@@ -105,4 +105,18 @@
     display: inline;
     margin-left: 8px;
 }
+.listDivRoot{
+    width: 100%;
+    max-width: 360px;
+    background-color: white;
+}
+.classesSmall{
+    width: 50px;
+    height: 50px
+}
+.classesLarge{
+    width: 70px;
+    height: 70px
+}
+
 

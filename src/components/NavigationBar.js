@@ -1,13 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar';
-import Form from 'react-bootstrap/Form'
 import NavDropdown from 'react-bootstrap/NavDropdown'
-import FormControl from 'react-bootstrap/FormControl';
-import Button from 'react-bootstrap/Button'
 import ProcuraYaLogo from '../assets/LOGO1.png'
-import AltUserImg from '../assets/nouser.png'
 import UploadFileImg from '../assets/paper.png'
 import SearchImg from '../assets/mglass.png'
 import FileUploadForm from '../components/FileUploadForm'
@@ -15,7 +11,30 @@ import personGrey from '../assets/personGrey.png'
 import fileGrey from '../assets/fileGrey.png'
 import personOrange from '../assets/personOrange.png'
 import fileOrange from '../assets/fileOrange.png'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import AccountConfig from './AccountConfig';
+import InboxIcon from '../components/InboxIcon';
 import '../css/NavigationBar.css'
+
+
+
+const MySwal = withReactContent(Swal);
+const Toast = MySwal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3500,
+    timerProgressBar: true,
+    onOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer)
+        toast.addEventListener('mouseleave', Swal.resumeTimer)
+    },
+    onAfterClose: () => {
+        window.location.replace('/Home');
+    }
+
+})
 
 export default class NavigationBar extends Component {
     constructor(props) {
@@ -24,35 +43,18 @@ export default class NavigationBar extends Component {
             userData: {},
         }
     }
-    /*state = {
-        name: ''
-    }*/
-    /*
-    get user Info
-    Img, name and user type
-    */
 
-    async getInitialState() {
+    async handleComponentUpdate() {
         var response = await fetch('/getUserInfo');
         var data = await response.json();
-        console.log(data);
         this.setState({ userData: data });
     }
     async componentDidMount() {
         var response = await fetch('/getUserInfo');
         var data = await response.json();
-        console.log(data);
         this.setState({ userData: data });
     }
-    //logout
-    /*logout = () => {
-        fetch('/logout')
-            .then(response => {
-                if (response.status === 200) {
-                    window.location.replace('/');
-                }
-            })
-    }*/
+
     //render component in right panel
     uploadFileFn = () => {
         //ReactDOM.unmountComponentAtNode(document.getElementById('fright'));
@@ -83,11 +85,12 @@ export default class NavigationBar extends Component {
             }
         }
     }
+
     render() {
         return (
             <div>
                 <Navbar id='Navbar' bg="warning" variant="dark"  >
-                    <Navbar.Brand href="/Home"><img src={ProcuraYaLogo} height='75px' width='75px' href='/'></img></Navbar.Brand>
+                    <Navbar.Brand href="/Home"><img id='procuraYaLogo' src={ProcuraYaLogo} href='/'></img></Navbar.Brand>
                     <Nav className='mr-auto'>
                         {/*<Nav.Link href="/CreateAccount" id='NavBarLink1'>Create Account</Nav.Link>*/}
                         {/*<Nav.Link href="/" id='NavBarLink2' >Landing Page</Nav.Link>*/}
@@ -95,12 +98,15 @@ export default class NavigationBar extends Component {
                             <NavDropdown.Item id='NavBarDropdown1' href="#action/3.1">Mis Expedientes</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
-                    <img class='navBarIcons' id='uploadFileButton' src={UploadFileImg} height='50px' width='50px' onClick={this.uploadFileFn}></img>
-                    {/*<img class='navBarIcons' id='searchEngineButton' src={SearchImg} height='50px' width='50px' onClick={this.openSearchEngine}></img>*/}
-                    <NavDropdown title={<img id='userImage' src={AltUserImg} height='50px' width='50px'></img>} id='NavBarUserImg' height='50px' width='50px' id="basic-nav-dropdown" drop='left'>
-                        <NavDropdown.Item id='NavBarDropdown2' href="#action/3.1" drop='left'>{this.state.userData.name}</NavDropdown.Item>
-                        <NavDropdown.Item id='NavBarDropdown2' href="#action/3.1" drop='left'>Ajustes de Cuenta</NavDropdown.Item>
-                        <NavDropdown.Item id='NavBarDropdown3' href="#action/3.1" drop='left' onClick={this.props.handleLogout}>Cerrar Sesión</NavDropdown.Item>
+                    <div className='NavBarButtonsDiv'>
+                        <img class='navBarIcons' id='uploadFileButton' src={UploadFileImg} height='50px' width='50px' onClick={this.uploadFileFn}></img>
+                        <img class='navBarIcons' id='searchEngineButton' src={SearchImg} height='50px' width='50px' onClick={this.openSearchEngine}></img>
+                        <InboxIcon />
+                    </div>
+                    <NavDropdown title={<img id='userImage' src={this.state.userData.img} height='50px' width='50px'></img>} id='NavBarUserImg' height='50px' width='50px' id="basic-nav-dropdown" drop='left'>
+                        <NavDropdown.Item id='NavBarDropdown1' href="" drop='left'>{this.state.userData.name}</NavDropdown.Item>
+                        <NavDropdown.Item id='NavBarDropdown2' href="" drop='left' onClick={() => { AccountConfig().then(res => { if (res) { this.handleComponentUpdate() } }) }}>Ajustes de Cuenta</NavDropdown.Item>
+                        <NavDropdown.Item id='NavBarDropdown3' href="" drop='left' onClick={this.props.handleLogout}>Cerrar Sesión</NavDropdown.Item>
                     </NavDropdown>
                 </Navbar >
                 <div id="myNav" class="overlay">

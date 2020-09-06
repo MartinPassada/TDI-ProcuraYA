@@ -1,0 +1,16 @@
+.TranferListsContainer{
+    display: flex;
+    flex-direction: row;
+}
+.TransferListLeft{
+    display: flex;
+    float: left;
+}
+.TransferListButtonsContainer{
+    position: inherit;
+    align-self: center;
+}
+.TranferListRight{
+    display: flex;
+    float: right;
+}

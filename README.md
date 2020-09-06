@@ -12,6 +12,15 @@
  Gmail
  Mohmal
 
+
+Update #17
+
+1. Users can now assign/un-assign files to their attorneys
+2. Representatives can now send messages in-app
+3. Attorneys Panel
+4. Miscellaneous fixes
+5. More features I don't remember
+
 Update #16
 
 1. New Landing Page

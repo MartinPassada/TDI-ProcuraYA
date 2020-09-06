@@ -7,7 +7,7 @@ const Toast = MySwal.mixin({
     toast: true,
     position: 'top-end',
     showConfirmButton: false,
-    timer: 3500,
+    timer: 3000,
     timerProgressBar: true,
     onOpen: (toast) => {
         toast.addEventListener('mouseenter', Swal.stopTimer)
@@ -25,9 +25,8 @@ const Toast = MySwal.mixin({
     }
 })
 
-export default function Login(handleLogin) {
+export default function Login() {
     LoginForm();
-
     function LoginForm(loginData) {
         if (loginData == undefined || loginData.email == undefined || loginData.password == undefined) {
             var LastEmail = '';
@@ -55,7 +54,7 @@ export default function Login(handleLogin) {
             showCancelButton: true,
             cancelButtonText: 'CANCELAR',
             cancelButtonColor: '#999999',
-            focusConfirm: false,
+            focusConfirm: true,
             allowEnterKey: true,
             allowOutsideClick: false,
             footer: '<a href=/ResetPassword> Restablecer contraseña</a>',
@@ -142,7 +141,6 @@ export default function Login(handleLogin) {
                     })
                         .then(response => {
                             if (response.status === 200) {
-                                handleLogin();
                                 Toast.fire({
                                     icon: 'success',
                                     title: 'Logueo exitoso redireccionando al Home...'
