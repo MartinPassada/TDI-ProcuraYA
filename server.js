@@ -25,7 +25,7 @@ app.use(session({
     secret: 'whatever',
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 9999999999999999999999999999 } // 1800000 Expira despues de media hora
+    cookie: { maxAge: 1800000 } // 1800000 Expira despues de media hora
 },
     loginattemps = 0,
 ))

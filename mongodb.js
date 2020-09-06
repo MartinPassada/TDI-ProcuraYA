@@ -24,7 +24,7 @@ module.exports.updateMessageState = updateMessageState
 /******************************************************************** */
 const fs = require("fs");
 const path = require('path');
-var usingOnlineCluster = false;
+var usingOnlineCluster = true;
 var mongodb = '';
 var mongoURL = '';
 var mongoClient = '';
