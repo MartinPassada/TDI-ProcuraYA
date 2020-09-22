@@ -43,9 +43,9 @@
 .RinnerDiv {
     float: right;
     height: auto;
-    width: auto;
+    width: 60%;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     align-content: center;
     justify-items: center;
@@ -53,12 +53,8 @@
 }
 
 .FilesListButton{
-    max-width: 45px;
-    max-height: 45px;
-    width: auto;
-    height: auto;
-    cursor: pointer;
-    display: flex;
+    z-index: 2;
+    font-size: 40px;
    
 }
 
@@ -72,12 +68,12 @@
 /*control panel title*/
 .ControlPanelTitle{
     display: flex;
-    align-self: flex-start;
-    justify-content: left;
+    justify-content: center;
+    width: 40%;
 }
 .refreshButton{
-    max-width: 45px;
-    max-height: 45px;
+    max-width: 40px;
+    max-height: 40px;
     width: auto;
     height: auto;
     cursor: pointer;
@@ -117,6 +113,11 @@
 .classesLarge{
     width: 70px;
     height: 70px
+}
+.newTaskIcon{
+    z-index: 2;
+    color: red;
+    align-self: center
 }
 
 

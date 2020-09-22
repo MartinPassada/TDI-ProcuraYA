@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import TransferList from './TransferList'
+import Tooltip from '@material-ui/core/Tooltip';
 //import ControlPanel from './ControlPanel'
 
 
@@ -154,16 +155,18 @@ export default function AssignFilesIcon(props) {
     }
 
     return (
-        <div className={classes.root} onClick={() => { assignFiles(assignedFiles) }} style={{ cursor: 'pointer' }} >
-            <div>
-                <Badge color='error' badgeContent={count} max={999} anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}  >
-                    <DescriptionSharpIcon className={classes.icon} style={{ fontSize: 40 }} />
-                </Badge>
+        <Tooltip style={{ zIndex: 2 }} title="Asignar Expediente" arrow>
+            <div className={classes.root} onClick={() => { assignFiles(assignedFiles) }} style={{ cursor: 'pointer' }} >
+                <div>
+                    <Badge color='error' badgeContent={count} max={999} anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}  >
+                        <DescriptionSharpIcon className={classes.icon} style={{ fontSize: 40 }} />
+                    </Badge>
+                </div>
             </div>
-        </div>
+        </Tooltip>
 
     );
 }

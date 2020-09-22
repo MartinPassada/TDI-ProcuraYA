@@ -19,8 +19,21 @@ import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Tooltip from '@material-ui/core/Tooltip';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import IconButton from '@material-ui/core/IconButton';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import PersonIcon from '@material-ui/icons/Person';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 
 
@@ -38,6 +51,7 @@ const Toast = MySwal.mixin({
     onAfterClose: () => {
     }
 })
+
 /*function showButtons(e) {
     e = e || window.event;
     var row = e.target.parentNode.childNodes[1];
@@ -64,7 +78,7 @@ export default class ControlPanel extends Component {
 
         let RB = document.getElementById('refreshButton');
         RB.src = refreshButtonGif;
-        const res = await fetch('/getUserFilesIDList');
+        const res = await fetch('/getUserFiles');
         if (res.status === 404) {
             RB.src = refreshButton;
             Toast.fire({
@@ -91,7 +105,7 @@ export default class ControlPanel extends Component {
     handleUpdate = async () => {
         let RB = document.getElementById('refreshButton');
         RB.src = refreshButtonGif;
-        const res = await fetch('/getUserFilesIDList');
+        const res = await fetch('/getUserFiles');
         if (res.status === 404) {
             RB.src = refreshButton;
             Toast.fire({
@@ -155,6 +169,7 @@ export default class ControlPanel extends Component {
                     } else if (response.status === 200) {
                         const data = response.json()
                             .then(data => {
+                                console.log(data)
                                 let fileDiv = document.createElement('div');
                                 fileDiv.setAttribute('class', 'fileContainer');
                                 fileDiv.setAttribute('id', 'fileContainer');
@@ -174,13 +189,16 @@ export default class ControlPanel extends Component {
                                 }
                                 //Header
                                 let headerTable = this.createHeader(data);
-
                                 headerDiv.append(headerTable);
                                 let division = document.createElement('hr');
                                 division.setAttribute('class', 'division');
                                 let headerTitle = document.createElement('h3');
                                 headerTitle.setAttribute('class', 'headerTitle');
                                 headerTitle.innerHTML = 'Datos Generales';
+                                //+info accordion
+
+                                let accordion = <Accordion></Accordion>
+
                                 fileDiv.append(headerTitle, headerDiv, division, bodyDiv);
                                 ReactDOM.unmountComponentAtNode(document.getElementById('fright'));
                                 document.getElementById('fright').innerHTML = '';
@@ -263,15 +281,50 @@ export default class ControlPanel extends Component {
         return (
             <div>
                 <div class='TitleDiv'>
-                    <img src={fileIcon} class='titleIcon' id='titleIcon' onClick={this.handleUpdate}></img>
+                    {/*<img src={fileIcon} class='titleIcon' id='titleIcon' onClick={this.handleUpdate}></img>*/}
                     <h2 class='ControlPanelTitle'>Expedientes</h2>
-                    <img src={refreshButton} class='refreshButton' id='refreshButton' onClick={this.handleUpdate}></img>
                     <div class='RinnerDiv' id='RinnerDiv'>
-                        <img class='FilesListButton' src={mglassIcon} onClick={() => { this.searchFile() }}></img>
-                        <img class='FilesListButton' src={sendIcon}></img>
-                        <img class='FilesListButton' src={backIcon}></img>
-                        <img class='FilesListButton' src={crossIcon} onClick={() => { this.getAttorneysPanel() }} ></img>
-                        <img class='FilesListButton' src={trashIcon}></img>
+                        <div>
+                            <Tooltip title="Ver expediente" arrow>
+                                <IconButton onClick={() => { this.searchFile() }}>
+                                    <VisibilityIcon style={{ fontSize: 40, zIndex: 2, color: '#ea5f32' }} />
+                                </IconButton>
+                                {/*<img class='FilesListButton' src={mglassIcon} onClick={() => { this.searchFile() }}></img>*/}
+                            </Tooltip>
+                        </div>
+                        <div>
+                            <Tooltip title="Enviar expediente" arrow>
+                                <IconButton onClick={() => { '' }}>
+                                    <ArrowForwardIcon style={{ fontSize: 40, zIndex: 2, color: '#ea5f32' }} />
+                                </IconButton>
+                                {/*<img class='FilesListButton' src={sendIcon}></img>*/}
+                            </Tooltip>
+                        </div>
+                        <div>
+                            <Tooltip title="Traer expediente" arrow>
+                                <IconButton onClick={() => { '' }}>
+                                    <ArrowBackIcon style={{ fontSize: 40, zIndex: 2, color: '#ea5f32' }} />
+                                </IconButton>
+                                {/*<img class='FilesListButton' src={backIcon}></img>*/}
+                            </Tooltip>
+                        </div>
+                        <div>
+                            <Tooltip title="Ver procuradores" arrow>
+                                <IconButton onClick={() => { this.getAttorneysPanel() }}>
+                                    <PersonIcon style={{ fontSize: 40, zIndex: 2, color: '#ea5f32' }} />
+                                </IconButton>
+                                {/*<img class='FilesListButton' src={crossIcon} onClick={() => { this.getAttorneysPanel() }} ></img>*/}
+                            </Tooltip>
+                        </div>
+                        <div>
+                            <Tooltip title="Borrar expediente" arrow>
+                                <IconButton onClick={() => { '' }}>
+                                    <DeleteForeverIcon style={{ fontSize: 40, zIndex: 2, color: 'red' }} />
+                                </IconButton>
+                                {/*<img class='FilesListButton' src={trashIcon}></img>*/}
+                            </Tooltip>
+                        </div>
+                        <img src={refreshButton} class='refreshButton' id='refreshButton' onClick={this.handleUpdate}></img>
                     </div>
                 </div>
                 {
@@ -300,6 +353,26 @@ export default class ControlPanel extends Component {
                                                         }
                                                     </ListItemIcon>
                                                     <ListItemText primary={'Expediente N°: ' + e.fileID} />
+                                                    {
+                                                        this.state.userData.type ? (
+                                                            //
+                                                            ''
+                                                        ) : (
+                                                                <ListItemIcon>
+                                                                    {e.tasks === undefined ? (
+                                                                        ''
+                                                                    ) : (
+                                                                            <Tooltip title="Tareas pendientes" arrow>
+                                                                                <NewReleasesIcon className='newTaskIcon' />
+                                                                            </Tooltip>
+                                                                        )
+
+                                                                    }
+                                                                </ListItemIcon>
+                                                            )
+                                                    }
+
+
                                                 </ListItem >
                                             )
 

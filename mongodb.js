@@ -6,7 +6,7 @@ module.exports.unBlockUser = unBlockUser;
 module.exports.resetPassword = resetPassword;
 module.exports.emailConfirmation = emailConfirmation;
 module.exports.saveFile = saveFile;
-module.exports.getUserFilesIDList = getUserFilesIDList;
+module.exports.getUserFiles = getUserFiles;
 module.exports.getFile = getFile;
 module.exports.getAttorneys = getAttorneys;
 module.exports.attorneyData = attorneyData;
@@ -21,6 +21,8 @@ module.exports.saveMessage = saveMessage
 module.exports.getInboxMessagesIDList = getInboxMessagesIDList
 module.exports.getInboxMessages = getInboxMessages
 module.exports.updateMessageState = updateMessageState
+module.exports.getTasksNames = getTasksNames
+module.exports.addTaskToFile = addTaskToFile
 /******************************************************************** */
 const fs = require("fs");
 const path = require('path');
@@ -318,10 +320,11 @@ function saveFile(file, email, mongoID, cbOK) {
                         fileTitle: `${file.header.fileTitle}`,
                         owner: `${mongoID}`,
                         isAssigned: false,
-                        assignedTo: null,
+                        assignedTo: '',
                         creationDate: Date.now(),
                         lastEditionDate: Date.now(),
                         editionHistory: [Date.now(),],
+                        tasks: [],
                         bodies: file.body[lastItem],
                     });
                     users.updateOne({ 'email': `${email}` }, { $push: { files: `${file.header.fileID}` } });
@@ -343,7 +346,7 @@ function saveFile(file, email, mongoID, cbOK) {
     });
 }
 //GET USER FILES
-function getUserFilesIDList(email, cbOK) {
+function getUserFiles(email, cbOK) {
     mongoClient.connect(err => {
         if (err) {
             cbError("No se pudo conectar a la DB. " + err);
@@ -358,16 +361,16 @@ function getUserFilesIDList(email, cbOK) {
                         console.log(err)
                         cbOK(500)
                     } else if (data == '') {
-                        //console.log('getUserFilesIDList users find 404');
+                        //console.log('getUserFiles users find 404');
                         cbOK(data); //no se encontro nada
                     } else if (data !== '') {
                         //si se encontro algo
-                        files.find({ "fileID": { $in: data[0].files } }).project({ "_id": 0.0, 'fileID': 1.0, 'assignedTo': 1.0, 'owner': 1.0 }).toArray((err, data) => {
+                        files.find({ "fileID": { $in: data[0].files } }).project({ "_id": 0.0, 'fileID': 1.0, 'assignedTo': 1.0, 'owner': 1.0, 'tasks': 1.0 }).toArray((err, data) => {
                             if (err) {
                                 console.log(err)
                                 cbOK(500)
                             } else if (data == '') {
-                                //console.log('getUserFilesIDList files find 404');
+                                //console.log('getUserFiles files find 404');
                                 cbOK(data); //no se encontro nada
                             } else if (data !== '') {
                                 //si se encontro algo
@@ -633,7 +636,7 @@ function assignFiles(data, cbOK) {
                         if (err) {
                             cbOK(500)
                         } else if (result) {
-                            files.updateMany({ "fileID": { $in: data.toAssignList } }, { $set: { "isAssigned": false, "assignedTo": null, "assignDate": null } }, function (err, result) {
+                            files.updateMany({ "fileID": { $in: data.toAssignList } }, { $set: { "isAssigned": false, "assignedTo": '', "assignDate": '' } }, function (err, result) {
                                 if (err) {
                                     cbOK(500)
                                 } else if (result) {
@@ -710,8 +713,8 @@ function getInboxMessagesIDList(userMongoID, cbOK) {
                         cbOK(404);
                         //no files founded
                     } else if (data !== '') {
-                        console.log('db data 200 getInboxMessagesIDList');
-                        console.log(data[0].inbox)
+                        //console.log('db data 200 getInboxMessagesIDList');
+                        //console.log(data[0].inbox)
                         cbOK(data[0].inbox);
                     } else {
                         cbOK(500);
@@ -764,6 +767,54 @@ function updateMessageState(fileID, cbOK) {
             messages.updateOne({ "messageID": fileID }, { $set: { "wasRead": true } }, function (err, result) {
                 if (err) {
                     console.log(err)
+                    cbOK(500)
+                } else if (result) {
+                    cbOK(200)
+                }
+            })
+
+        }
+
+
+    });
+    //client.close();
+}
+
+function getTasksNames(cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var tasks = db.collection("tasks");
+            tasks.find({}).project({ "_id": 0.0 }).toArray((err, data) => {
+                if (err) {
+                    console.log(err);
+                    cbOK(500)
+                } else if (data.length > 0) {
+                    cbOK(data[0])
+                } else {
+                    cbOK(404)
+                }
+            })
+
+        }
+
+
+    });
+    //client.close();
+}
+
+function addTaskToFile(data, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var files = db.collection("files");
+            files.updateMany({ "fileID": { $in: data.files } }, { $push: { "tasks": { $each: data.tasks } } }, function (err, result) {
+                if (err) {
+                    console.log(err);
                     cbOK(500)
                 } else if (result) {
                     cbOK(200)

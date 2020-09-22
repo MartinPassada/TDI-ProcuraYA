@@ -307,8 +307,8 @@ app.post('/updateUserImg', (req, res) => {
     });
 });
 // GET USER FILES ID LIST
-app.get('/getUserFilesIDList', function (req, res) {
-    mongoDatabase.getUserFilesIDList(req.session.email, cbOK => {
+app.get('/getUserFiles', function (req, res) {
+    mongoDatabase.getUserFiles(req.session.email, cbOK => {
         if (`${cbOK}` == 404) {
             res.sendStatus(404);
         } else if (`${cbOK}` == 500) {
@@ -358,7 +358,7 @@ app.get('/getUserFilesIDList', function (req, res) {
                     });
                 }
 
-                //console.log(filteredArray)
+                console.log(filteredArray)
                 mongoDatabase.attorneyDataMulti(filteredArray, cbOK => {
                     if (`${cbOK}` == 404) {
                         res.sendStatus(404);
@@ -493,8 +493,8 @@ app.get('/getInboxMessages', function (req, res) {
             res.sendStatus(500);
         } else if (`${cbOK}` !== 500 && `${cbOK}` !== 404) {
             let messageArrID = cbOK
-            console.log('server messageArrID')
-            console.log(messageArrID)
+            //console.log('server messageArrID')
+            //console.log(messageArrID)
             mongoDatabase.getInboxMessages(messageArrID, cbOK => {
                 if (`${cbOK}` == 404) {
                     res.sendStatus(404);
@@ -519,7 +519,29 @@ app.post('/updateMessageState', function (req, res) {
         }
     })
 })
-
+app.get('/getTasksNames', function (req, res) {
+    mongoDatabase.getTasksNames(cbOK => {
+        if (`${cbOK}` == 404) {
+            res.sendStatus(404);
+        } else if (`${cbOK}` == 500) {
+            res.sendStatus(500);
+        } else if (`${cbOK}` !== 500 && `${cbOK}` !== 404) {
+            res.send(cbOK);
+        }
+    })
+})
+app.post('/addTaskToFile', function (req, res) {
+    let data = req.body
+    mongoDatabase.addTaskToFile(data, cbOK => {
+        if (`${cbOK}` == 404) {
+            res.sendStatus(404);
+        } else if (`${cbOK}` == 500) {
+            res.sendStatus(500);
+        } else if (`${cbOK}` !== 500 && `${cbOK}` !== 404) {
+            res.send(cbOK);
+        }
+    })
+})
 
 app.listen(process.env.PORT || 8001,
     () => console.log("Server is running..."));

@@ -12,6 +12,9 @@
  Gmail
  Mohmal
 
+Update #18
+
+1. Fixes and miscellaneous improvemets
 
 Update #17
 

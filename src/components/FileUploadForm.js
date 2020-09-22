@@ -156,7 +156,6 @@ export default class FileUploadForm extends Component {
         this.state.bodies.push(this.newBody(this.state.bodies.length));
         this.setState({ bodies: this.state.bodies });
     };
-
     deleteBody = (e) => {
         let row = e.target.parentNode.parentNode
         let array = this.state.bodies;

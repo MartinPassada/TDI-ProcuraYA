@@ -6,6 +6,7 @@ import ChatIcon from '@material-ui/icons/Chat';
 import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 const MySwal = withReactContent(Swal);
@@ -117,16 +118,17 @@ export default function SendMessageIcon(props) {
 
 
     return (
-        <div className={classes.root} onClick={() => { sendMessage(props) }} style={{ cursor: 'pointer' }} >
-            <div>
-                <Badge color='error' badgeContent={0} max={999} anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}  >
-                    <ChatIcon className={classes.icon} style={{ fontSize: 40 }} />
-                </Badge>
+        <Tooltip style={{ zIndex: 2 }} title="Enviar Mensaje" arrow>
+            <div className={classes.root} onClick={() => { sendMessage(props) }} style={{ cursor: 'pointer' }} >
+                <div>
+                    <Badge color='error' badgeContent={0} max={999} anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }}  >
+                        <ChatIcon className={classes.icon} style={{ fontSize: 40 }} />
+                    </Badge>
+                </div>
             </div>
-        </div>
-
+        </Tooltip>
     );
 }

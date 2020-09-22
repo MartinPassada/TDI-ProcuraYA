@@ -1,0 +1,11 @@
+.containerDiv{
+    display: flex;
+    justify-content: center;
+}
+
+.selectTaskFormDiv{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: -moz-max-content;
+}

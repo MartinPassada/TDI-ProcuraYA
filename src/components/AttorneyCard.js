@@ -14,6 +14,7 @@ import withReactContent from 'sweetalert2-react-content'
 
 
 
+
 const MySwal = withReactContent(Swal);
 const Toast = MySwal.mixin({
     toast: true,

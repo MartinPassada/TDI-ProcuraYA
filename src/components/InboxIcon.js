@@ -141,70 +141,96 @@ export default function InboxIcon(props) {
     }
 
     return (
-        <NavDropdown drop='left' title={<div className={classes.root} style={{ cursor: 'pointer' }}>
-            <Badge color='error' badgeContent={count} max={999} anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-            }} >
-                <ForumIcon className={classes.icon} style={{ fontSize: 50 }} />
-            </Badge>
-        </div>}>
-            <NavDropdown.Item id='NavBarDropdown1'>
-                <List component="nav" dense aria-label="main mailbox folders">
-                    {
-                        Inbox.map(e => {
-                            /*return <div onClick={() => { checkMessage(e) }} style={{ backgroundColor: e.wasRead ? 'white' : '#ebebeb' }}>
-                                <NavDropdown.Item bsPrefix='messagesDropdownItem' id='NavBarDropdown1'>
-        
-                                    <Avatar className={classes.avatar} src={e.senderImg} />
-                                    <p className='messagesDropdownText'>{e.sender}</p>
-                                    <p className='messagesDropdownMessage'>{e.message}</p>
-        
-                                </NavDropdown.Item>
-                            </div>*/
-                            return (
-                                e.wasRead ?
-                                    (
-                                        <ListItem
-                                            button
-                                            selected={false}
-                                            onClick={() => { checkMessage(e) }}
+        Inbox.length > 0 ? (
+            <NavDropdown drop='left' title={<div className={classes.root} style={{ cursor: 'pointer' }}>
+                <Badge color='error' badgeContent={count} max={999} anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }} >
+                    <ForumIcon className={classes.icon} style={{ fontSize: 50 }} />
+                </Badge>
+            </div>}>
+                <NavDropdown.Item id='NavBarDropdown1'>
+                    <List component="nav" dense aria-label="main mailbox folders">
+                        {
+                            Inbox.map(e => {
+                                /*return <div onClick={() => { checkMessage(e) }} style={{ backgroundColor: e.wasRead ? 'white' : '#ebebeb' }}>
+                                    <NavDropdown.Item bsPrefix='messagesDropdownItem' id='NavBarDropdown1'>
+            
+                                        <Avatar className={classes.avatar} src={e.senderImg} />
+                                        <p className='messagesDropdownText'>{e.sender}</p>
+                                        <p className='messagesDropdownMessage'>{e.message}</p>
+            
+                                    </NavDropdown.Item>
+                                </div>*/
+                                return (
+                                    e.wasRead ?
+                                        (
+                                            <ListItem
+                                                button
+                                                selected={false}
+                                                onClick={() => { checkMessage(e) }}
 
-                                        >
-                                            <ListItemIcon>
-                                                <Avatar className={classes.avatar} src={e.senderImg} />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary={e.sender}
-                                                secondary={e.message}
-                                            />
-                                        </ListItem >
-                                    ) : (
-                                        <ListItem
-                                            button
-                                            selected={true}
-                                            onClick={() => { checkMessage(e) }}
+                                            >
+                                                <ListItemIcon>
+                                                    <Avatar className={classes.avatar} src={e.senderImg} />
+                                                </ListItemIcon>
+                                                <ListItemText
+                                                    primary={e.sender}
+                                                    secondary={e.message}
+                                                />
+                                            </ListItem >
+                                        ) : (
+                                            <ListItem
+                                                button
+                                                selected={true}
+                                                onClick={() => { checkMessage(e) }}
 
-                                        >
-                                            <ListItemIcon>
-                                                <Avatar className={classes.avatar} src={e.senderImg} />
-                                            </ListItemIcon>
-                                            <ListItemText
-                                                primary={e.sender}
-                                                secondary={e.message}
-                                            />
-                                        </ListItem >
-                                    )
-                            )
+                                            >
+                                                <ListItemIcon>
+                                                    <Avatar className={classes.avatar} src={e.senderImg} />
+                                                </ListItemIcon>
+                                                <ListItemText
+                                                    primary={e.sender}
+                                                    secondary={e.message}
+                                                />
+                                            </ListItem >
+                                        )
+                                )
 
-                        })
-                    }
-                </List>
-            </NavDropdown.Item>
+                            })
+                        }
+                    </List>
+                </NavDropdown.Item>
+            </NavDropdown>
+        ) : (
 
+                <NavDropdown drop='left' title={<div className={classes.root} style={{ cursor: 'pointer' }}>
+                    <Badge color='error' badgeContent={count} max={999} anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                    }} >
+                        <ForumIcon className={classes.icon} style={{ fontSize: 50 }} />
+                    </Badge>
+                </div>}>
+                    <NavDropdown.Item id='NavBarDropdown1'>
+                        <List component="nav" dense aria-label="main mailbox folders">
 
-        </NavDropdown>
+                            <ListItem
+                                button
+                                selected={false}
+                                onClick={''}
+                            >
+                                <ListItemText
+                                    primary={'No tienes mensajes'}
 
+                                />
+                            </ListItem >
+
+                        </List>
+                    </NavDropdown.Item>
+                </NavDropdown>
+            )
 
     );
 }
