@@ -13,6 +13,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import ExtendSessionFn from './ExtendSesion';
 
 
 const MySwal = withReactContent(Swal);
@@ -117,7 +118,8 @@ export default function InboxIcon(props) {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
             },
         })
         if (response.status === 200) {
@@ -134,6 +136,8 @@ export default function InboxIcon(props) {
                 icon: 'error',
                 title: 'Server Error'
             })
+        } else if (response.status === 403) {
+            await ExtendSessionFn()
         }
     }
     const handleUpdate = async () => {

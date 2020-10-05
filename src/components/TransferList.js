@@ -15,6 +15,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import AttorneyDataInfoHeader from "./AttorneyDataInfoHeader"
 import '../css/TransferList.css'
+import ExtendSessionFn from './ExtendSesion';
 
 
 const MySwal = withReactContent(Swal);
@@ -81,7 +82,14 @@ export default function TransferList(props) {
         return assignedArray
     }
     async function filterUserFilesArray() {
-        const res = await fetch('/getFilesToAssign');
+        const res = await fetch('/getFilesToAssign', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+            }
+        });
         if (res.status === 200) {
             let data = await res.json();
             if (data.length > 0) {
@@ -97,6 +105,8 @@ export default function TransferList(props) {
             })
         } else if (res.status === 404) {
             return userFiles
+        } else if (res.status === 403) {
+            await ExtendSessionFn()
         }
 
     }

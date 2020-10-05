@@ -8,6 +8,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import TransferList from './TransferList'
 import Tooltip from '@material-ui/core/Tooltip';
+import ExtendSessionFn from './ExtendSesion';
 //import ControlPanel from './ControlPanel'
 
 
@@ -104,7 +105,8 @@ export default function AssignFilesIcon(props) {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
                     },
                     body: JSON.stringify(dataSend)
                 })
@@ -117,6 +119,8 @@ export default function AssignFilesIcon(props) {
                         title: 'Error de servidor'
                     })
                     handleUpdate();
+                } else if (response.status === 403) {
+                    await ExtendSessionFn()
                 }
 
 
@@ -132,7 +136,8 @@ export default function AssignFilesIcon(props) {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
             },
             body: JSON.stringify(dataSend)
         })
@@ -148,6 +153,8 @@ export default function AssignFilesIcon(props) {
                 icon: 'error',
                 title: 'Error de servidor'
             })
+        } else if (response.status === 403) {
+            await ExtendSessionFn()
         }
     }
     const handleUpdate = async () => {

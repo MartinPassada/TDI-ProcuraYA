@@ -11,6 +11,7 @@ import Avatar from '@material-ui/core/Avatar';
 import AttorneyDataInfoHeader from './AttorneyDataInfoHeader'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import ExtendSessionFn from './ExtendSesion';
 
 
 const MySwal = withReactContent(Swal);
@@ -59,7 +60,8 @@ export default function SelectFile(props) {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
             },
             body: JSON.stringify(dataSend)
         })
@@ -73,6 +75,8 @@ export default function SelectFile(props) {
                 icon: 'error',
                 title: 'Error de servidor'
             })
+        } else if (response.status === 500) {
+            await ExtendSessionFn();
         }
     }
     useEffect(() => {

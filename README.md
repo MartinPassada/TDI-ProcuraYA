@@ -7,14 +7,30 @@
 **For more info check public Trello Roadmap at:** https://trello.com/b/Nk5HrWOk/procura-ya
 
 **Email sender was succesfully tested with the following emails:**
+
  Protonmail
  Outlook
  Gmail
  Mohmal
 
+Update #19
+
+1. Attorneys actions were reduced, attorneys can't:
+    * Upload Files
+    * Search for files in DB
+    * Assign tasks to files
+    * Assign files to other users
+2. Implemented jwt (with refresh tokens) over sessions
+3. Now users with "representative" user type will see an un-accomplished tasks table for each file
+4. Now users with "attorney" user type will see an un-accomplished tasks table for each file and from there they can complete them.
+5. When session expires, you will be asked to extend it
+6. Improved messages when there's no data to show
+
+
 Update #18
 
 1. Fixes and miscellaneous improvemets
+2. Representatives can now attach tasks to specific file
 
 Update #17
 

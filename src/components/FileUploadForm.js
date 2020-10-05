@@ -6,7 +6,9 @@ import Card from 'react-bootstrap/Card'
 import Trash from '../assets/trash.png'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import ExtendSessionFn from './ExtendSesion';
 import '../css/SunEditor.css'
+
 const MySwal = withReactContent(Swal);
 const Toast = MySwal.mixin({
     toast: true,
@@ -23,7 +25,6 @@ const Toast = MySwal.mixin({
     }
 
 })
-
 export default class FileUploadForm extends Component {
     constructor(props) {
         super(props)
@@ -103,17 +104,18 @@ export default class FileUploadForm extends Component {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
                 },
                 body: JSON.stringify(this.file)
             })
-                .then(response => {
+                .then(async response => {
                     if (response.status === 200) {
                         Toast.fire({
                             icon: 'success',
                             title: 'Su expediente se ha guardado correctamente'
                         })
-                    } else if (response.status === 403) {
+                    } else if (response.status === 401) {
                         Toast.fire({
                             icon: 'error',
                             title: 'El expediente ya esta cargado'
@@ -123,6 +125,8 @@ export default class FileUploadForm extends Component {
                             icon: 'error',
                             title: 'Server Error'
                         })
+                    } else if (response.status === 403) {
+                        await ExtendSessionFn();
                     }
                 })
         } else {

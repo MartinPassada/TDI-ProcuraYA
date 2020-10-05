@@ -20,7 +20,7 @@ const Unauthorized = () => {
             </div>
             <div class="message">
                 <h1>403 - You Shall Not Pass</h1>
-                <p>Oh no!, Gandalf bloquea el camino!<br />Puede ser que hayas tipiado una url? O hayas querido ir a un lugar distinto?, como el Hobbit?</p>
+                <p>Oh no!, Gandalf bloquea el camino!<br />Puede ser que tu sesion haya expirado? O hayas querido ir a un lugar distinto?, como el Hobbit?</p>
             </div>
             <p><Link to='/'>Volver a la página principal</Link></p>
         </div>

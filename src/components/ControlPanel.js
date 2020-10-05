@@ -1,19 +1,21 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom';
-import ListGroup from 'react-bootstrap/ListGroup';
-import mglassIcon from '../assets/mglass.png'
-import crossIcon from '../assets/cross.png'
-import trashIcon from '../assets/trash.png'
-import sendIcon from '../assets/send.png'
-import backIcon from '../assets/back.png'
+//import ListGroup from 'react-bootstrap/ListGroup';
+//import mglassIcon from '../assets/mglass.png'
+//import crossIcon from '../assets/cross.png'
+//import trashIcon from '../assets/trash.png'
+//import sendIcon from '../assets/send.png'
+//import backIcon from '../assets/back.png'
 import refreshButton from '../assets/refreshIcon.png'
 import refreshButtonGif from '../assets/refreshGif.gif'
 import noSearchResultImg from '../assets/nosearchresult.jpg'
 import AttorneysPanel from './AttorneysPanel'
 import $ from 'jquery';
-import fileIcon from '../assets/paper.png'
+//import fileIcon from '../assets/paper.png'
+import TasksTable from './TasksTable'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import ExtendSession from './ExtendSesion'
 //MATERIAL UI
 import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
@@ -29,11 +31,10 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PersonIcon from '@material-ui/icons/Person';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import Accordion from '@material-ui/core/Accordion';
+import Accordion from './Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 
 
@@ -51,7 +52,6 @@ const Toast = MySwal.mixin({
     onAfterClose: () => {
     }
 })
-
 /*function showButtons(e) {
     e = e || window.event;
     var row = e.target.parentNode.childNodes[1];
@@ -71,20 +71,29 @@ export default class ControlPanel extends Component {
         }
     }
     async componentDidMount() {
-        const response = await fetch('/getUserInfo');
+        const response = await fetch('/getUserInfo', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+            }
+        })
         var data = await response.json();
         this.setState({ userData: data })
-
-
         let RB = document.getElementById('refreshButton');
         RB.src = refreshButtonGif;
-        const res = await fetch('/getUserFiles');
-        if (res.status === 404) {
+        const res = await fetch('/getUserFiles', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+            }
+        });
+        if (res.status === 403) {
             RB.src = refreshButton;
-            Toast.fire({
-                icon: 'error',
-                title: 'No estas logueado'
-            })
+            await ExtendSession();
         } else if (res.status === 500) {
             RB.src = refreshButton;
             Toast.fire({
@@ -94,9 +103,27 @@ export default class ControlPanel extends Component {
         } else if (res.status === 200) {
             const data = await res.json();
             if (data.length === 0) {
-                this.setState({ noFilesMessage: ['No tienes expedientes, intenta cargar uno...'], userFiles: data })
-                RB.src = refreshButton;
+                if (this.state.userData.type) {
+                    this.setState({ noFilesMessage: ['No tienes expedientes, intenta cargar uno'], userFiles: data })
+                    RB.src = refreshButton;
+                } else {
+                    this.setState({ noFilesMessage: ['No tienes expedientes, espera a que te asignen uno'], userFiles: data })
+                    RB.src = refreshButton;
+                }
+
             } else {
+                data.forEach(file => {
+                    if (file.tasks == undefined) {
+                        file.tasks = []
+                    } else {
+                        file.hasUnresolvedTasks = false;
+                        file.tasks.forEach(t => {
+                            if (t.state === 'No realizada') {
+                                file.hasUnresolvedTasks = true
+                            }
+                        })
+                    }
+                })
                 this.setState({ userFiles: data, noFilesMessage: [] });
                 RB.src = refreshButton;
             }
@@ -105,13 +132,17 @@ export default class ControlPanel extends Component {
     handleUpdate = async () => {
         let RB = document.getElementById('refreshButton');
         RB.src = refreshButtonGif;
-        const res = await fetch('/getUserFiles');
-        if (res.status === 404) {
+        const res = await fetch('/getUserFiles', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+            }
+        });
+        if (res.status === 403) {
             RB.src = refreshButton;
-            Toast.fire({
-                icon: 'error',
-                title: 'No estas logueado'
-            })
+            await ExtendSession();
         } else if (res.status === 500) {
             RB.src = refreshButton;
             Toast.fire({
@@ -121,15 +152,33 @@ export default class ControlPanel extends Component {
         } else if (res.status === 200) {
             const data = await res.json();
             if (data.length === 0) {
-                this.setState({ noFilesMessage: ['No tienes expedientes, intenta cargar uno...'], userFiles: data })
-
-                RB.src = refreshButton;
+                if (this.state.userData.type) {
+                    this.setState({ noFilesMessage: ['No tienes expedientes, intenta cargar uno'], userFiles: data })
+                    RB.src = refreshButton;
+                } else {
+                    this.setState({ noFilesMessage: ['No tienes expedientes, espera a que te asignen uno'], userFiles: data })
+                    RB.src = refreshButton;
+                }
             } else {
-                this.setState({ userFiles: data, noFilesMessage: [] });
-                RB.src = refreshButton;
+                data.forEach(file => {
+                    if (file.tasks == undefined) {
+                        file.tasks = []
+                    } else {
+                        file.hasUnresolvedTasks = false;
+                        file.tasks.forEach(t => {
+                            if (t.state === 'No realizada') {
+                                file.hasUnresolvedTasks = true
+                            }
+                        })
+                    }
+                })
             }
+
+            this.setState({ userFiles: data, noFilesMessage: [] });
+            RB.src = refreshButton;
         }
-    };
+    }
+
     searchFile = () => {
         let fileID = this.state.fileSelected
         if (fileID === null) {
@@ -143,10 +192,11 @@ export default class ControlPanel extends Component {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
                 }
             })
-                .then(response => {
+                .then(async response => {
                     if (response.status === 500) {
                         ReactDOM.unmountComponentAtNode(document.getElementById('fright'));
                         document.getElementById('fright').innerHTML = '';
@@ -162,6 +212,8 @@ export default class ControlPanel extends Component {
                             title: 'No hemos encontrado el expediente',
                         })
                     } else if (response.status === 403) {
+                        await ExtendSession();
+                    } else if (response.status === 402) {
                         Toast.fire({
                             icon: 'error',
                             title: 'No tienes acceso a este expediente'
@@ -190,16 +242,16 @@ export default class ControlPanel extends Component {
                                 //Header
                                 let headerTable = this.createHeader(data);
                                 headerDiv.append(headerTable);
-                                let division = document.createElement('hr');
-                                division.setAttribute('class', 'division');
+                                //let division = document.createElement('hr');
+                                //division.setAttribute('class', 'division');
                                 let headerTitle = document.createElement('h3');
                                 headerTitle.setAttribute('class', 'headerTitle');
                                 headerTitle.innerHTML = 'Datos Generales';
                                 //+info accordion
-
-                                let accordion = <Accordion></Accordion>
-
-                                fileDiv.append(headerTitle, headerDiv, division, bodyDiv);
+                                let taskInfo = <Accordion fileID={fileID} data={data.tasks} userType={this.state.userData.type} />
+                                let taskInfoDiv = document.createElement('div');
+                                ReactDOM.render(taskInfo, taskInfoDiv);
+                                fileDiv.append(headerTitle, headerDiv, taskInfoDiv, bodyDiv);
                                 ReactDOM.unmountComponentAtNode(document.getElementById('fright'));
                                 document.getElementById('fright').innerHTML = '';
                                 document.getElementById('fright').appendChild(fileDiv);
@@ -212,7 +264,7 @@ export default class ControlPanel extends Component {
     getAttorneysPanel = () => {
         ReactDOM.unmountComponentAtNode(document.getElementById('fright'));
         document.getElementById('fright').innerHTML = '';
-        ReactDOM.render(<AttorneysPanel handleControlPanelUpdate={this.handleUpdate} />, document.getElementById("fright"))
+        ReactDOM.render(<AttorneysPanel handleControlPanelUpdate={this.handleUpdate} userData={this.state.userData} />, document.getElementById("fright"))
     }
     createHeader = (data) => {
         var t = document.createElement('table');
@@ -309,12 +361,24 @@ export default class ControlPanel extends Component {
                             </Tooltip>
                         </div>
                         <div>
-                            <Tooltip title="Ver procuradores" arrow>
-                                <IconButton onClick={() => { this.getAttorneysPanel() }}>
-                                    <PersonIcon style={{ fontSize: 40, zIndex: 2, color: '#ea5f32' }} />
-                                </IconButton>
-                                {/*<img class='FilesListButton' src={crossIcon} onClick={() => { this.getAttorneysPanel() }} ></img>*/}
-                            </Tooltip>
+                            {
+                                this.state.userData.type ? (
+                                    <Tooltip title="Ver procuradores" arrow>
+                                        <IconButton onClick={() => { this.getAttorneysPanel() }}>
+                                            <PersonIcon style={{ fontSize: 40, zIndex: 2, color: '#ea5f32' }} />
+                                        </IconButton>
+                                        {/*<img class='FilesListButton' src={crossIcon} onClick={() => { this.getAttorneysPanel() }} ></img>*/}
+                                    </Tooltip>
+                                ) : (
+                                        <Tooltip title="Ver mandatarios" arrow>
+                                            <IconButton onClick={() => { this.getAttorneysPanel() }}>
+                                                <PersonIcon style={{ fontSize: 40, zIndex: 2, color: '#ea5f32' }} />
+                                            </IconButton>
+                                            {/*<img class='FilesListButton' src={crossIcon} onClick={() => { this.getAttorneysPanel() }} ></img>*/}
+                                        </Tooltip>
+                                    )
+                            }
+
                         </div>
                         <div>
                             <Tooltip title="Borrar expediente" arrow>
@@ -355,16 +419,16 @@ export default class ControlPanel extends Component {
                                                     <ListItemText primary={'Expediente N°: ' + e.fileID} />
                                                     {
                                                         this.state.userData.type ? (
-                                                            //
+                                                            //representative
                                                             ''
                                                         ) : (
                                                                 <ListItemIcon>
-                                                                    {e.tasks === undefined ? (
-                                                                        ''
+                                                                    {e.hasUnresolvedTasks ? (
+                                                                        <Tooltip title="Tareas pendientes" arrow>
+                                                                            <NewReleasesIcon className='newTaskIcon' />
+                                                                        </Tooltip>
                                                                     ) : (
-                                                                            <Tooltip title="Tareas pendientes" arrow>
-                                                                                <NewReleasesIcon className='newTaskIcon' />
-                                                                            </Tooltip>
+                                                                            ''
                                                                         )
 
                                                                     }
@@ -385,7 +449,7 @@ export default class ControlPanel extends Component {
                         ) : (
 
                             this.state.noFilesMessage.map(m => {
-                                return <div ><img height="300px" width='auto' src={noSearchResultImg}></img>
+                                return <div ><img height="500px" width='100%' src={noSearchResultImg}></img>
                                     <p>{m}</p>
                                 </div>
                             })

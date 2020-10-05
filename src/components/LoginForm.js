@@ -64,7 +64,7 @@ export default function Login() {
             hideClass: {
                 popup: 'animate__animated animate__fadeOutDown'
             },
-            preConfirm: () => {
+            preConfirm: async () => {
                 var loginData = {
                     email: document.getElementById("swal-input1").value,
                     password: document.getElementById("swal-input2").value
@@ -131,7 +131,7 @@ export default function Login() {
                     })
                 }
                 else {
-                    return fetch('/login', {
+                    return await fetch('/login', {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
@@ -139,8 +139,15 @@ export default function Login() {
                         },
                         body: JSON.stringify(loginData)
                     })
-                        .then(response => {
+                        .then(async response => {
                             if (response.status === 200) {
+                                let res = await response.json();
+                                const token = res.accessToken;
+                                const refreshToken = res.refreshToken;
+                                localStorage.setItem('jwtToken', token);
+                                localStorage.setItem('jwtRToken', refreshToken);
+                                //console.log(localStorage);
+                                //console.log(localStorage);
                                 Toast.fire({
                                     icon: 'success',
                                     title: 'Logueo exitoso redireccionando al Home...'

@@ -19,7 +19,9 @@
     "axios": "^0.20.0",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.5.0",
+    "connect-redis": "^5.0.0",
     "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-favicon": "^2.0.1",
     "express-fileupload": "^1.2.0",
@@ -27,12 +29,14 @@
     "flexbox-react": "^4.4.0",
     "handlebars": "^4.7.6",
     "jquery": "^3.5.1",
+    "jsonwebtoken": "^8.5.1",
     "jss-plugin-vendor-prefixer": "^10.4.0",
     "lottie-web": "^5.7.0",
     "mdbreact": "^4.27.0",
     "mongodb": "^3.5.9",
     "node-sass": "^4.14.1",
     "nodemailer": "^6.4.10",
+    "nodemon": "^2.0.4",
     "path": "^0.12.7",
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
@@ -42,19 +46,22 @@
     "react-scripts": "3.4.1",
     "react-sidebar": "^3.0.2",
     "react-transition-group": "^1.2.1",
+    "redis": "^3.0.2",
     "sendmail": "^1.6.1",
     "sharp": "^0.25.4",
     "suneditor-react": "^2.12.2",
     "svg-captcha": "^1.4.0",
     "sweetalert2": "^9.15.1",
-    "sweetalert2-react-content": "^3.0.1"
+    "sweetalert2-react-content": "^3.0.1",
+    "uuid": "^8.3.0"
   },
   "proxy": "http://localhost:8001",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "devStart": "nodemon node server.js"
   },
   "eslintConfig": {
     "extends": "react-app"

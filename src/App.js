@@ -14,9 +14,20 @@ import Unauthorized from './pages/Unauthorized'
 function App() {
 
   const handleLogout = async () => {
-    await fetch('/logout')
+    let body = {
+      token: localStorage.getItem('jwtRToken')
+    }
+    await fetch('/logout', {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    })
       .then(response => {
         if (response.status === 200 || response.status === 500) {
+          localStorage.removeItem('jwtToken')
           window.location.replace('/');
         }
       })

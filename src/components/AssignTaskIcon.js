@@ -11,6 +11,7 @@ import SelectFile from './SelectFile'
 import SelectTask from './SelectTask'
 import Summary from './Summary'
 import Tooltip from '@material-ui/core/Tooltip';
+import ExtendSessionFn from './ExtendSesion';
 
 
 const MySwal = withReactContent(Swal);
@@ -71,7 +72,8 @@ export default function AssignTaskIcon(props) {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
             },
             body: JSON.stringify(dataSend)
         })
@@ -87,6 +89,8 @@ export default function AssignTaskIcon(props) {
                 icon: 'error',
                 title: 'Error de servidor'
             })
+        } else if (response.status === 403) {
+            await ExtendSessionFn()
         }
     }
     const handleUpdate = async () => {

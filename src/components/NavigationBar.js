@@ -45,12 +45,26 @@ export default class NavigationBar extends Component {
     }
 
     async handleComponentUpdate() {
-        var response = await fetch('/getUserInfo');
+        var response = await fetch('/getUserInfo', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+            }
+        });
         var data = await response.json();
         this.setState({ userData: data });
     }
     async componentDidMount() {
-        var response = await fetch('/getUserInfo');
+        var response = await fetch('/getUserInfo', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+            }
+        });
         var data = await response.json();
         this.setState({ userData: data });
     }
@@ -98,11 +112,20 @@ export default class NavigationBar extends Component {
                             <NavDropdown.Item id='NavBarDropdown1' href="#action/3.1">Mis Expedientes</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
-                    <div className='NavBarButtonsDiv'>
-                        <img class='navBarIcons' id='uploadFileButton' src={UploadFileImg} height='50px' width='50px' onClick={this.uploadFileFn}></img>
-                        <img class='navBarIcons' id='searchEngineButton' src={SearchImg} height='50px' width='50px' onClick={this.openSearchEngine}></img>
-                        <InboxIcon />
-                    </div>
+                    {
+                        this.state.userData.type ? (
+                            <div className='NavBarButtonsDiv'>
+                                <img class='navBarIcons' id='uploadFileButton' src={UploadFileImg} height='50px' width='50px' onClick={this.uploadFileFn}></img>
+                                <img class='navBarIcons' id='searchEngineButton' src={SearchImg} height='50px' width='50px' onClick={this.openSearchEngine}></img>
+                                <InboxIcon />
+                            </div>
+                        ) : (
+                                <div className='NavBarButtonsDiv'>
+                                    <img class='navBarIcons' id='searchEngineButton' src={SearchImg} height='50px' width='50px' onClick={this.openSearchEngine}></img>
+                                    <InboxIcon />
+                                </div>
+                            )
+                    }
                     <NavDropdown title={<img id='userImage' src={this.state.userData.img} height='50px' width='50px'></img>} id='NavBarUserImg' height='50px' width='50px' id="basic-nav-dropdown" drop='left'>
                         <NavDropdown.Item id='NavBarDropdown1' href="" drop='left'>{this.state.userData.name}</NavDropdown.Item>
                         <NavDropdown.Item id='NavBarDropdown2' href="" drop='left' onClick={() => { AccountConfig().then(res => { if (res) { this.handleComponentUpdate() } }) }}>Ajustes de Cuenta</NavDropdown.Item>
@@ -115,8 +138,15 @@ export default class NavigationBar extends Component {
                         <input type='text' id='searchInput' placeholder='Busca algo...' maxlength="29"></input>
                     </div>
                     <div class="overlay-content">
-                        <img class='searchEngineIcons' checked={false} id='searchEnginePersonIcon' onClick={() => { this.selectSearchEngineIcon(window.event.target) }} src={personGrey} ></img>
-                        <img class='searchEngineIcons' checked={false} id='searchEngineFileIcon' onClick={() => { this.selectSearchEngineIcon(window.event.target) }} src={fileGrey} ></img>
+                        {
+                            this.state.userData.type ? (<>
+                                <img class='searchEngineIcons' checked={false} id='searchEnginePersonIcon' onClick={() => { this.selectSearchEngineIcon(window.event.target) }} src={personGrey} ></img>
+                                <img class='searchEngineIcons' checked={false} id='searchEngineFileIcon' onClick={() => { this.selectSearchEngineIcon(window.event.target) }} src={fileGrey} ></img>
+                            </>) : (<>
+                                <img class='searchEngineIcons' checked={false} id='searchEnginePersonIcon' onClick={() => { this.selectSearchEngineIcon(window.event.target) }} src={personGrey} ></img>
+                                <img style={{ display: 'none' }} class='searchEngineIcons' checked={false} id='searchEngineFileIcon' onClick={() => { this.selectSearchEngineIcon(window.event.target) }} src={fileGrey} ></img>
+                            </>)
+                        }
                     </div>
                 </div>
             </div>

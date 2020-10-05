@@ -1,0 +1,57 @@
+//login1
+POST  http://localhost:8001/login
+Content-Type: application/json
+
+{
+    "email": "7f345b0b3b@emaillab.xyz",
+    "password": "123123"
+}
+
+###
+
+//login 2
+POST  http://localhost:8001/login
+Content-Type: application/json
+
+{
+    "email": "7f345b0b3b@emaillab.xyz",
+    "password": "123123"
+}
+
+###
+
+//TOKEN
+POST http://localhost:8001/token
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiRmlyZWZveCBNb3ppbGxhIiwibW9uZ29JRCI6IjVmMzcwYTY2ZTdhNmJiMWY5NGE1NDU4ZiIsImVtYWlsIjoiN2YzNDViMGIzYkBlbWFpbGxhYi54eXoiLCJ0eXBlIjoiYXR0b3JuZXkiLCJpbWciOiJhc3NldHMvdXNlckltYWdlcy8xNTk4NDA5NTk2MDUyNDY5NTAzMDE5MzEyNC5wbmciLCJpYXQiOjE2MDE3NjE2Mzh9.dg8Ms58F7Yqd5MtXlEVizywKhwtInBJHCm3nwUHbJiQ"
+}
+
+###
+//GET USER INFO
+GET http://localhost:8001/getUserInfo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiRmlyZWZveCBNb3ppbGxhIiwibW9uZ29JRCI6IjVmMzcwYTY2ZTdhNmJiMWY5NGE1NDU4ZiIsImVtYWlsIjoiN2YzNDViMGIzYkBlbWFpbGxhYi54eXoiLCJ0eXBlIjoiYXR0b3JuZXkiLCJpbWciOiJhc3NldHMvdXNlckltYWdlcy8xNTk4NDA5NTk2MDUyNDY5NTAzMDE5MzEyNC5wbmciLCJpYXQiOjE2MDE3NjE2NzcsImV4cCI6MTYwMTc2MTcwMn0.ROWhtWKPKnnzOY3nOzwbkeUJuc6uTrQoTK-mD_AD3s4
+
+###
+//LOGUOT
+DELETE http://localhost:8001/logout
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiRmlyZWZveCBNb3ppbGxhIiwibW9uZ29JRCI6IjVmMzcwYTY2ZTdhNmJiMWY5NGE1NDU4ZiIsImVtYWlsIjoiN2YzNDViMGIzYkBlbWFpbGxhYi54eXoiLCJ0eXBlIjoiYXR0b3JuZXkiLCJpbWciOiJhc3NldHMvdXNlckltYWdlcy8xNTk4NDA5NTk2MDUyNDY5NTAzMDE5MzEyNC5wbmciLCJpYXQiOjE2MDE3NjE2Mzh9.dg8Ms58F7Yqd5MtXlEVizywKhwtInBJHCm3nwUHbJiQ"
+}
+###
+
+POST  http://localhost:8001/completeTask
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiRmlyZWZveCBNb3ppbGxhIiwibW9uZ29JRCI6IjVmMzcwYTY2ZTdhNmJiMWY5NGE1NDU4ZiIsImVtYWlsIjoiN2YzNDViMGIzYkBlbWFpbGxhYi54eXoiLCJ0eXBlIjoiYXR0b3JuZXkiLCJpbWciOiJhc3NldHMvdXNlckltYWdlcy8xNTk4NDA5NTk2MDUyNDY5NTAzMDE5MzEyNC5wbmciLCJpYXQiOjE2MDE4NTc2MDAsImV4cCI6MTYwMTk4NjQwMH0.HilAxLc_DKbjiI1bhCyciKreAIdln1gTFIRPQ5peorw
+
+{
+    
+  "taskName": "Dejar Nota",
+  "expirationDate": "2020-10-31",
+  "fileID": "123123"
+
+    
+}

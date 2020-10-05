@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import Tooltip from '@material-ui/core/Tooltip';
+import ExtendSessionFn from './ExtendSesion';
 
 
 const MySwal = withReactContent(Swal);
@@ -94,10 +95,11 @@ export default function SendMessageIcon(props) {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json',
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
                         },
                         body: JSON.stringify(data)
-                    }).then(response => {
+                    }).then(async response => {
                         if (response.status === 200) {
                             Toast.fire({
                                 icon: 'success',
@@ -108,6 +110,8 @@ export default function SendMessageIcon(props) {
                                 icon: 'error',
                                 title: 'Server Error'
                             })
+                        } else if (response.status === 403) {
+                            await ExtendSessionFn();
                         }
                     })
                 }

@@ -2,6 +2,7 @@ import AttorneyCard from './AttorneyCard'
 import React, { Component } from 'react';
 import refreshButtonGif from '../assets/refreshGif.gif'
 import Swal from 'sweetalert2'
+import ExtendSession from './ExtendSesion'
 import withReactContent from 'sweetalert2-react-content'
 import $ from 'jquery';
 import '../css/AttorneysPanel.css'
@@ -32,7 +33,14 @@ export default class AttorneysPanel extends Component {
 
     async componentDidMount() {
         this.createAndMountSpinner();
-        let response = await fetch('/getAttorneys');
+        let response = await fetch('/getAttorneys', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+            }
+        });
         if (response.status === 200) {
             let data = await response.json();
             if (data.length === 0) {
@@ -73,9 +81,12 @@ export default class AttorneysPanel extends Component {
         } else if (response.status === 500) {
             Toast.fire({
                 icon: 'error',
-                title: 'Error de servidor'
+                title: 'Server error'
             })
             document.getElementById('attorneysDiv').innerHTML = '';
+        } else if (response.status === 403) {
+            document.getElementById('attorneysDiv').innerHTML = '';
+            await ExtendSession();
         }
 
     }
@@ -95,7 +106,7 @@ export default class AttorneysPanel extends Component {
             <div class='attorneysDiv' id='attorneysDiv'>
                 {
                     this.state.attorneys.map(a => {
-                        return <AttorneyCard attorneyData={a} handleControlPanelUpdate={this.props.handleControlPanelUpdate} />
+                        return <AttorneyCard attorneyData={a} handleControlPanelUpdate={this.props.handleControlPanelUpdate} userData={this.props.userData} />
                     })
                 }
                 {

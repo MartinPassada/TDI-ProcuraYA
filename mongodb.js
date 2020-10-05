@@ -23,10 +23,12 @@ module.exports.getInboxMessages = getInboxMessages
 module.exports.updateMessageState = updateMessageState
 module.exports.getTasksNames = getTasksNames
 module.exports.addTaskToFile = addTaskToFile
+module.exports.getRepresentatives = getRepresentatives
+module.exports.completeTask = completeTask
 /******************************************************************** */
 const fs = require("fs");
 const path = require('path');
-var usingOnlineCluster = true;
+var usingOnlineCluster = false;
 var mongodb = '';
 var mongoURL = '';
 var mongoClient = '';
@@ -68,7 +70,7 @@ function searchMongoID(email, cbOK) {
 function validateLogin(loginData, cbOK) {
     mongoClient.connect(err => {
         if (err) {
-            cbError("No se pudo conectar a la DB. " + err);
+            console.log("No se pudo conectar a la DB. " + err);
         } else {
             var db = mongoClient.db("ProcuraYaDatabase");
             var collection = db.collection("users");
@@ -80,6 +82,8 @@ function validateLogin(loginData, cbOK) {
                     cbOK(603)
                     //usuario bloqueado
                 } else if (data[0].password === loginData.password) {
+                    //console.log('db login response');
+                    //console.log(data[0])
                     cbOK(data[0]);
                     //credenciales validas
                 } else if (data[0].password !== loginData.password) {
@@ -332,7 +336,7 @@ function saveFile(file, email, mongoID, cbOK) {
                     cbOK(200)
 
                 } else if (data[0].fileID === file.header.fileID) {
-                    cbOK(403)
+                    cbOK(401)
                     //el expediente ya existe
                 } else {
                     cbOK(500)
@@ -434,14 +438,47 @@ function getFile(mongoID, fileID, cbOK) {
     //client.close();
 }
 //GET ATTORNEYS (FRIENDLIST)
-function getAttorneys(email, cbOK) {
+function getAttorneys(mongoID, cbOK) {
     mongoClient.connect(err => {
         if (err) {
             cbError('No se pudo conectar a la DB ' + err);
         } else {
             var db = mongoClient.db("ProcuraYaDatabase");
             var users = db.collection("users");
-            users.find({ 'email': `${email}` }).project({ "_id": 0.0, "attorneys": 1.0 }).toArray((err, data) => {
+            var ObjectID = require('mongodb').ObjectID;
+            //console.log(mongoID)
+            users.find({ "_id": ObjectID(`${mongoID}`) }).project({ "_id": 0.0, "attorneys": 1.0 }).toArray((err, data) => {
+                if (err) {
+                    console.log(err)
+                    cbOK(500);
+                } else {
+                    if (data == '') {
+                        //console.log(data);
+                        cbOK(404);
+                        //no existe usuario
+                    } else if (data !== '') {
+                        //console.log(data[0].attorneys);
+                        cbOK(data[0].attorneys)
+                    } else {
+                        cbOK(500);
+                    }
+                }
+
+
+            });
+        }
+        //client.close();
+    });
+}
+function getRepresentatives(mongoID, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var users = db.collection("users");
+            var ObjectID = require('mongodb').ObjectID;
+            users.find({ "_id": ObjectID(`${mongoID}`) }).project({ "_id": 0.0, "representatives": 1.0 }).toArray((err, data) => {
                 if (err) {
                     console.log(err)
                     cbOK(500);
@@ -450,7 +487,7 @@ function getAttorneys(email, cbOK) {
                         cbOK(404);
                         //no existe usuario
                     } else if (data !== '') {
-                        cbOK(data[0].attorneys)
+                        cbOK(data[0].representatives)
                     } else {
                         cbOK(500);
                     }
@@ -744,7 +781,7 @@ function getInboxMessages(MessageArrID, cbOK) {
                     cbOK(404);
                     //no files founded
                 } else if (data !== '') {
-                    console.log(data)
+                    //console.log(data)
                     cbOK(data);
                 } else {
                     cbOK(500);
@@ -812,6 +849,10 @@ function addTaskToFile(data, cbOK) {
         } else {
             var db = mongoClient.db("ProcuraYaDatabase");
             var files = db.collection("files");
+            data.tasks.forEach(t => {
+                t.state = 'No realizada';
+                t.expired = false;
+            })
             files.updateMany({ "fileID": { $in: data.files } }, { $push: { "tasks": { $each: data.tasks } } }, function (err, result) {
                 if (err) {
                     console.log(err);
@@ -825,6 +866,53 @@ function addTaskToFile(data, cbOK) {
 
 
     });
+    //client.close();
+}
+function completeTask(name, taskData, cbOK) {
+    //console.log('en BD')
+    //console.log(taskData);
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var files = db.collection("files");
+            files.find({ "fileID": taskData.fileID }).project({ "_id": 0.0, "tasks": 1.0 }).toArray((err, data) => {
+                if (err) {
+                    console.log(err);
+                    cbOK(500)
+                } else if (data) {
+                    //console.log(data[0]);
+                    //console.log(data[0].tasks)
+                    data[0].tasks.forEach(e => {
+                        if (e.taskName === taskData.taskName && e.expirationDate === taskData.expirationDate) {
+                            e.state = 'Realizada';
+                            e.completedBy = name;
+                            e.completedDate = Date.now();
+                        }
+                    })
+                    let overWrite = data[0].tasks
+                    files.updateOne({ "fileID": taskData.fileID }, { $set: { "tasks": [] } }, function (err, result) {
+                        if (err) {
+                            console.log(err)
+                        } else if (result) {
+                            files.updateOne({ "fileID": taskData.fileID }, { $set: { "tasks": overWrite } }, function (err, final) {
+                                if (err) {
+                                    console.log(err)
+                                } else if (final) {
+                                    cbOK(200)
+                                }
+                            })
+                        }
+
+                    })
+                }
+            })
+
+        }
+
+    })
+
     //client.close();
 }
 

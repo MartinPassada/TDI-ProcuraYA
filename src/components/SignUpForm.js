@@ -20,7 +20,6 @@ const Toast = MySwal.mixin({
     onAfterClose: () => {
         window.location.replace('/Home');
     }
-
 })
 
 
@@ -446,8 +445,13 @@ export default function SaveType(typeofuser) {
                                 },
                                 body: JSON.stringify(signUpData)
                             })
-                                .then(response => {
+                                .then(async response => {
                                     if (response.status === 200) {
+                                        let res = await response.json();
+                                        const token = res.accessToken;
+                                        const refreshToken = res.refreshToken;
+                                        localStorage.setItem('jwtToken', token);
+                                        localStorage.setItem('jwtRToken', refreshToken);
                                         Toast.fire({
                                             icon: 'success',
                                             title: 'Registro Exitoso redireccionando al Home...'

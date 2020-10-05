@@ -3,6 +3,7 @@ import withReactContent from 'sweetalert2-react-content';
 import { useState, useEffect } from 'react';
 import axios from 'axios'
 import NavigationBar from './NavigationBar'
+import ExtendSessionFn from './ExtendSesion';
 
 
 
@@ -55,11 +56,16 @@ export default async function AccountConfig(props) {
                 if ((file.size / 1024) < 1024) {
                     let fd = new FormData();
                     fd.append("file", file, file.name);
-                    await axios.post('updateUserImg', fd, {
+                    const headers = {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+                    }
+                    await axios.post('updateUserImg', fd, { headers }, {
                         onUploadProgress: progressEvent => {
                             console.log(progressEvent.loaded / progressEvent.total)
                         }
-                    }).then(response => {
+                    }).then(async response => {
                         if (response.status === 200) {
                             return true
                         } else if (response.status === 500) {
@@ -67,6 +73,8 @@ export default async function AccountConfig(props) {
                                 icon: 'error',
                                 title: 'Server Error'
                             })
+                        } else if (response.status === 403) {
+                            await ExtendSessionFn()
                         }
                     }).catch(error => {
                         Swal.showValidationMessage(

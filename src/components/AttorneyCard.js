@@ -12,9 +12,6 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
 
-
-
-
 const MySwal = withReactContent(Swal);
 const Toast = MySwal.mixin({
     toast: true,
@@ -62,9 +59,19 @@ export default function AttorneyCard(props) {
             </CardActionArea>
             <CardContent>
                 <div class='customButtonsDiv'>
-                    <AssignFilesIcon attorneyData={props.attorneyData} handleControlPanelUpdate={props.handleControlPanelUpdate} />
-                    <AssignTaskIcon attorneyData={props.attorneyData} />
-                    <SendMessageIcon attorneyData={props.attorneyData} />
+                    {
+                        props.userData.type ? (
+                            <>
+                                <AssignFilesIcon attorneyData={props.attorneyData} handleControlPanelUpdate={props.handleControlPanelUpdate} />
+                                <AssignTaskIcon attorneyData={props.attorneyData} />
+                                <SendMessageIcon attorneyData={props.attorneyData} />
+                            </>
+                        ) : (
+                                <>
+                                    <SendMessageIcon attorneyData={props.attorneyData} />
+                                </>
+                            )
+                    }
                 </div>
             </CardContent>
 
