@@ -25,10 +25,14 @@ module.exports.getTasksNames = getTasksNames
 module.exports.addTaskToFile = addTaskToFile
 module.exports.getRepresentatives = getRepresentatives
 module.exports.completeTask = completeTask
+module.exports.searchFriend = searchFriend
+module.exports.searchFileInBD = searchFileInBD
+module.exports.addFriend = addFriend
+module.exports.tasksDateReport = tasksDateReport
 /******************************************************************** */
 const fs = require("fs");
 const path = require('path');
-var usingOnlineCluster = false;
+var usingOnlineCluster = true;
 var mongodb = '';
 var mongoURL = '';
 var mongoClient = '';
@@ -329,6 +333,7 @@ function saveFile(file, email, mongoID, cbOK) {
                         lastEditionDate: Date.now(),
                         editionHistory: [Date.now(),],
                         tasks: [],
+                        year: `${file.header.fileYear}`,
                         bodies: file.body[lastItem],
                     });
                     users.updateOne({ 'email': `${email}` }, { $push: { files: `${file.header.fileID}` } });
@@ -436,6 +441,76 @@ function getFile(mongoID, fileID, cbOK) {
     })
 
     //client.close();
+}
+//GET ALL FILES
+function tasksDateReport(cbOK) {
+
+    mongoClient.connect(err => {
+        if (err) {
+            cbError("No se pudo conectar a la DB. " + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var files = db.collection("files");
+            var users = db.collection("users");
+            var ObjectID = require('mongodb').ObjectID;
+            var expiredTasksReport = [];
+            var notifications = [];
+
+
+            files.find().project({ "_id": 0, "tasks": 1, "assignedTo": 1, "owner": 1, "fileID": 1 }).toArray((err, data) => {
+                if (err) {
+                    console.log(err)
+                } else if (data.length > 0) {
+                    //console.log(data);
+                    data.forEach(obj => {
+                        obj.tasks.forEach(t => {
+                            if (Date.parse(t.expirationDate) < Date.now()) {
+                                //tarea vencida
+                                if (t.state == 'No realizada') {
+                                    let objectIDArr = [];
+                                    objectIDArr.push(obj.assignedTo);
+                                    objectIDArr.push(obj.owner);
+                                    let expiredTask = {
+                                        fileID: obj.fileID,
+                                        taskName: t.taskName,
+                                        users: objectIDArr,
+                                    }
+                                    expiredTasksReport.push(expiredTask);
+                                }
+
+                            } else if ((Date.parse(t.expirationDate) - Date.now()) <= 86400000) {
+                                //tarea vence pronto
+                                if (t.state == 'No realizada') {
+                                    let objectIDArr = [];
+                                    objectIDArr.push(obj.assignedTo);
+                                    objectIDArr.push(obj.owner);
+                                    let closeToExpireTask = {
+                                        fileID: obj.fileID,
+                                        taskName: t.taskName,
+                                        users: objectIDArr,
+                                    }
+                                    notifications.push(closeToExpireTask);
+                                }
+
+                            } else {
+                                //todo bien
+                            }
+
+                        })
+                    })
+                    cbOK([expiredTasksReport, notifications]);
+                    //console.log(data);
+                } else {
+                    cbOK(500);
+                }
+
+            })
+        }
+
+    })
+
+    //client.close();
+
 }
 //GET ATTORNEYS (FRIENDLIST)
 function getAttorneys(mongoID, cbOK) {
@@ -776,7 +851,7 @@ function getInboxMessages(MessageArrID, cbOK) {
             var ObjectID = require('mongodb').ObjectID;
             var db = mongoClient.db("ProcuraYaDatabase");
             var messages = db.collection("messages");
-            messages.find({ "messageID": { $in: MessageArrID } }).project({ "_id": 0.0, "senderID": 0.0 }).toArray((err, data) => {
+            messages.find({ "messageID": { $in: MessageArrID } }).project({ "_id": 0.0 }).toArray((err, data) => {
                 if (data == '') {
                     cbOK(404);
                     //no files founded
@@ -913,6 +988,121 @@ function completeTask(name, taskData, cbOK) {
 
     })
 
+    //client.close();
+}
+
+// limitar cantidad de friendRequest que se pueden enviar
+
+function searchFriend(searchParameter, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var users = db.collection("users");
+            users.createIndex({ userName: 'text', userLastName: 'text' }, function (err, result) {
+                if (err) console.log(err);
+                if (result) {
+
+                    users.find({ $text: { $search: `${searchParameter}` } },
+                        { score: { $meta: 'textScore' } }).project({ "_id": 1, "userName": 1, "userLastName": 1, "userImg": 1, "score": { $meta: "textScore" } }).sort({ score: { $meta: 'textScore' } }).limit(15).toArray((err, data) => {
+                            if (err) {
+                                console.log(err);
+                                cbOK(500)
+                            } else if (data.length > 0) {
+                                cbOK(data)
+                            } else {
+                                cbOK(404)
+                            }
+                        })
+                }
+            })
+
+        }
+    });
+    //client.close();
+}
+
+function searchFileInBD(searchParameter, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var files = db.collection("files");
+            files.createIndex({ fileID: 'text', fileTitle: 'text', year: 'text', fileState: 'text', locationRoom: 'text', fileLocation: 'text' }, function (err, result) {
+                if (err) console.log(err);
+                if (result) {
+
+                    files.find({ $text: { $search: `${searchParameter}` } },
+                        { score: { $meta: 'textScore' } }).project({ "_id": 1, "fileID": 1, "fileTitle": 1, "year": 1, "score": { $meta: "textScore" } }).sort({ score: { $meta: 'textScore' } }).limit(15).toArray((err, data) => {
+                            if (err) {
+                                console.log(err);
+                                cbOK(500)
+                            } else if (data.length > 0) {
+                                cbOK(data)
+                            } else {
+                                cbOK(404)
+                            }
+                        })
+                }
+            })
+        }
+    });
+    //client.close();
+}
+
+function addFriend(data, userData, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var users = db.collection("users");
+            var ObjectID = require('mongodb').ObjectID;
+
+
+            if (userData.type == 'attorney') {
+
+                users.updateOne({ "_id": ObjectID(`${userData.mongoID}`) }, { $push: { representatives: data.friendID } }, (err, result) => {
+                    if (err) {
+                        console.log(err)
+                        cbOK(500)
+                    } else if (result) {
+                        users.updateOne({ "_id": ObjectID(`${data.friendID}`) }, { $push: { attorneys: userData.mongoID } }, (err, result) => {
+                            if (err) {
+                                console.log(err)
+                                cbOK(500)
+                            } else if (result) {
+                                console.log('bd un attorney acepto a un amigo')
+                                cbOK(200)
+                            }
+                        })
+                    }
+                })
+
+            } else if (userData.type == 'representative') {
+                users.updateOne({ "_id": ObjectID(`${userData.mongoID}`) }, { $push: { attorneys: data.friendID } }, (err, result) => {
+                    if (err) {
+                        console.log(err)
+                        cbOK(500)
+                    } else if (result) {
+                        users.updateOne({ "_id": ObjectID(`${data.friendID}`) }, { $push: { representatives: userData.mongoID } }, (err, result) => {
+                            if (err) {
+                                console.log(err)
+                                cbOK(500)
+                            } else if (result) {
+                                console.log('bd un attorney acepto a un amigo')
+                                cbOK(200)
+                            }
+                        })
+                    }
+                })
+            }
+
+
+        }
+    });
     //client.close();
 }
 

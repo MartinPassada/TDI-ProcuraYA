@@ -305,6 +305,13 @@ export default class ControlPanel extends Component {
         c5.innerHTML = 'Carátula';
         c5.setAttribute('class', 'tableCellTitle');
 
+        let r6 = t.insertRow(5);
+        let c6 = r6.insertCell(0);
+        let c6d = r6.insertCell(1);
+        c6d.innerHTML = data.year;
+        c6.innerHTML = 'Año';
+        c6.setAttribute('class', 'tableCellTitle');
+
         return t;
     }
     createAndMountSpinner = () => {

@@ -62,56 +62,139 @@ export default function InboxIcon(props) {
     }, [])
 
     const checkMessage = (e) => {
-        MySwal.fire({
-            showClass: {
-                popup: 'animate__animated animate__fadeInDown'
-            },
-            hideClass: {
-                popup: 'animate__animated animate__fadeOutUp'
-            },
-            title: 'Mensaje',
-            html: `<div style="display: block;"><img style="padding-right: 5px;" className="userImg" height="40px" src="${e.senderImg}"></img>${e.sender}</div>
-                <div><p>${e.message}</p></div>`,
-            confirmButtonText: 'ACEPTAR',
-            cancelButtonText: 'CANCELAR',
-            confirmButtonColor: '#ea5f32',
-            cancelButtonColor: '#999999',
-            showCloseButton: true,
-            allowEnterKey: true,
-            showLoaderOnConfirm: true,
-            focusConfirm: true,
-            allowOutsideClick: false,
-            onOpen: () => {
-                let data = {
-                    fileID: e.messageID
-                }
-                fetch('/updateMessageState', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data),
-                }).then(response => {
-                    if (response.status === 200) {
-                        handleUpdate();
-                    } else if (response.status === 500) {
-                        Toast.fire({
-                            icon: 'error',
-                            title: 'Error de servidor'
-                        })
-                    } else if (response.status === 404) {
-                        Toast.fire({
-                            icon: 'warning',
-                            title: 'no pudimos actualizar el estado del mensaje'
-                        })
+        if (e.type == 'message') {
+            MySwal.fire({
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                },
+                title: 'Mensaje',
+                html: `<div style="display: block;"><img style="padding-right: 5px;" className="userImg" height="40px" src="${e.senderImg}"></img>${e.sender}</div>
+                    <div><p>${e.message}</p></div>`,
+                confirmButtonText: 'ACEPTAR',
+                cancelButtonText: 'CANCELAR',
+                confirmButtonColor: '#ea5f32',
+                cancelButtonColor: '#999999',
+                showCloseButton: true,
+                allowEnterKey: true,
+                showLoaderOnConfirm: true,
+                focusConfirm: true,
+                allowOutsideClick: false,
+                onOpen: () => {
+                    let data = {
+                        fileID: e.messageID
                     }
-                })
-            },
-            preConfirm: () => {
+                    fetch('/updateMessageState', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data),
+                    }).then(response => {
+                        if (response.status === 200) {
+                            handleUpdate();
+                        } else if (response.status === 500) {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Error de servidor'
+                            })
+                        } else if (response.status === 404) {
+                            Toast.fire({
+                                icon: 'warning',
+                                title: 'no pudimos actualizar el estado del mensaje'
+                            })
+                        }
+                    })
+                },
+                preConfirm: () => {
 
-            },
-        })
+                },
+            })
+        } else {
+            MySwal.fire({
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp'
+                },
+                title: 'Agregar contacto',
+                html: `<div style="display: block;"><img style="padding-right: 5px;" className="userImg" height="40px" src="${e.senderImg}"></img>${e.sender}</div>
+                    <div><p>${e.message}</p></div>`,
+                confirmButtonText: 'AGREGAR CONTACTO',
+                cancelButtonText: 'CANCELAR',
+                confirmButtonColor: '#ea5f32',
+                showCancelButton: true,
+                cancelButtonColor: '#999999',
+                showCloseButton: true,
+                allowEnterKey: true,
+                showLoaderOnConfirm: true,
+                focusConfirm: true,
+                allowOutsideClick: false,
+                onOpen: () => {
+                    let data = {
+                        fileID: e.messageID
+                    }
+                    fetch('/updateMessageState', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data),
+                    }).then(response => {
+                        if (response.status === 200) {
+                            handleUpdate();
+                        } else if (response.status === 500) {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Error de servidor'
+                            })
+                        } else if (response.status === 404) {
+                            Toast.fire({
+                                icon: 'warning',
+                                title: 'no pudimos actualizar el estado del mensaje'
+                            })
+                        }
+                    })
+                },
+                preConfirm: async () => {
+                    //add friend request
+                    console.log(e.senderID)
+                    let friendData = {
+                        friendID: e.senderID
+                    }
+                    await fetch('/addFriend', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+                        },
+                        body: JSON.stringify(friendData)
+                    }).then(async response => {
+                        if (response.status === 200) {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Contacto agregado'
+                            })
+                        } else if (response.status === 500) {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Server Error'
+                            })
+                        } else if (response.status === 403) {
+                            await ExtendSessionFn();
+
+                        }
+                    })
+                }
+            })
+        }
+
     }
     async function getInboxMessages() {
         let response = await fetch('/getInboxMessages', {

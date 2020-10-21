@@ -69,8 +69,25 @@ function authenticateToken(req, res, next) {
     })
 }
 function generateAccessToken(user) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '128800s' })
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1800' })
 }
+
+/*setInterval(async () => {
+    console.log('se inicio el servicio de notificacion');
+    mongoDatabase.tasksDateReport(cbOK => {
+        let expiredTasksReport = cbOK[0]
+        let notificationReport = cbOK[1];
+        console.log('report from bd')
+        console.log('EXPIRED TASKS')
+        console.log(expiredTasksReport);
+        console.log('CLOSE TO EXPIRE TASKS')
+        console.log(notificationReport);
+
+    });
+}, 2000);*/
+
+
+
 app.post('/token', (req, res) => {
     const refreshToken = req.body.token
     //console.log(refreshToken);
@@ -389,10 +406,6 @@ app.post('/updateUserImg', authenticateToken, (req, res) => {
     });
 });
 // GET USER FILES ID LIST
-
-
-
-
 app.get('/getUserFiles', authenticateToken, function (req, res) {
     mongoDatabase.getUserFiles(req.user.email, cbOK => {
         if (`${cbOK}` == 404) {
@@ -503,12 +516,7 @@ app.post('/getFile', authenticateToken, function (req, res) {
     })
 })
 app.get('/getAttorneys', authenticateToken, function (req, res) {
-    //console.log('getAttorneys iniciado');
-    //req.session.mongoID = '5efc8e0914c2b0123c2c9dc2' //representative
-    //req.session.userType = 'representative'
-    //req.session.mongoID = '5f370a8be7a6bb1f94a54590' //attorney
-    //req.session.userType = 'attorney'
-    console.log(req.user.name);
+    //console.log(req.user.name);
     if (req.user.type === 'attorney') {
         console.log('es un attorney')
         mongoDatabase.getRepresentatives(req.user.mongoID, cbOK => {
@@ -664,6 +672,86 @@ app.post('/completeTask', authenticateToken, function (req, res) {
         }
     })
 })
+app.post('/searchFriend', authenticateToken, function (req, res) {
+    let searchParameter = req.query.searchParameter
+    //console.log('searchParameter in server ' + searchParameter)
+    mongoDatabase.searchFriend(searchParameter, cbOK => {
+        if (`${cbOK}` == 404) {
+            res.sendStatus(404);
+        } else if (`${cbOK}` == 500) {
+            res.sendStatus(500);
+        } else if (`${cbOK}` !== 500 && `${cbOK}` !== 404) {
+            let searchResult = cbOK;
+            let friendList = []
+            if (req.user.type === 'attorney') {
+                mongoDatabase.getRepresentatives(req.user.mongoID, cbOK => {
+                    if (`${cbOK}` == 404) {
+                        res.sendStatus(404);
+                    } else if (`${cbOK}` == 500) {
+                        res.sendStatus(500);
+                    } else if (`${cbOK}` !== 500 && `${cbOK}` !== 404) {
+                        friendList = cbOK
+                        searchResult.forEach(e => {
+                            e.alreadyInFriendList = false;
+                            friendList.forEach(friend => {
+                                if (e._id == friend) {
+                                    e.alreadyInFriendList = true;
+                                }
+                            });
+                        })
+                        res.send(searchResult)
+                    }
+                })
+            } else if (req.user.type === 'representative') {
+                mongoDatabase.getAttorneys(req.user.mongoID, cbOK => {
+                    if (`${cbOK}` == 404) {
+                        res.sendStatus(404);
+                    } else if (`${cbOK}` == 500) {
+                        res.sendStatus(500);
+                    } else if (`${cbOK}` !== 500 && `${cbOK}` !== 404) {
+                        friendList = cbOK
+                        searchResult.forEach(e => {
+                            e.alreadyInFriendList = false;
+                            friendList.forEach(friend => {
+                                if (e._id == friend) {
+                                    e.alreadyInFriendList = true;
+                                }
+                            });
+                        })
+                        res.send(searchResult)
+                    }
+                })
+            }
+
+        }
+    })
+})
+app.post('/searchFileInBD', authenticateToken, async function (req, res) {
+    let searchParameter = req.query.searchParameter;
+    console.log('searchParameter in server ' + searchParameter)
+    mongoDatabase.searchFileInBD(searchParameter, cbOK => {
+        if (`${cbOK}` == 404) {
+            res.sendStatus(404);
+        } else if (`${cbOK}` == 500) {
+            res.sendStatus(500);
+        } else if (`${cbOK}` !== 500 && `${cbOK}` !== 404) {
+            res.send(cbOK);
+        }
+    })
+})
+app.post('/addFriend', authenticateToken, function (req, res) {
+    let data = req.body
+    mongoDatabase.addFriend(data, req.user, cbOK => {
+        if (`${cbOK}` == 404) {
+            res.sendStatus(404);
+        } else if (`${cbOK}` == 500) {
+            res.sendStatus(500);
+        } else if (`${cbOK}` !== 500 && `${cbOK}` !== 404) {
+            res.sendStatus(200);
+        }
+    })
+})
+
 app.listen(process.env.PORT || 8001,
     () => console.log("Server is running..."));
 

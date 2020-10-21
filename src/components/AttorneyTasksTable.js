@@ -103,7 +103,7 @@ export default function DenseTable(props) {
     return (
         <>
             {
-                props.td.length > 0 ? (
+                props.td && props.td.length > 0 ? (
                     <TableContainer component={Paper}>
                         <Table className={classes.table} size="small" aria-label="a dense table">
                             <TableHead>

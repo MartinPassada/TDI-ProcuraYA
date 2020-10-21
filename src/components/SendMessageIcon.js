@@ -89,7 +89,7 @@ export default function SendMessageIcon(props) {
                     let data = {
                         attorneyID: props.attorneyData._id,
                         message: message,
-                        type: 'message'
+                        type: 'message',
                     }
                     const response = await fetch('/saveMessage', {
                         method: 'POST',

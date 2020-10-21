@@ -41,6 +41,7 @@ export default class FileUploadForm extends Component {
                 locationRoom: '',
                 fileState: '',
                 fileTitle: '',
+                fileYear: '',
             },
             body: [],
         }
@@ -99,6 +100,7 @@ export default class FileUploadForm extends Component {
             file.header.locationRoom = document.getElementById('locationRoom').value.toUpperCase();
             file.header.fileState = document.getElementById('fileState').value.toUpperCase();
             file.header.fileTitle = document.getElementById('fileTitle').value.toUpperCase();
+            file.header.fileYear = document.getElementById('fileYear').value.toUpperCase();
 
             await fetch('/uploadFile', {
                 method: 'POST',
@@ -224,6 +226,11 @@ export default class FileUploadForm extends Component {
                                 <label class='FileHeaderLabels'>
                                     Caratula:
                                     <input maxLength='60' type="text" placeholder="Cataruta" class='FileHeaderInputs' id='fileTitle'></input>
+                                </label>
+
+                                <label class='FileHeaderLabels'>
+                                    Año:
+                                    <input maxLength='60' type="text" placeholder="Año" class='FileHeaderInputs' id='fileYear'></input>
                                 </label>
 
                             </Card.Body>

@@ -15,7 +15,10 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import AccountConfig from './AccountConfig';
 import InboxIcon from '../components/InboxIcon';
+import ExtendSessionFn from './ExtendSesion';
+import SearchResultList from './SearchResultList'
 import '../css/NavigationBar.css'
+
 
 
 
@@ -31,7 +34,7 @@ const Toast = MySwal.mixin({
         toast.addEventListener('mouseleave', Swal.resumeTimer)
     },
     onAfterClose: () => {
-        window.location.replace('/Home');
+        //window.location.replace('/Home');
     }
 
 })
@@ -81,6 +84,69 @@ export default class NavigationBar extends Component {
     closeSearchEngine() {
         document.getElementById("myNav").style.height = "0%";
     }
+    async searchInBD() {
+        let icons = document.querySelectorAll('.searchEngineIcons');
+        let searchParameter = document.getElementById('searchInput').value
+        let searchResultListDiv = document.getElementById('searchResultListDiv');
+        if (icons[0].checked) {
+            await fetch(`/searchFriend?searchParameter=${searchParameter}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+                }
+            }).then(async response => {
+                if (response.status === 200) {
+                    let results = await response.json();
+                    ReactDOM.render(<SearchResultList results={results} type={'friends'} userData={this.state.userData} />, searchResultListDiv)
+                } else if (response.status === 403) {
+                    await ExtendSessionFn();
+                } else if (response.status === 404) {
+                    ReactDOM.render(<SearchResultList results={[]} />, searchResultListDiv)
+                } else if (response.status === 500) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Server Error'
+                    })
+                }
+            })
+            //console.log('personas esta chekeado')
+        } else if (icons[1].checked) {
+            fetch(`/searchFileInBD?searchParameter=${searchParameter}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+                }
+            }).then(async response => {
+                if (response.status === 200) {
+                    let results = await response.json();
+                    ReactDOM.render(<SearchResultList results={results} type={'files'} userData={this.state.userData} />, searchResultListDiv)
+                } else if (response.status === 403) {
+                    await ExtendSessionFn();
+                } else if (response.status === 404) {
+                    ReactDOM.render(<SearchResultList results={[]} />, searchResultListDiv)
+                } else if (response.status === 500) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Server Error'
+                    })
+
+                }
+            })
+            //console.log('files esta chekeado')
+        } else {
+            Toast.fire({
+                icon: 'error',
+                title: 'selecciona un tipo de busqueda'
+            })
+            //console.log('ninguno esta chekeado')
+        }
+    }
+
+
     selectSearchEngineIcon(e) {
         let icons = document.querySelectorAll('.searchEngineIcons');
         //document.getElementById('searchInput').focus();
@@ -135,9 +201,6 @@ export default class NavigationBar extends Component {
                 <div id="myNav" class="overlay">
                     <a href="javascript:void(0)" class="closebtn" onClick={this.closeSearchEngine}>&times;</a>
                     <div class="overlay-content">
-                        <input type='text' id='searchInput' placeholder='Busca algo...' maxlength="29"></input>
-                    </div>
-                    <div class="overlay-content">
                         {
                             this.state.userData.type ? (<>
                                 <img class='searchEngineIcons' checked={false} id='searchEnginePersonIcon' onClick={() => { this.selectSearchEngineIcon(window.event.target) }} src={personGrey} ></img>
@@ -147,6 +210,12 @@ export default class NavigationBar extends Component {
                                 <img style={{ display: 'none' }} class='searchEngineIcons' checked={false} id='searchEngineFileIcon' onClick={() => { this.selectSearchEngineIcon(window.event.target) }} src={fileGrey} ></img>
                             </>)
                         }
+                    </div>
+                    <div class="overlay-content">
+                        <input onInput={() => { this.searchInBD() }} type='search' id='searchInput' placeholder='Busca algo...' maxlength="29"></input>
+                    </div>
+                    <div class="overlay-content-searchResultDiv">
+                        <div id='searchResultListDiv'></div>
                     </div>
                 </div>
             </div>
