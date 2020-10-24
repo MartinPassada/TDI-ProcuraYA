@@ -81,7 +81,7 @@ Update #13
 Update #12
 
 1. Minor fixes on signUp Form
-2. Reset Password Form can now guide users trough steps to restore password and unblock their accounts
+2. Reset Password Form can now guide users through steps to restore password and unblock their accounts
 3. Unblock user api is now working as expected
 4. A brand new update password api was violently added
 5. We added an api for sending random codes to users emails
