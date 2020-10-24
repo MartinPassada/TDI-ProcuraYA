@@ -69,23 +69,23 @@ function authenticateToken(req, res, next) {
     })
 }
 function generateAccessToken(user) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1200s' })
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '99999999999s' })
 }
 
-/*setInterval(async () => {
-    console.log('se inicio el servicio de notificacion');
-    mongoDatabase.tasksDateReport(cbOK => {
+function checkDeadlines() {
+    mongoDatabase.checkDeadlines(cbOK => {
         let expiredTasksReport = cbOK[0]
         let notificationReport = cbOK[1];
-        console.log('report from bd')
         console.log('EXPIRED TASKS')
         console.log(expiredTasksReport);
         console.log('CLOSE TO EXPIRE TASKS')
         console.log(notificationReport);
 
     });
-}, 2000);*/
+}
 
+
+checkDeadlines();
 
 
 app.post('/token', (req, res) => {
@@ -683,6 +683,7 @@ app.post('/searchFriend', authenticateToken, function (req, res) {
         } else if (`${cbOK}` !== 500 && `${cbOK}` !== 404) {
             let searchResult = cbOK;
             let friendList = []
+            console.log(searchResult);
             if (req.user.type === 'attorney') {
                 mongoDatabase.getRepresentatives(req.user.mongoID, cbOK => {
                     if (`${cbOK}` == 404) {

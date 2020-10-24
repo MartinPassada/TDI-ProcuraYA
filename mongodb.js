@@ -28,7 +28,7 @@ module.exports.completeTask = completeTask
 module.exports.searchFriend = searchFriend
 module.exports.searchFileInBD = searchFileInBD
 module.exports.addFriend = addFriend
-module.exports.tasksDateReport = tasksDateReport
+module.exports.checkDeadlines = checkDeadlines
 /******************************************************************** */
 const fs = require("fs");
 const path = require('path');
@@ -443,7 +443,7 @@ function getFile(mongoID, fileID, cbOK) {
     //client.close();
 }
 //GET ALL FILES
-function tasksDateReport(cbOK) {
+function checkDeadlines(cbOK) {
 
     mongoClient.connect(err => {
         if (err) {
