@@ -85,7 +85,7 @@ function checkDeadlines() {
 }
 
 
-checkDeadlines();
+//checkDeadlines();
 
 
 app.post('/token', (req, res) => {
