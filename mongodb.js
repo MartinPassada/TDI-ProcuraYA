@@ -1000,23 +1000,29 @@ function searchFriend(searchParameter, cbOK) {
         } else {
             var db = mongoClient.db("ProcuraYaDatabase");
             var users = db.collection("users");
-            users.createIndex({ userName: 'text', userLastName: 'text' }, function (err, result) {
-                if (err) console.log(err);
-                if (result) {
+            try {
+                users.createIndex({ userName: 'text', userLastName: 'text' }, function (err, result) {
+                    if (err) console.log(err);
+                    if (result) {
 
-                    users.find({ $text: { $search: `${searchParameter}` } },
-                        { score: { $meta: 'textScore' } }).project({ "_id": 1, "userName": 1, "userLastName": 1, "userImg": 1, "score": { $meta: "textScore" } }).sort({ score: { $meta: 'textScore' } }).limit(15).toArray((err, data) => {
-                            if (err) {
-                                console.log(err);
-                                cbOK(500)
-                            } else if (data.length > 0) {
-                                cbOK(data)
-                            } else {
-                                cbOK(404)
-                            }
-                        })
-                }
-            })
+                        users.find({ $text: { $search: `${searchParameter}` } },
+                            { score: { $meta: 'textScore' } }).project({ "_id": 1, "userName": 1, "userLastName": 1, "userImg": 1, "score": { $meta: "textScore" } }).sort({ score: { $meta: 'textScore' } }).limit(15).toArray((err, data) => {
+                                if (err) {
+                                    console.log(err);
+                                    cbOK(500)
+                                } else if (data.length > 0) {
+                                    console.log(data);
+                                    cbOK(data)
+                                } else {
+                                    cbOK(404)
+                                }
+                            })
+                    }
+                })
+            } catch (error) {
+                console.log('bd error catched \n' + error)
+            }
+
 
         }
     });
@@ -1030,23 +1036,28 @@ function searchFileInBD(searchParameter, cbOK) {
         } else {
             var db = mongoClient.db("ProcuraYaDatabase");
             var files = db.collection("files");
-            files.createIndex({ fileID: 'text', fileTitle: 'text', year: 'text', fileState: 'text', locationRoom: 'text', fileLocation: 'text' }, function (err, result) {
-                if (err) console.log(err);
-                if (result) {
+            try {
+                files.createIndex({ fileID: 'text', fileTitle: 'text', year: 'text', fileState: 'text', locationRoom: 'text', fileLocation: 'text' }, function (err, result) {
+                    if (err) console.log(err);
+                    if (result) {
 
-                    files.find({ $text: { $search: `${searchParameter}` } },
-                        { score: { $meta: 'textScore' } }).project({ "_id": 1, "fileID": 1, "fileTitle": 1, "year": 1, "score": { $meta: "textScore" } }).sort({ score: { $meta: 'textScore' } }).limit(15).toArray((err, data) => {
-                            if (err) {
-                                console.log(err);
-                                cbOK(500)
-                            } else if (data.length > 0) {
-                                cbOK(data)
-                            } else {
-                                cbOK(404)
-                            }
-                        })
-                }
-            })
+                        files.find({ $text: { $search: `${searchParameter}` } },
+                            { score: { $meta: 'textScore' } }).project({ "_id": 1, "fileID": 1, "fileTitle": 1, "year": 1, "score": { $meta: "textScore" } }).sort({ score: { $meta: 'textScore' } }).limit(15).toArray((err, data) => {
+                                if (err) {
+                                    console.log(err);
+                                    cbOK(500)
+                                } else if (data.length > 0) {
+                                    cbOK(data)
+                                } else {
+                                    cbOK(404)
+                                }
+                            })
+                    }
+                })
+            } catch (error) {
+                console.log('bd error catched \n' + error)
+            }
+
         }
     });
     //client.close();

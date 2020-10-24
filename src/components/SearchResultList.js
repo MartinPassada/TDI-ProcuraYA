@@ -112,34 +112,30 @@ export default function SearchResultList(props) {
                 results.length > 0 ? (
 
                     props.type === 'friends' ? (
-
                         results.map((value, index) => {
-                            if (value.userImg !== props.userData.img) {
-                                const labelId = `checkbox-list-secondary-label-${value}`;
-                                return <ListItem key={index} button>
-                                    <ListItemAvatar>
-                                        <Avatar
-                                            src={value.userImg}
-                                        />
-                                    </ListItemAvatar>
-                                    <ListItemText id={labelId} primary={`${value.userName} ${value.userLastName} `} />
-                                    {
-                                        value.alreadyInFriendList ? ('') : (
-                                            <ListItemSecondaryAction>
-                                                <div id={index}>
-                                                    <Tooltip title="Agregar contacto" arrow>
-                                                        <IconButton onClick={() => { addFriend(value._id, index) }}>
-                                                            <PersonAddIcon style={{ fontSize: 40, zIndex: 2, color: 'green' }} />
-                                                        </IconButton>
-                                                    </Tooltip>
-                                                </div>
-                                            </ListItemSecondaryAction>
-                                        )
-                                    }
-                                </ListItem >
-                            } else {
-                                //nothing
-                            }
+                            const labelId = `checkbox-list-secondary-label-${value}`;
+                            return <ListItem key={index} button>
+                                <ListItemAvatar>
+                                    <Avatar
+                                        src={value.userImg}
+                                    />
+                                </ListItemAvatar>
+                                <ListItemText id={labelId} primary={`${value.userName} ${value.userLastName} `} />
+                                {
+                                    value.alreadyInFriendList ? ('') : (
+                                        <ListItemSecondaryAction>
+                                            <div id={index}>
+                                                <Tooltip title="Agregar contacto" arrow>
+                                                    <IconButton onClick={() => { addFriend(value._id, index) }}>
+                                                        <PersonAddIcon style={{ fontSize: 40, zIndex: 2, color: 'green' }} />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </div>
+                                        </ListItemSecondaryAction>
+                                    )
+                                }
+                            </ListItem >
+
                         })
                     ) : (
                             results.map((value, index) => {

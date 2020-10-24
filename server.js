@@ -683,7 +683,7 @@ app.post('/searchFriend', authenticateToken, function (req, res) {
         } else if (`${cbOK}` !== 500 && `${cbOK}` !== 404) {
             let searchResult = cbOK;
             let friendList = []
-            console.log(searchResult);
+            //console.log(searchResult);
             if (req.user.type === 'attorney') {
                 mongoDatabase.getRepresentatives(req.user.mongoID, cbOK => {
                     if (`${cbOK}` == 404) {
@@ -700,7 +700,22 @@ app.post('/searchFriend', authenticateToken, function (req, res) {
                                 }
                             });
                         })
-                        res.send(searchResult)
+                        console.log('esta buscando ' + req.user.name + '\n')
+                        let indexToDelete = false;
+                        console.log('antes de filtrar \n')
+                        console.log(searchResult)
+                        searchResult.map((e, index) => {
+                            if (e._id == req.user.mongoID) {
+                                indexToDelete = index
+                            }
+                        })
+                        if (indexToDelete !== false) {
+                            searchResult.splice(indexToDelete, 1);
+                            res.send(searchResult)
+                        } else {
+                            res.send(searchResult)
+                        }
+
                     }
                 })
             } else if (req.user.type === 'representative') {
@@ -719,7 +734,24 @@ app.post('/searchFriend', authenticateToken, function (req, res) {
                                 }
                             });
                         })
-                        res.send(searchResult)
+                        console.log('esta buscando ' + req.user.name + '\n')
+                        let indexToDelete = false;
+                        searchResult.map((e, index) => {
+                            if (e._id == req.user.mongoID) {
+                                indexToDelete = index
+                            }
+                        })
+                        console.log('antes de filtrar \n')
+                        console.log(searchResult)
+                        if (indexToDelete !== false) {
+                            searchResult.splice(indexToDelete, 1);
+                            res.send(searchResult)
+                        } else {
+                            res.send(searchResult)
+                        }
+
+
+
                     }
                 })
             }
