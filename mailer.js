@@ -35,43 +35,52 @@ function pushNotificationDeadlines(deadLinesReport) {
             pass: 'jsudvssubnovsybw', //procura2020ya
         },
     });
-    deadLinesReport.expiredTasksReport.length > 0 ? (
-        deadLinesReport.expiredTasksReport.forEach(t => {
-            t.users.forEach(user => {
-                mongoDatabase.getUserEmail(user, cbOK => {
-                    console.log(cbOK)
-                    transporter.sendMail({
-                        from: 'procurayanoresponder@gmail.com',
-                        to: `${cbOK}`,
-                        subject: "Tarea pronta a expirar",
-                        text: `Se acerca el plazo limite para completar la tarea "${t.taskName}" en el expediente ${t.fileID}`,
-                        html: "", // html body
+    if (deadLinesReport && deadLinesReport.expiredTasksReport) {
+        deadLinesReport.expiredTasksReport.length > 0 ? (
+            deadLinesReport.expiredTasksReport.forEach(t => {
+                t.users.forEach(user => {
+                    mongoDatabase.getUserEmail(user, cbOK => {
+                        console.log(cbOK)
+                        transporter.sendMail({
+                            from: 'procurayanoresponder@gmail.com',
+                            to: `${cbOK}`,
+                            subject: "Tarea pronta a expirar",
+                            text: `Se acerca el plazo limite para completar la tarea "${t.taskName}" en el expediente ${t.fileID}`,
+                            html: "", // html body
+                        })
                     })
                 })
             })
-        })
-    ) : (
-            console.log('no expired tasks to notify')
-        )
-    deadLinesReport.notifications.length > 0 ? (
-        deadLinesReport.notifications.forEach(t => {
-            t.users.forEach(user => {
-                mongoDatabase.getUserEmail(user, cbOK => {
-                    console.log(cbOK)
-                    transporter.sendMail({
-                        from: 'procurayanoresponder@gmail.com',
-                        to: `${cbOK}`,
-                        subject: "Tarea pronta a expirar",
-                        text: `Se acerca el plazo limite para completar la tarea "${t.taskName}" en el expediente ${t.fileID}`,
-                        html: "", // html body
+        ) : (
+                console.log('no expired tasks to notify')
+            )
+    } else {
+        console.log('no expired tasks to notify')
+    }
+    if (deadLinesReport && deadLinesReport.notifications) {
+        deadLinesReport.notifications.length > 0 ? (
+            deadLinesReport.notifications.forEach(t => {
+                t.users.forEach(user => {
+                    mongoDatabase.getUserEmail(user, cbOK => {
+                        console.log(cbOK)
+                        transporter.sendMail({
+                            from: 'procurayanoresponder@gmail.com',
+                            to: `${cbOK}`,
+                            subject: "Tarea pronta a expirar",
+                            text: `Se acerca el plazo limite para completar la tarea "${t.taskName}" en el expediente ${t.fileID}`,
+                            html: "", // html body
+                        })
                     })
-                })
 
+                })
             })
-        })
-    ) : (
-            console.log('no task close to expire')
-        )
+        ) : (
+                console.log('no task close to expire')
+            )
+    } else {
+        console.log('no task close to expire')
+    }
+
 }
 
 
