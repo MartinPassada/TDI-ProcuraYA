@@ -58,6 +58,7 @@ export default class NavigationBar extends Component {
         });
         var data = await response.json();
         this.setState({ userData: data });
+
     }
     async componentDidMount() {
         var response = await fetch('/getUserInfo', {

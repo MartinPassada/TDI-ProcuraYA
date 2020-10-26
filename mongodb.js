@@ -29,6 +29,8 @@ module.exports.searchFriend = searchFriend
 module.exports.searchFileInBD = searchFileInBD
 module.exports.addFriend = addFriend
 module.exports.checkDeadlines = checkDeadlines
+module.exports.getUserEmail = getUserEmail
+module.exports.getUserImg = getUserImg
 /******************************************************************** */
 const fs = require("fs");
 const path = require('path');
@@ -498,7 +500,11 @@ function checkDeadlines(cbOK) {
 
                         })
                     })
-                    cbOK([expiredTasksReport, notifications]);
+                    let deadLinesReport = {
+                        expiredTasksReport: expiredTasksReport,
+                        notifications: notifications
+                    };
+                    cbOK(deadLinesReport);
                     //console.log(data);
                 } else {
                     cbOK(500);
@@ -990,9 +996,7 @@ function completeTask(name, taskData, cbOK) {
 
     //client.close();
 }
-
 // limitar cantidad de friendRequest que se pueden enviar
-
 function searchFriend(searchParameter, cbOK) {
     mongoClient.connect(err => {
         if (err) {
@@ -1116,6 +1120,50 @@ function addFriend(data, userData, cbOK) {
     });
     //client.close();
 }
+
+function getUserEmail(mongoID, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var ObjectID = require('mongodb').ObjectID;
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var users = db.collection("users");
+            users.find({ "_id": ObjectID(`${mongoID}`) }).project({ "_id": 0.0, "email": 1.0 }).toArray((err, data) => {
+                if (err) {
+                    console.log(err)
+                    cbOK(500)
+                } else if (data) {
+                    cbOK(data[0].email)
+                }
+
+            })
+
+        }
+    })
+}
+function getUserImg(mongoID, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var ObjectID = require('mongodb').ObjectID;
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var users = db.collection("users");
+            users.find({ "_id": ObjectID(`${mongoID}`) }).project({ "_id": 0.0, "userImg": 1.0 }).toArray((err, data) => {
+                if (err) {
+                    console.log(err)
+                    cbOK(500)
+                } else if (data) {
+                    cbOK(data[0].userImg)
+                }
+
+            })
+
+        }
+    })
+}
+
 
 
 

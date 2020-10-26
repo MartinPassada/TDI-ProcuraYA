@@ -69,23 +69,25 @@ function authenticateToken(req, res, next) {
     })
 }
 function generateAccessToken(user) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '99999999999s' })
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1500s' })
 }
 
 function checkDeadlines() {
-    mongoDatabase.checkDeadlines(cbOK => {
-        let expiredTasksReport = cbOK[0]
-        let notificationReport = cbOK[1];
-        console.log('EXPIRED TASKS')
-        console.log(expiredTasksReport);
-        console.log('CLOSE TO EXPIRE TASKS')
-        console.log(notificationReport);
+    setInterval(() => {
+        mongoDatabase.checkDeadlines(cbOK => {
+            let deadLinesReport = cbOK
+            mailer.pushNotificationDeadlines(deadLinesReport);
+            /*console.log('EXPIRED TASKS')
+            console.log(expiredTasksReport);
+            console.log('CLOSE TO EXPIRE TASKS')
+            console.log(notificationReport);*/
+        });
+    }, 300000);
 
-    });
 }
 
 
-//checkDeadlines();
+checkDeadlines();
 
 
 app.post('/token', (req, res) => {
@@ -100,7 +102,7 @@ app.post('/token', (req, res) => {
             mongoID: user.mongoID,
             email: user.email,
             type: user.type,
-            img: user.img
+            //img: user.img
         })
         res.json({ accessToken: accessToken })
     })
@@ -167,7 +169,7 @@ app.post('/login', (req, res) => {
                     mongoID: userData._id,
                     email: userData.email,
                     type: userData.userType,
-                    img: userData.userImg
+                    //img: userData.userImg
                 }
                 const accessToken = generateAccessToken(user);
                 const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET)
@@ -191,22 +193,27 @@ app.get('/getUserInfo', authenticateToken, (req, res) => {
     if (req.user.name === undefined) {
         res.sendStatus(403);
     } else if (req.user.name !== undefined) {
-        if (req.user.type === 'attorney') {
-            let data = {
-                name: req.user.name,
-                type: false,
-                img: req.user.img,
-            }
-            res.send(data);
+        let userIMG;
+        mongoDatabase.getUserImg(req.user.mongoID, cbOK => {
+            userIMG = cbOK
+            if (req.user.type === 'attorney') {
+                let data = {
+                    name: req.user.name,
+                    type: false,
+                    img: userIMG,
+                }
+                res.send(data);
 
-        } else if (req.user.type === 'representative') {
-            let data = {
-                name: req.user.name,
-                type: true,
-                img: req.user.img,
+            } else if (req.user.type === 'representative') {
+                let data = {
+                    name: req.user.name,
+                    type: true,
+                    img: userIMG,
+                }
+                res.send(data);
             }
-            res.send(data);
-        }
+        })
+
     } else {
         res.sendStatus(500);
     }
@@ -396,7 +403,7 @@ app.post('/updateUserImg', authenticateToken, (req, res) => {
             let newUserImg = `assets/userImages/${file.name}`;
             mongoDatabase.updateUserImg(req.user.mongoID, newUserImg, cbOK => {
                 if (`${cbOK}` == 200) {
-                    req.user.userImg = newUserImg;
+                    //req.user.userImg = newUserImg;
                     res.sendStatus(200);
                 } else if (`${cbOK}` == 500) {
                     res.sendStatus(500);
@@ -595,13 +602,16 @@ app.post('/assignFiles', function (req, res) {
 })
 app.post('/saveMessage', authenticateToken, function (req, res) {
     let data = req.body;
-    mongoDatabase.saveMessage(req.user.mongoID, req.user.img, req.user.name, data, cbOK => {
-        if (`${cbOK}` == 500) {
-            res.sendStatus(500);
-        } else if (`${cbOK}` == 200) {
-            res.sendStatus(200);
-        }
+    mongoDatabase.getUserImg(req.user.mongoID, userIMG => {
+        mongoDatabase.saveMessage(req.user.mongoID, userIMG, req.user.name, data, cbOK => {
+            if (`${cbOK}` == 500) {
+                res.sendStatus(500);
+            } else if (`${cbOK}` == 200) {
+                res.sendStatus(200);
+            }
+        })
     })
+
 })
 app.get('/getInboxMessages', authenticateToken, function (req, res) {
     mongoDatabase.getInboxMessagesIDList(req.user.mongoID, cbOK => {

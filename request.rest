@@ -3,7 +3,7 @@ POST  http://localhost:8001/login
 Content-Type: application/json
 
 {
-    "email": "7f345b0b3b@emaillab.xyz",
+    "email": "39b3f51672@firemailbox.club",
     "password": "123123"
 }
 
@@ -31,7 +31,7 @@ Content-Type: application/json
 ###
 //GET USER INFO
 GET http://localhost:8001/getUserInfo
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiRmlyZWZveCBNb3ppbGxhIiwibW9uZ29JRCI6IjVmMzcwYTY2ZTdhNmJiMWY5NGE1NDU4ZiIsImVtYWlsIjoiN2YzNDViMGIzYkBlbWFpbGxhYi54eXoiLCJ0eXBlIjoiYXR0b3JuZXkiLCJpbWciOiJhc3NldHMvdXNlckltYWdlcy8xNTk4NDA5NTk2MDUyNDY5NTAzMDE5MzEyNC5wbmciLCJpYXQiOjE2MDM1Nzg3NjUsImV4cCI6MTAxNjAzNTc4NzY0fQ.94l1KBZDqLSgbh4OzemGTsgGUyrbDegySfmJKR8Wd38
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibWFuZGF0IG1hbmRhdCIsIm1vbmdvSUQiOiI1Zjk0ZTcxNGMzODNkYjM2NDRjYTk5MWQiLCJlbWFpbCI6IjM5YjNmNTE2NzJAZmlyZW1haWxib3guY2x1YiIsInR5cGUiOiJyZXByZXNlbnRhdGl2ZSIsImltZyI6ImFzc2V0cy91c2VySW1hZ2VzLzE2MDM1OTkxNzE5ODQ2MzU2NjIzNDE2MDMxLnBuZyIsImlhdCI6MTYwMzU5OTM2OSwiZXhwIjoxMDE2MDM1OTkzNjh9.B-zFjqq-c7g1JB6KnnPmHTtpQeHQiAi_39EFkCeZnQo
 
 ###
 //LOGUOT
