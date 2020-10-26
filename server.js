@@ -69,7 +69,7 @@ function authenticateToken(req, res, next) {
     })
 }
 function generateAccessToken(user) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1500s' })
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1200s' })
 }
 
 function checkDeadlines() {
@@ -395,7 +395,7 @@ app.post('/updateUserImg', authenticateToken, (req, res) => {
     let randomNumber = Math.floor(Math.random() * 9999999999999);
     let date = Date.now();
     file.name = ((date.toString()) + (randomNumber.toString())) + '.png'
-    file.mv(`./src/assets/userImages/${file.name}`, err => {
+    file.mv(`src/assets/userImages/${file.name}`, err => {
         if (err) {
             console.error(err);
             return res.status(500).send(err);
