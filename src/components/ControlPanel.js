@@ -35,6 +35,7 @@ import Accordion from './Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
+import LocationsPanel from './LocationsPanel'
 
 
 
@@ -334,6 +335,11 @@ export default class ControlPanel extends Component {
         this.state.indexSelected = index;
         this.setState({ indexSelected: this.state.indexSelected })
     }
+    getLocations = () => {
+        ReactDOM.unmountComponentAtNode(document.getElementById('fright'));
+        document.getElementById('fright').innerHTML = '';
+        ReactDOM.render(<LocationsPanel handleControlPanelUpdate={this.handleUpdate} userData={this.state.userData} />, document.getElementById("fright"))
+    }
 
     render() {
 
@@ -353,7 +359,7 @@ export default class ControlPanel extends Component {
                         </div>
                         <div>
                             <Tooltip title="Enviar expediente" arrow>
-                                <IconButton onClick={() => { '' }}>
+                                <IconButton onClick={() => { this.getLocations() }}>
                                     <ArrowForwardIcon style={{ fontSize: 40, zIndex: 2, color: '#ea5f32' }} />
                                 </IconButton>
                                 {/*<img class='FilesListButton' src={sendIcon}></img>*/}

@@ -19,8 +19,6 @@ const jwt = require("jsonwebtoken");
 
 
 
-
-
 //Middlewares
 app.use(fileUpload());
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -69,7 +67,7 @@ function authenticateToken(req, res, next) {
     })
 }
 function generateAccessToken(user) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1200s' })
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1800s' })
 }
 
 function checkDeadlines() {
@@ -87,7 +85,7 @@ function checkDeadlines() {
 }
 
 
-checkDeadlines();
+//checkDeadlines();
 
 
 app.post('/token', (req, res) => {
@@ -794,6 +792,42 @@ app.post('/addFriend', authenticateToken, function (req, res) {
         }
     })
 })
+app.get('/getLocations', authenticateToken, function (req, res) {
+    mongoDatabase.getLocations(cbOK => {
+        if (`${cbOK}` == 500) {
+            res.sendStatus(500);
+        } else if (`${cbOK}` !== 500) {
+            res.send(cbOK);
+        }
+    })
+})
+app.get('/getLocation', authenticateToken, function (req, res) {
+    let locationName = req.query.name;
+    mongoDatabase.getLocation(locationName, cbOK => {
+        if (`${cbOK}` == 500) {
+            res.sendStatus(500);
+        } else if (`${cbOK}` !== 500) {
+            res.send(cbOK);
+        }
+    })
+})
+app.get('/getMyFilesToAssign', authenticateToken, function (req, res) {
+    let mongoID = req.user.mongoID;
+    mongoDatabase.getMyFilesToAssign(mongoID, cbOK => {
+        if (`${cbOK}` == 500) {
+            res.sendStatus(500);
+        } else if (`${cbOK}` !== 500) {
+            console.log(cbOK)
+            res.send(cbOK);
+        }
+    })
+})
+
+
+
+
+
+
 
 app.listen(process.env.PORT || 8001,
     () => console.log("Server is running..."));

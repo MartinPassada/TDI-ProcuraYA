@@ -33,6 +33,7 @@ export default class FileUploadForm extends Component {
         this.state = {
             count: 0,
             bodies: [],
+            locationsComboBoxOptions: [],
         }
         this.file = {
             header: {
@@ -47,6 +48,30 @@ export default class FileUploadForm extends Component {
         }
     }
 
+    async componentDidMount() {
+        await fetch('/getLocations', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+            }
+        }).then(response => {
+            if (response.status === 200) {
+                response.json().then(json => {
+                    console.log(json)
+                    if (json.length > 0) {
+                        this.state.locationsComboBoxOptions = json
+                        this.setState({ locationsComboBoxOptions: this.state.locationsComboBoxOptions })
+                    } else {
+                        this.setState({ locationsComboBoxOptions: [] })
+                    }
+                })
+
+            }
+        })
+
+    }
     handleChange(content) {
         let bodyContent = { content }
         this.file.body.push(bodyContent);
@@ -96,7 +121,7 @@ export default class FileUploadForm extends Component {
         let headerInputs = document.querySelectorAll('.FileHeaderInputs');
         if (this.checkEmptyInputs(headerInputs) === false && this.injectedCode(headerInputs) === false && this.inputsError(headerInputs) === false) {
             file.header.fileID = document.getElementById('fileID').value.toUpperCase();
-            file.header.fileLocation = document.getElementById('fileLocation').value.toUpperCase();
+            file.header.fileLocation = document.getElementById('combo').value.toUpperCase();
             file.header.locationRoom = document.getElementById('locationRoom').value.toUpperCase();
             file.header.fileState = document.getElementById('fileState').value.toUpperCase();
             file.header.fileTitle = document.getElementById('fileTitle').value.toUpperCase();
@@ -188,7 +213,7 @@ export default class FileUploadForm extends Component {
                 console.log(array[i].props.id)
                 //array[i].props.id = array[i].props.id - 1
             }
-    
+     
         }*/
         array.splice(index, 1);
         this.setState({ bodies: array });
@@ -210,7 +235,14 @@ export default class FileUploadForm extends Component {
                                 </label>
                                 <label class='FileHeaderLabels'>
                                     Jurisdiccion:
-                                    <input type="text" placeholder="Jurisdiccion" class='FileHeaderInputs' id='fileLocation'></input>
+                                    <select id="combo">
+                                        {
+                                            this.state.locationsComboBoxOptions.map(e => {
+                                                return <option value={e.name}>{e.name}</option>
+                                            })
+                                        }
+                                    </select>
+                                    {/*<input type="text" placeholder="Jurisdiccion" class='FileHeaderInputs' id='fileLocation'></input>*/}
                                 </label>
 
                                 <label class='FileHeaderLabels'>

@@ -60,6 +60,7 @@ export default async function ExtendSessionFn(props) {
                     let data = await res.json();
                     const token = data.accessToken;
                     localStorage.setItem('jwtToken', token);
+                    window.location.replace('/Home');
                     return true
                 }
             })

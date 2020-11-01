@@ -13,6 +13,12 @@
  Gmail
  Mohmal
 
+Update #21
+
+1. Combo box for selecting location of a file in fileUploadForm
+2. Locations Panel added
+3. Random Fixes (search engine, user pictures, etc)
+
 Update #20
 
 1. Fixes

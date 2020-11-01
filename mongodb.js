@@ -31,6 +31,9 @@ module.exports.addFriend = addFriend
 module.exports.checkDeadlines = checkDeadlines
 module.exports.getUserEmail = getUserEmail
 module.exports.getUserImg = getUserImg
+module.exports.getLocations = getLocations
+module.exports.getLocation = getLocation
+module.exports.getMyFilesToAssign = getMyFilesToAssign
 /******************************************************************** */
 const fs = require("fs");
 const path = require('path');
@@ -1156,6 +1159,66 @@ function getUserImg(mongoID, cbOK) {
                     cbOK(500)
                 } else if (data) {
                     cbOK(data[0].userImg)
+                }
+
+            })
+
+        }
+    })
+}
+function getLocations(cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var locations = db.collection("locations");
+            locations.find({}).project({ "_id": 0.0, "name": 1.0 }).toArray((err, data) => {
+                if (err) {
+                    console.log(err)
+                    cbOK(500)
+                } else if (data) {
+                    cbOK(data)
+                }
+
+            })
+
+        }
+    })
+}
+function getLocation(locationName, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var locations = db.collection("locations");
+            locations.find({ "name": locationName }).project({ "_id": 0.0, "name": 0.0 }).toArray((err, data) => {
+                if (err) {
+                    console.log(err)
+                    cbOK(500)
+                } else if (data) {
+                    cbOK(data[0])
+                }
+
+            })
+
+        }
+    })
+}
+function getMyFilesToAssign(mongoID, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var files = db.collection("files");
+            files.find({ "assignedTo": mongoID }).project({ "_id": 0.0, "fileID": 1.0 }).toArray((err, data) => {
+                if (err) {
+                    console.log(err)
+                    cbOK(500)
+                } else if (data) {
+                    cbOK(data)
                 }
 
             })
