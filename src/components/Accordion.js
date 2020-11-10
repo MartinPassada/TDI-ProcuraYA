@@ -39,7 +39,7 @@ export default function ControlledAccordions(props) {
                     aria-controls="panel4bh-content"
                     id="panel4bh-header"
                 >
-                    <Typography className={classes.heading}>Treas Asignadas a este expediente</Typography>
+                    <Typography className={classes.heading}>Tareas Asignadas a este expediente</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Typography>

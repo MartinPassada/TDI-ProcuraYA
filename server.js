@@ -67,7 +67,7 @@ function authenticateToken(req, res, next) {
     })
 }
 function generateAccessToken(user) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1800s' })
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '9999999999s' })
 }
 
 function checkDeadlines() {
@@ -811,21 +811,89 @@ app.get('/getLocation', authenticateToken, function (req, res) {
         }
     })
 })
+
+
 app.get('/getMyFilesToAssign', authenticateToken, function (req, res) {
     let mongoID = req.user.mongoID;
     mongoDatabase.getMyFilesToAssign(mongoID, cbOK => {
         if (`${cbOK}` == 500) {
             res.sendStatus(500);
         } else if (`${cbOK}` !== 500) {
-            console.log(cbOK)
+            //console.log(cbOK)
             res.send(cbOK);
         }
     })
 })
 
+app.get('/getAssignedFilesToLocation', authenticateToken, function (req, res) {
+    //console.log('server' + req.query.locationName)
+    let data = {}
+    if (req.query.isRoom == 'false') {
+        data = {
+            entityName: req.query.entityName,
+            locationName: req.query.locationName,
+            isRoom: false
+        }
+    } else {
+        data = {
+            entityName: req.query.entityName,
+            locationName: req.query.locationName,
+            isRoom: true
+        }
+    }
+    console.log(data)
+    mongoDatabase.getAssignedFilesToLocation(data, cbOK => {
+        if (`${cbOK}` == 500) {
+            res.sendStatus(500);
+        } else if (`${cbOK}` !== 500) {
+            /*let arr = cbOK
+            let filteredArray = []
+            arr.forEach(file => {
+                if (file.assignedTo == req.user.mongoID) {
+                    filteredArray.push(file)
+                }
+            })*/
+            //console.log('files encontrados en sala o sec')
+            //console.log(cbOK)
+            res.send(cbOK);
+        }
 
+    })
+})
 
+app.post('/assignFilesToLocation', authenticateToken, function (req, res) {
+    let data = req.body;
+    console.log(data)
+    mongoDatabase.assignFilesToLocation(data, cbOK => {
+        if (`${cbOK}` == 500) {
+            res.sendStatus(500);
+        } else if (`${cbOK}` == 200) {
+            res.sendStatus(200);
+        }
+    })
 
+})
+app.get('/getTasks', authenticateToken, function (req, res) {
+    let fileID = req.query.fileID;
+    console.log('server getTasks')
+    //console.log(fileID)
+    mongoDatabase.getTasks(fileID, cbOK => {
+        if (`${cbOK}` == 500) {
+            res.sendStatus(500);
+        } else if (`${cbOK}` !== 500) {
+            //console.log('get tasks server response')
+            //console.log(cbOK)
+            let filteredArray = [];
+            cbOK.tasks.map((t, index) => {
+                if (t.state == 'Realizada') {
+                    cbOK.tasks.splice(index, 1)
+                }
+            })
+            res.send(cbOK);
+        }
+    })
+
+})
 
 
 

@@ -34,6 +34,9 @@ module.exports.getUserImg = getUserImg
 module.exports.getLocations = getLocations
 module.exports.getLocation = getLocation
 module.exports.getMyFilesToAssign = getMyFilesToAssign
+module.exports.getAssignedFilesToLocation = getAssignedFilesToLocation
+module.exports.assignFilesToLocation = assignFilesToLocation
+module.exports.getTasks = getTasks
 /******************************************************************** */
 const fs = require("fs");
 const path = require('path');
@@ -340,6 +343,11 @@ function saveFile(file, email, mongoID, cbOK) {
                         tasks: [],
                         year: `${file.header.fileYear}`,
                         bodies: file.body[lastItem],
+                        isBeingProcessed: false,
+                        assignedLoc: '',
+                        sentDate: 0,
+                        alarm: 0,
+
                     });
                     users.updateOne({ 'email': `${email}` }, { $push: { files: `${file.header.fileID}` } });
 
@@ -1213,12 +1221,196 @@ function getMyFilesToAssign(mongoID, cbOK) {
         } else {
             var db = mongoClient.db("ProcuraYaDatabase");
             var files = db.collection("files");
-            files.find({ "assignedTo": mongoID }).project({ "_id": 0.0, "fileID": 1.0 }).toArray((err, data) => {
+            files.find({ $and: [{ assignedTo: { $eq: `${mongoID}` } }, { assignedLoc: { $eq: '' } }] }).project({ "_id": 0.0 }).toArray((err, data) => {
                 if (err) {
                     console.log(err)
                     cbOK(500)
                 } else if (data) {
                     cbOK(data)
+                }
+
+            })
+
+        }
+    })
+}
+function getAssignedFilesToLocation(data, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var locations = db.collection("locations");
+            var files = db.collection("files");
+            locations.find({ "name": `${data.entityName}` }).project({ "_id": 0.0, "rooms": 1.0, "secretaries": 1.0 }).toArray((error, result) => {
+                if (error) {
+                    console.log(error)
+                    cbOK(500)
+                } else if (result) {
+                    if (result.length > 0) {
+                        let responseArray = []
+                        if (data.isRoom) {
+                            result[0].rooms.forEach(room => {
+                                if (room.name == data.locationName) {
+                                    room.files.forEach(file => {
+                                        responseArray.push(file)
+                                    })
+                                }
+                            })
+                            console.log('response array for rooms')
+                            console.log(responseArray)
+                            files.find({ $and: [{ "fileID": { $in: responseArray } }, { assignedLoc: { $ne: '' } }] }).project({ "_id": 0.0, "fileID": 1.0, "assignedLoc": 1.0 }).toArray((error, result) => {
+                                if (error) {
+                                    console.log(error)
+                                } else if (result) {
+                                    cbOK(result)
+                                }
+                            })
+                        } else {
+                            result[0].secretaries.forEach(sec => {
+                                if (sec.name == data.locationName) {
+                                    sec.files.forEach(file => {
+                                        responseArray.push(file)
+                                    })
+                                }
+                            })
+                            console.log('response array for secs')
+                            console.log(responseArray)
+                            files.find({ $and: [{ "fileID": { $in: responseArray } }, { assignedLoc: { $ne: '' } }] }).project({ "_id": 1.0, "fileID": 1.0, "assignedLoc": 1.0 }).toArray((error, result) => {
+                                if (error) {
+                                    console.log(error)
+                                } else if (result) {
+                                    console.log(result)
+                                    cbOK(result)
+                                }
+                            })
+
+                        }
+
+                    } else {
+                        console.log('no files found')
+                        cbOK([])
+                    }
+
+                }
+            })
+        }
+    })
+}
+
+function assignFilesToLocation(data, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            //var ObjectID = require('mongodb').ObjectID;
+            var files = db.collection("files");
+            var locations = db.collection("locations");
+            console.log('data in bd')
+            console.log(data);
+
+            try {
+                files.updateMany({ "fileID": { $in: data.assignedList } }, { $set: { "isBeingProcessed": true, "assignedLoc": `${data.locationName}`, "sentDate": Date.now() } }, function (err, result) {
+                    if (err) {
+                        cbOK(500)
+                    } else if (result) {
+                        locations.find({ "name": `${data.entityName}` }).project({ "_id": 0.0 }).toArray((err, result) => {
+                            if (err) {
+                                cbOK(500)
+                            } else if (result) {
+                                if (data.isRoom) {
+                                    result[0].rooms.forEach(room => {
+                                        if (data.locationName == room.name) {
+                                            data.assignedList.forEach(fileID => {
+                                                room.files.push(fileID)
+                                            })
+                                        }
+                                    })
+                                    locations.updateOne({ "name": `${data.entityName}` }, { $set: { "rooms": result[0].rooms } })
+                                } else {
+                                    result[0].secretaries.forEach(sec => {
+                                        if (data.locationName == sec.name) {
+                                            data.assignedList.forEach(fileID => {
+                                                sec.files.push(fileID)
+                                                console.log('pusheo en secretaries')
+                                            })
+                                        }
+                                    })
+                                    locations.updateOne({ "name": `${data.entityName}` }, { $set: { "secretaries": result[0].secretaries } })
+                                }
+                                files.updateMany({ "fileID": { $in: data.toAssignList } }, { $set: { "isBeingProcessed": false, "assignedLoc": '', "sentDate": '' } }, function (err, result) {
+                                    if (err) {
+                                        cbOK(500)
+                                    } else if (result) {
+                                        locations.find({ "name": `${data.entityName}` }).project({ "_id": 0.0 }).toArray((err, result) => {
+                                            if (err) {
+                                                console.log(err)
+                                                cbOK(500)
+                                            } else if (result) {
+                                                if (data.isRoom) {
+                                                    result[0].rooms.forEach(room => {
+                                                        if (data.locationName == room.name) {
+                                                            room.files.map((e, index) => {
+                                                                if (data.toAssignList.includes(e)) {
+                                                                    room.files.splice(index, 1)
+                                                                }
+                                                            })
+
+                                                        }
+                                                    })
+                                                    locations.updateOne({ "name": `${data.entityName}` }, { $set: { "rooms": result[0].rooms } })
+                                                    cbOK(200)
+                                                } else {
+                                                    result[0].secretaries.forEach(sec => {
+                                                        if (data.locationName == sec.name) {
+                                                            sec.files.map((e, index) => {
+                                                                if (data.toAssignList.includes(e)) {
+                                                                    sec.files.splice(index, 1)
+                                                                }
+                                                            })
+
+                                                        }
+                                                    })
+                                                    locations.updateOne({ "name": `${data.entityName}` }, { $set: { "secretaries": result[0].secretaries } })
+                                                    cbOK(200)
+                                                }
+                                            }
+                                        })
+                                    }
+                                })
+
+                            }
+                        })
+
+
+                    }
+                })
+            } catch (error) {
+                console.log(error)
+            }
+
+
+        }
+
+    }
+        //client.close();
+    )
+}
+
+function getTasks(fileID, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var files = db.collection("files");
+            files.find({ "fileID": fileID }).project({ "_id": 0.0, "fileID": 1.0, "tasks": 1.0 }).toArray((err, data) => {
+                if (err) {
+                    console.log(err)
+                    cbOK(500)
+                } else if (data) {
+                    cbOK(data[0])
                 }
 
             })

@@ -6,11 +6,11 @@ import DescriptionSharpIcon from '@material-ui/icons/DescriptionSharp';
 import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import TransferList from './TransferList'
+import TransferListforLocation from './TransferListforLocation'
 import Tooltip from '@material-ui/core/Tooltip';
 import ExtendSessionFn from './ExtendSesion';
+import SummaryLocation from './SummaryLocation'
 //import ControlPanel from './ControlPanel'
-
 
 const MySwal = withReactContent(Swal);
 const Toast = MySwal.mixin({
@@ -48,21 +48,25 @@ export default function SendFileButton(props) {
     const [assignedFiles, setAssignedFiles] = React.useState([]);
 
     useEffect(() => {
-        getAssignedFiles();
+        getAssignedFilesToLocation();
     }, [])
 
     const renderComponent = (SwalBodyContainer, assignedFiles) => {
-        /*ReactDOM.render(<TransferList attorneyData={props.attorneyData} assignedFiles={assignedFiles} />, SwalBodyContainer)*/
+        ReactDOM.render(<TransferListforLocation attorneyData={props.attorneyData} assignedFiles={assignedFiles} />, SwalBodyContainer)
     }
     const assignFiles = async (assignedFiles) => {
-        MySwal.fire({
-            showClass: {
-                popup: 'animate__animated animate__fadeInDown'
+        let toAssignList = [];
+        let assignedList = [];
+        let time = {
+            days: 0,
+            hours: 0,
+            minutes: 0,
+        }
+        MySwal.mixin({
+            onBeforeOpen: async () => {
+                let progressStepBar = document.getElementsByClassName('swal2-progress-steps');
+                progressStepBar[0].childNodes[0].style.background = '#ea5f32';
             },
-            hideClass: {
-                popup: 'animate__animated animate__fadeOutUp'
-            },
-            title: 'Enviar Expediente',
             html: `<div style="display: block;"><img style="padding-right: 5px;" className='userImg' height='40px' src=${''}></img>${''}` + ' ' + `${''}</div>`,
             confirmButtonText: 'ACEPTAR',
             cancelButtonText: 'CANCELAR',
@@ -73,63 +77,131 @@ export default function SendFileButton(props) {
             focusConfirm: true,
             showCloseButton: true,
             allowOutsideClick: false,
-            onOpen: () => {
-                let SwalBodyContainer = Swal.getContent()
-                renderComponent(SwalBodyContainer, assignedFiles);
+            progressSteps: ['1', '2', '3'],
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
             },
-            preConfirm: async () => {
-                let toAssignList = [];
-                let assignedList = [];
-                let lList = document.getElementById('TlistLeft').childNodes[0].childNodes[0].childNodes[2].childNodes;
-                let rList = document.getElementById('TlistRight').childNodes[0].childNodes[0].childNodes[2].childNodes;
-                lList.forEach(node => {
-                    if (node.textContent != '') {
-                        let fileID = node.textContent.replace('Expediente N° ', '');
-                        toAssignList.push(fileID);
-                    }
-                })
-                rList.forEach(node => {
-                    if (node.textContent != '') {
-                        let fileID = node.textContent.replace('Expediente N° ', '');
-                        assignedList.push(fileID);
-                    }
-                })
-
-                let dataSend = {
-                    attorneyID: props.attorneyData._id,
-                    toAssignList: toAssignList,
-                    assignedList: assignedList,
-                }
-
-                let response = await fetch('assignFiles', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
-                    },
-                    body: JSON.stringify(dataSend)
-                })
-                if (response.status === 200) {
-                    handleUpdate();
-                    props.handleControlPanelUpdate();
-                } else if (response.status === 500) {
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Error de servidor'
+        }).queue([
+            {
+                //step 1 select file
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown'
+                },
+                title: 'Enviar Expediente',
+                onOpen: () => {
+                    let SwalBodyContainer = Swal.getContent()
+                    renderComponent(SwalBodyContainer, assignedFiles);
+                },
+                preConfirm: async () => {
+                    let lList = document.getElementById('TlistLeft').childNodes[0].childNodes[0].childNodes[2].childNodes;
+                    let rList = document.getElementById('TlistRight').childNodes[0].childNodes[0].childNodes[2].childNodes;
+                    lList.forEach(node => {
+                        if (node.textContent != '') {
+                            let fileID = node.textContent.replace('Expediente N° ', '');
+                            toAssignList.push(fileID);
+                        }
                     })
-                    handleUpdate();
-                } else if (response.status === 403) {
-                    await ExtendSessionFn()
+                    rList.forEach(node => {
+                        if (node.textContent != '') {
+                            let fileID = node.textContent.replace('Expediente N° ', '');
+                            assignedList.push(fileID);
+                        }
+                    })
                 }
-
-
-                //request? something ?
             },
-        })
+            {
+                //step 2 select time
+                onBeforeOpen: () => {
+                    let progressStepBar = document.getElementsByClassName('swal2-progress-steps');
+                    progressStepBar[0].childNodes[0].style.background = '#ea5f32';
+                    progressStepBar[0].childNodes[1].style.background = '#ea5f32';
+                    progressStepBar[0].childNodes[2].style.background = '#ea5f32';
+                },
+                icon: 'question',
+                title: 'Seleccionar Recordatorio',
+                onOpen: () => {
+                    //let SwalBodyContainer = Swal.getContent()
+                    //ReactDOM.render(<SelectTask setTaskListFn={setTaskListFn} />, SwalBodyContainer)
+                },
+                input: 'range',
+                //inputLabel: 'Minutos',
+                inputAttributes: {
+                    title: 'Minutos',
+                    min: 0,
+                    max: 60,
+                    step: 1
+                },
+                inputValue: 0,
+                preConfirm: async () => {
+                    let inputs = Swal.getInput()
+                    time.minutes = parseInt(inputs.value)
+                    //console.log(time.minutes)
+                },
+            },
+            {
+                //step 3 summary ?
+                onBeforeOpen: () => {
+                    let progressStepBar = document.getElementsByClassName('swal2-progress-steps');
+                    progressStepBar[0].childNodes.forEach(cn => {
+                        cn.style.background = '#ea5f32';
+                    })
+
+                },
+                title: 'Sumario',
+                onOpen: () => {
+                    let dataSend = {
+                        isRoom: props.isRoom,
+                        entityName: props.entityName,
+                        locationName: props.locationName,
+                        toAssignList: toAssignList,
+                        assignedList: assignedList,
+                        time: time
+                    }
+                    let SwalBodyContainer = Swal.getContent()
+                    ReactDOM.render(<SummaryLocation dataToSend={dataSend} />, SwalBodyContainer)
+                },
+                preConfirm: async () => {
+                    let dataSend = {
+                        isRoom: props.isRoom,
+                        entityName: props.entityName,
+                        locationName: props.locationName,
+                        toAssignList: toAssignList,
+                        assignedList: assignedList,
+                        time: time
+                    }
+                    console.log(dataSend);
+                    //REQUEST
+                    let response = await fetch('/assignFilesToLocation', {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + localStorage.getItem('jwtToken')
+                        },
+                        body: JSON.stringify(dataSend)
+                    })
+                    if (response.status === 200) {
+                        handleUpdate();
+                        //props.handleControlPanelUpdate();
+                    } else if (response.status === 500) {
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Error de servidor'
+                        })
+                        handleUpdate();
+                    } else if (response.status === 403) {
+                        await ExtendSessionFn()
+                    }
+                    //REQUEST
+                },
+            }
+
+        ])
+
+
     }
-    async function getAssignedFiles() {
-        let response = await fetch('/getMyFilesToAssign', {
+    async function getAssignedFilesToLocation() {
+        let response = await fetch(`/getAssignedFilesToLocation?locationName=${props.locationName}&entityName=${props.entityName}&isRoom=${props.isRoom}`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -139,7 +211,7 @@ export default function SendFileButton(props) {
         })
         if (response.status === 200) {
             let res = await response.json();
-            //setCount(res.length);
+            setCount(res.length);
             setAssignedFiles(res);
         } else if (response.status === 404) {
             setCount(0);
@@ -154,11 +226,11 @@ export default function SendFileButton(props) {
         }
     }
     const handleUpdate = async () => {
-        await getAssignedFiles();
+        await getAssignedFilesToLocation();
     }
 
     return (
-        <Tooltip style={{ zIndex: 2 }} title="Asignar Expediente" arrow>
+        <Tooltip style={{ zIndex: 2 }} title="Enviar Expediente" arrow>
             <div className={classes.root} onClick={() => { assignFiles(assignedFiles) }} style={{ cursor: 'pointer' }} >
                 <div>
                     <Badge color='error' badgeContent={count} max={999} anchorOrigin={{
@@ -173,3 +245,16 @@ export default function SendFileButton(props) {
 
     );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

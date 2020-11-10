@@ -51,7 +51,7 @@ export default function InnerLocationCard(props) {
                     cleanLocationsDiv().then(cleaned => {
                         if (cleaned) {
                             let locationsDiv = document.getElementById('locationsDiv');
-                            ReactDOM.render(<InnerCard rooms={props.array.rooms} userData={props.userData} />, locationsDiv)
+                            ReactDOM.render(<InnerCard rooms={props.array.rooms} userData={props.userData} entityName={props.entityName} />, locationsDiv)
 
                         }
                     })
@@ -83,7 +83,7 @@ export default function InnerLocationCard(props) {
                     cleanLocationsDiv().then(cleaned => {
                         if (cleaned) {
                             let locationsDiv = document.getElementById('locationsDiv');
-                            ReactDOM.render(<InnerCard secretaries={props.array.secretaries} userData={props.userData} />, locationsDiv)
+                            ReactDOM.render(<InnerCard secretaries={props.array.secretaries} userData={props.userData} entityName={props.entityName} />, locationsDiv)
                         }
                     })
                 }}>

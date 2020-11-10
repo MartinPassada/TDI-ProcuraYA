@@ -59,7 +59,7 @@ export default class FileUploadForm extends Component {
         }).then(response => {
             if (response.status === 200) {
                 response.json().then(json => {
-                    console.log(json)
+                    //console.log(json)
                     if (json.length > 0) {
                         this.state.locationsComboBoxOptions = json
                         this.setState({ locationsComboBoxOptions: this.state.locationsComboBoxOptions })
@@ -89,7 +89,8 @@ export default class FileUploadForm extends Component {
         if (emptyInputs) { return true } else { return false }
     }
     injectedCode(inputsCollection) {
-        const avoidHackPattern = /([a-zA-Z0-9_.\-\/@*]{3,60})$/gm;
+        //const avoidHackPattern = /^\s*([\s\w\d áéíóú a-zA-Z0-9_+/.:'!’"#ñ,()¿?*=-]{1,8})\s*$/g;
+        const avoidHackPattern = /([a-zA-Z0-9_.\-\/<>{}]{3,60})$/gm;
         var injectedInputs = false;
         inputsCollection.forEach(input => {
             if (input.value.search(avoidHackPattern)) {

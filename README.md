@@ -13,9 +13,16 @@
  Gmail
  Mohmal
 
+Update #22
+
+1. Attorneys can now send files to diferrent locations
+2. A form will allow to attorneys to set up a time lapse to be warned about their own files
+3. Miscellaneous fixes
+4. BD fixes
+
 Update #21
 
-1. Combo box for selecting location of a file in fileUploadForm
+1. Combo box now allow selecting location of a file in fileUploadForm
 2. Locations Panel added
 3. Random Fixes (search engine, user pictures, etc)
 

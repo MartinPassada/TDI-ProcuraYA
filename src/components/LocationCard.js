@@ -46,7 +46,7 @@ export default function LocationCard(props) {
     }
     return (
         <div onClick={async () => {
-            let query = props.locationsData.name
+            var query = props.locationsData.name
             await fetch(`/getLocation?name=${query}`, {
                 method: 'GET',
                 headers: {
@@ -56,12 +56,12 @@ export default function LocationCard(props) {
                 }
             }).then(async res => {
                 let data = await res.json().then(jsonData => {
-                    console.log(jsonData);
+                    //console.log(jsonData);
                     cleanLocationsDiv().then(cleaned => {
                         if (cleaned) {
                             let locationsDiv = document.getElementById('locationsDiv');
                             Object.keys(jsonData).forEach(property => {
-                                ReactDOM.render(<InnerLocationCard array={jsonData} userData={props.userData} />, locationsDiv)
+                                ReactDOM.render(<InnerLocationCard entityName={query} array={jsonData} userData={props.userData} />, locationsDiv)
                             })
 
 

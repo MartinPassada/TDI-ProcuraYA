@@ -72,7 +72,7 @@ export default function InnerCard(props) {
                                             props.userData.type ? ('')
                                                 : (
                                                     <>
-                                                        <SendFileButton userData={props.userData} />
+                                                        <SendFileButton locationName={e.name} userData={props.userData} entityName={props.entityName} isRoom={true} />
                                                     </>
                                                 )
                                         }
@@ -112,7 +112,7 @@ export default function InnerCard(props) {
                                             props.userData.type ? ('')
                                                 : (
                                                     <>
-                                                        <SendFileButton userData={props.userData} />
+                                                        <SendFileButton locationName={e.name} userData={props.userData} entityName={props.entityName} isRoom={false} />
                                                     </>
                                                 )
                                         }
