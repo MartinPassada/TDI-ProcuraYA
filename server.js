@@ -50,6 +50,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 //TOKENS
 //******************************************************************************** */
 let refreshTokens = [];
+let triggerAlarmFiles = [];
 function authenticateToken(req, res, next) {
     //console.log(req)
     const authHeader = req.headers.authorization
@@ -69,7 +70,6 @@ function authenticateToken(req, res, next) {
 function generateAccessToken(user) {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '9999999999s' })
 }
-
 function checkDeadlines() {
     setInterval(() => {
         mongoDatabase.checkDeadlines(cbOK => {
@@ -83,6 +83,15 @@ function checkDeadlines() {
     }, 300000);
 
 }
+function letMeKnowInXminutes(fileID, time, email, entity, location) {
+    let minutes = (time * 1000) * 60
+    setTimeout(() => {
+        if (triggerAlarmFiles.includes(fileID)) {
+            mailer.individualNotification(fileID, email, entity, location);
+        }
+    }, minutes);
+}
+
 
 
 //checkDeadlines();
@@ -710,8 +719,8 @@ app.post('/searchFriend', authenticateToken, function (req, res) {
                         })
                         console.log('esta buscando ' + req.user.name + '\n')
                         let indexToDelete = false;
-                        console.log('antes de filtrar \n')
-                        console.log(searchResult)
+                        //console.log('antes de filtrar \n')
+                        //console.log(searchResult)
                         searchResult.map((e, index) => {
                             if (e._id == req.user.mongoID) {
                                 indexToDelete = index
@@ -749,8 +758,8 @@ app.post('/searchFriend', authenticateToken, function (req, res) {
                                 indexToDelete = index
                             }
                         })
-                        console.log('antes de filtrar \n')
-                        console.log(searchResult)
+                        //console.log('antes de filtrar \n')
+                        //console.log(searchResult)
                         if (indexToDelete !== false) {
                             searchResult.splice(indexToDelete, 1);
                             res.send(searchResult)
@@ -811,8 +820,6 @@ app.get('/getLocation', authenticateToken, function (req, res) {
         }
     })
 })
-
-
 app.get('/getMyFilesToAssign', authenticateToken, function (req, res) {
     let mongoID = req.user.mongoID;
     mongoDatabase.getMyFilesToAssign(mongoID, cbOK => {
@@ -841,7 +848,7 @@ app.get('/getAssignedFilesToLocation', authenticateToken, function (req, res) {
             isRoom: true
         }
     }
-    console.log(data)
+    //console.log(data)
     mongoDatabase.getAssignedFilesToLocation(data, cbOK => {
         if (`${cbOK}` == 500) {
             res.sendStatus(500);
@@ -863,11 +870,29 @@ app.get('/getAssignedFilesToLocation', authenticateToken, function (req, res) {
 
 app.post('/assignFilesToLocation', authenticateToken, function (req, res) {
     let data = req.body;
+    console.log('data in server - assignFilesToLocation')
     console.log(data)
+
     mongoDatabase.assignFilesToLocation(data, cbOK => {
         if (`${cbOK}` == 500) {
             res.sendStatus(500);
         } else if (`${cbOK}` == 200) {
+
+            data.assignedList.forEach(fileID => {
+                if (!triggerAlarmFiles.includes(fileID)) {
+                    if (parseInt(data.time.minutes) !== 0) {
+                        triggerAlarmFiles.push(fileID);
+                        letMeKnowInXminutes(fileID, parseInt(data.time.minutes), req.user.email, data.entityName, data.locationName);
+                    }
+                }
+            })
+            data.toAssignList.forEach(fileID => {
+                if (triggerAlarmFiles.includes(fileID)) {
+                    triggerAlarmFiles = triggerAlarmFiles.filter(fileObj => fileObj.file == fileID)
+                }
+            })
+            //console.log('triggerAlarmFiles');
+            //console.log(triggerAlarmFiles)
             res.sendStatus(200);
         }
     })

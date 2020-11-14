@@ -13,6 +13,10 @@
  Gmail
  Mohmal
 
+Update #23
+
+1. Mail warnings about files sended to place are now working as expected
+
 Update #22
 
 1. Attorneys can now send files to diferrent locations

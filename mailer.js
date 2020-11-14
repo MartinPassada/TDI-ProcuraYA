@@ -1,5 +1,6 @@
 module.exports.sendRandomCodeToEmail = sendRandomCodeToEmail;
 module.exports.pushNotificationDeadlines = pushNotificationDeadlines;
+module.exports.individualNotification = individualNotification;
 const mongoDatabase = require('./mongodb.js');
 const sendmail = require('sendmail')();
 "use strict";
@@ -81,6 +82,25 @@ function pushNotificationDeadlines(deadLinesReport) {
         console.log('no task close to expire')
     }
 
+}
+
+function individualNotification(fileID, email, entity, location) {
+    let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+            user: 'procurayanoresponder@gmail.com',
+            pass: 'jsudvssubnovsybw', //procura2020ya
+        },
+    });
+    transporter.sendMail({
+        from: 'procurayanoresponder@gmail.com',
+        to: `${email}`,
+        subject: "Ya puedes buscar tu expediente",
+        text: `El expediente Nro ${fileID} enviado a ${location} de ${entity}, ya esta listo para ser retirado`,
+        html: "", // html body
+    })
 }
 
 

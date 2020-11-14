@@ -445,7 +445,7 @@ function getFile(mongoID, fileID, cbOK) {
                     });
                 } else if (data) {
                     console.log('no se encontro nada')
-                    console.log(data);
+                    //console.log(data);
                     cbOK(404);
                 }
             })
@@ -1026,7 +1026,7 @@ function searchFriend(searchParameter, cbOK) {
                                     console.log(err);
                                     cbOK(500)
                                 } else if (data.length > 0) {
-                                    console.log(data);
+                                    //console.log(data);
                                     cbOK(data)
                                 } else {
                                     cbOK(404)
@@ -1161,15 +1161,20 @@ function getUserImg(mongoID, cbOK) {
             var ObjectID = require('mongodb').ObjectID;
             var db = mongoClient.db("ProcuraYaDatabase");
             var users = db.collection("users");
-            users.find({ "_id": ObjectID(`${mongoID}`) }).project({ "_id": 0.0, "userImg": 1.0 }).toArray((err, data) => {
-                if (err) {
-                    console.log(err)
-                    cbOK(500)
-                } else if (data) {
-                    cbOK(data[0].userImg)
-                }
+            try {
+                users.find({ "_id": ObjectID(`${mongoID}`) }).project({ "_id": 0.0, "userImg": 1.0 }).toArray((err, data) => {
+                    if (err) {
+                        console.log(err)
+                        cbOK(500)
+                    } else if (data) {
+                        cbOK(data[0].userImg)
+                    }
 
-            })
+                })
+            } catch (error) {
+                console.log(error);
+            }
+
 
         }
     })
@@ -1257,8 +1262,8 @@ function getAssignedFilesToLocation(data, cbOK) {
                                     })
                                 }
                             })
-                            console.log('response array for rooms')
-                            console.log(responseArray)
+                            //console.log('response array for rooms')
+                            //console.log(responseArray)
                             files.find({ $and: [{ "fileID": { $in: responseArray } }, { assignedLoc: { $ne: '' } }] }).project({ "_id": 0.0, "fileID": 1.0, "assignedLoc": 1.0 }).toArray((error, result) => {
                                 if (error) {
                                     console.log(error)
@@ -1274,8 +1279,8 @@ function getAssignedFilesToLocation(data, cbOK) {
                                     })
                                 }
                             })
-                            console.log('response array for secs')
-                            console.log(responseArray)
+                            //console.log('response array for secs')
+                            //console.log(responseArray)
                             files.find({ $and: [{ "fileID": { $in: responseArray } }, { assignedLoc: { $ne: '' } }] }).project({ "_id": 1.0, "fileID": 1.0, "assignedLoc": 1.0 }).toArray((error, result) => {
                                 if (error) {
                                     console.log(error)
@@ -1307,8 +1312,8 @@ function assignFilesToLocation(data, cbOK) {
             //var ObjectID = require('mongodb').ObjectID;
             var files = db.collection("files");
             var locations = db.collection("locations");
-            console.log('data in bd')
-            console.log(data);
+            //console.log('data in bd')
+            //console.log(data);
 
             try {
                 files.updateMany({ "fileID": { $in: data.assignedList } }, { $set: { "isBeingProcessed": true, "assignedLoc": `${data.locationName}`, "sentDate": Date.now() } }, function (err, result) {
@@ -1333,7 +1338,7 @@ function assignFilesToLocation(data, cbOK) {
                                         if (data.locationName == sec.name) {
                                             data.assignedList.forEach(fileID => {
                                                 sec.files.push(fileID)
-                                                console.log('pusheo en secretaries')
+                                                //console.log('pusheo en secretaries')
                                             })
                                         }
                                     })
