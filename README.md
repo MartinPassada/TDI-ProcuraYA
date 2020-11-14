@@ -173,14 +173,14 @@ some pics
 
 **Landing Page**
 
-![Screenshots](/LandingPage.bmp)
+![Screenshots](/Diseño/LandingPage.bmp)
 
 **Login**
 
-![Screenshots](/Login.bmp)
+![Screenshots](/Diseño/Login.bmp)
 
 **Create Account Form**
 
-![Screenshots](/CreateAccountForm.png)
+![Screenshots](/Diseño/CreateAccountForm.png)
 
 
