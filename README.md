@@ -29,7 +29,7 @@ Update #22
 1. Attorneys can now send files to diferrent locations
 2. A form will allow to attorneys to set up a time lapse to be warned about their own files
 3. Miscellaneous fixes
-4. BD fixes
+4. DB fixes
 
 Update #21
 
