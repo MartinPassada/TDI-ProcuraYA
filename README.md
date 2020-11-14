@@ -1,6 +1,3 @@
-![Screenshots](/LandingPage.bmp)
-
-
 **Changelog**
 
 **The project was never intended to work on chromium based browsers, use Firefox instead**
@@ -169,3 +166,20 @@ Update #2
 Update #1
 
 1. Landing Page
+
+
+
+
+**Landing Page**
+
+![Screenshots](/LandingPage.bmp)
+
+**Login**
+
+![Screenshots](/Login.bmp)
+
+**Create Account Form**
+
+![Screenshots](/CreateAccountForm.png)
+
+
