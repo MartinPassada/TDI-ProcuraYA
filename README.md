@@ -1,4 +1,4 @@
-![Screenshots](/logo.png)
+![Screenshots](/LandingPage.bmp)
 
 
 **Changelog**
