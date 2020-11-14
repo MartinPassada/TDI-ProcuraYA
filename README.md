@@ -1,3 +1,6 @@
+![Screenshots](/logo.png)
+
+
 **Changelog**
 
 **The project was never intended to work on chromium based browsers, use Firefox instead**
