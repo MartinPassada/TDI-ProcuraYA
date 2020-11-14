@@ -107,6 +107,14 @@ export default function SendFileButton(props) {
                             assignedList.push(fileID);
                         }
                     })
+                    if (assignedList.length == 0 && toAssignList.length == 0) {
+                        MySwal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Debes seleccionar al menos un expediente'
+                        })
+
+                    }
                 }
             },
             {

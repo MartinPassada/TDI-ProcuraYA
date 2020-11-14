@@ -37,11 +37,12 @@ function createData(name, calories, fat, carbs, protein) {
     return { name, calories, fat, carbs, protein };
 }
 
-export default function DenseTable(props) {
+export default function AttorneyTasksTable(props) {
     const classes = useStyles();
 
-    const completeTask = (taskName, expirationdate) => {
+    const completeTask = (taskName, expirationdate, taskid) => {
         let data = {
+            taskid: taskid,
             taskName: taskName,
             expirationDate: expirationdate,
             fileID: props.fileID
@@ -116,31 +117,42 @@ export default function DenseTable(props) {
                             </TableHead>
                             <TableBody>
                                 {props.td.map((row) => (
-                                    row.state !== 'Realizada' ? (
+                                    row.isBloqued ? (
                                         <TableRow key={row.taskName}>
                                             <TableCell component="th" scope="row">
                                                 {row.taskName}
                                             </TableCell>
                                             <TableCell align="right">{row.expirationDate}</TableCell>
-                                            <TableCell align="right">{row.state}</TableCell>
-                                            <TableCell align="right">
-                                                <Tooltip title="Completar tarea" arrow>
-                                                    <IconButton onClick={() => { completeTask(row.taskName, row.expirationDate) }}>
-                                                        <CheckIcon style={{ fontSize: 25, zIndex: 2, color: 'green' }} />
-                                                    </IconButton>
-                                                </Tooltip>
-                                            </TableCell>
+                                            <TableCell align="right">{'No cumplida'}</TableCell>
+                                            <TableCell align="right">{''}</TableCell>
                                         </TableRow>
                                     ) : (
-                                            <TableRow key={row.taskName}>
-                                                <TableCell component="th" scope="row">
-                                                    {row.taskName}
-                                                </TableCell>
-                                                <TableCell align="right">{row.expirationDate}</TableCell>
-                                                <TableCell align="right">{row.state}</TableCell>
-                                                <TableCell align="right">{''}</TableCell>
+                                            row.isDone ? (
+                                                <TableRow key={row.taskName}>
+                                                    <TableCell component="th" scope="row">
+                                                        {row.taskName}
+                                                    </TableCell>
+                                                    <TableCell align="right">{row.expirationDate}</TableCell>
+                                                    <TableCell align="right">{"Completa"}</TableCell>
+                                                    <TableCell align="right">{''}</TableCell>
+                                                </TableRow>
+                                            ) : (
+                                                    <TableRow key={row.taskName}>
+                                                        <TableCell component="th" scope="row">
+                                                            {row.taskName}
+                                                        </TableCell>
+                                                        <TableCell align="right">{row.expirationDate}</TableCell>
+                                                        <TableCell align="right">{"Lista para completar"}</TableCell>
+                                                        <TableCell align="right">
+                                                            <Tooltip title="Completar tarea" arrow>
+                                                                <IconButton onClick={() => { completeTask(row.taskName, row.expirationDate, row.id) }}>
+                                                                    <CheckIcon style={{ fontSize: 25, zIndex: 2, color: 'green' }} />
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )
 
-                                            </TableRow>
                                         )
                                 ))}
                             </TableBody>

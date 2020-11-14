@@ -90,7 +90,7 @@ export default class FileUploadForm extends Component {
     }
     injectedCode(inputsCollection) {
         //const avoidHackPattern = /^\s*([\s\w\d áéíóú a-zA-Z0-9_+/.:'!’"#ñ,()¿?*=-]{1,8})\s*$/g;
-        const avoidHackPattern = /([a-zA-Z0-9_.\-\/<>{}]{3,60})$/gm;
+        const avoidHackPattern = /[^ ' " / & #,]/g;
         var injectedInputs = false;
         inputsCollection.forEach(input => {
             if (input.value.search(avoidHackPattern)) {

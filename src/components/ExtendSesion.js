@@ -56,12 +56,16 @@ export default async function ExtendSessionFn(props) {
                     window.location.replace('/Home');
                 } else if (res.status === 403) {
                     window.location.replace('/Home');
-                } else {
-                    let data = await res.json();
-                    const token = data.accessToken;
-                    localStorage.setItem('jwtToken', token);
-                    window.location.replace('/Home');
-                    return true
+                } else if (res.status === 200) {
+                    console.log('data from /token')
+                    res.json().then(json => {
+                        console.log(json)
+                        const newAccessToken = json.accessToken;
+                        localStorage.setItem('jwtToken', newAccessToken);
+                        window.location.replace('/Home');
+                        return true
+                    })
+
                 }
             })
         } else if (result.isDismissed) {

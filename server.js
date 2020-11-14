@@ -49,10 +49,11 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 //TOKENS
 //******************************************************************************** */
-let refreshTokens = [];
-let triggerAlarmFiles = [];
+var refreshTokens = [];
+var triggerAlarmFiles = [];
 function authenticateToken(req, res, next) {
     //console.log(req)
+    //console.log('/authenticateToken')
     const authHeader = req.headers.authorization
     const token = authHeader && authHeader.split(' ')[1]
     //console.log(token);
@@ -68,7 +69,7 @@ function authenticateToken(req, res, next) {
     })
 }
 function generateAccessToken(user) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '9999999999s' })
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '3600s' })
 }
 function checkDeadlines() {
     setInterval(() => {
@@ -80,7 +81,7 @@ function checkDeadlines() {
             console.log('CLOSE TO EXPIRE TASKS')
             console.log(notificationReport);*/
         });
-    }, 300000);
+    }, 1800000);
 
 }
 function letMeKnowInXminutes(fileID, time, email, entity, location) {
@@ -91,13 +92,23 @@ function letMeKnowInXminutes(fileID, time, email, entity, location) {
         }
     }, minutes);
 }
+function unblockTask(fileID, taskID) {
+    mongoDatabase.unblockTask(fileID, taskID, cbOK => {
+        if (`${cbOK}` == 500) {
+            console.log('unblockTasks 500')
+        } else if (`${cbOK}` == 200) {
+            console.log('tarea desbloqueada')
+        }
+    })
+}
 
 
 
-//checkDeadlines();
+checkDeadlines();
 
 
 app.post('/token', (req, res) => {
+    //console.log('/token')
     const refreshToken = req.body.token
     //console.log(refreshToken);
     if (refreshToken == null) return res.sendStatus(401)
@@ -673,7 +684,7 @@ app.post('/addTaskToFile', function (req, res) {
         } else if (`${cbOK}` == 500) {
             res.sendStatus(500);
         } else if (`${cbOK}` !== 500 && `${cbOK}` !== 404) {
-            res.send(cbOK);
+            res.sendStatus(200);
         }
     })
 })
@@ -893,7 +904,20 @@ app.post('/assignFilesToLocation', authenticateToken, function (req, res) {
             })
             //console.log('triggerAlarmFiles');
             //console.log(triggerAlarmFiles)
-            res.sendStatus(200);
+            mongoDatabase.getTaskToBeCompleted(data.assignedList, cbOK => {
+                if (`${cbOK}` == 500) {
+                    res.sendStatus(500);
+                } else if (`${cbOK}` !== 500) {
+                    let tasksToUnblock = cbOK
+                    console.log('server 912 taskstoUnblock')
+                    console.log(tasksToUnblock);
+                    tasksToUnblock.forEach(t => {
+                        unblockTask(t.fileID, t.tasksToUnblock);
+                    })
+                    res.sendStatus(200);
+                }
+            })
+
         }
     })
 

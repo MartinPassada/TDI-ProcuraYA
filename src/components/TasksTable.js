@@ -18,7 +18,7 @@ function createData(name, calories, fat, carbs, protein) {
     return { name, calories, fat, carbs, protein };
 }
 
-export default function DenseTable(props) {
+export default function TasksTable(props) {
     const classes = useStyles();
 
     return (
@@ -38,13 +38,13 @@ export default function DenseTable(props) {
                             </TableHead>
                             <TableBody>
                                 {props.td.map((row) => (
-                                    row.state === 'No realizada' ? (
+                                    !row.isDone ? (
                                         <TableRow key={row.taskName}>
                                             <TableCell component="th" scope="row">
                                                 {row.taskName}
                                             </TableCell>
                                             <TableCell align="right">{row.expirationDate}</TableCell>
-                                            <TableCell align="right">{row.state}</TableCell>
+                                            <TableCell align="right">{'Sin cumplir'}</TableCell>
                                             <TableCell align="right">{''}</TableCell>
                                             <TableCell align="right">{''}</TableCell>
                                         </TableRow>
@@ -54,7 +54,7 @@ export default function DenseTable(props) {
                                                     {row.taskName}
                                                 </TableCell>
                                                 <TableCell align="right">{row.expirationDate}</TableCell>
-                                                <TableCell align="right">{row.state}</TableCell>
+                                                <TableCell align="right">{"Cumplida"}</TableCell>
                                                 <TableCell align="right">{row.completedBy}</TableCell>
                                                 <TableCell align="right">{(new Date(row.completedDate)).toLocaleDateString()}</TableCell>
                                             </TableRow>

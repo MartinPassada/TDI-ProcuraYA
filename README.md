@@ -13,9 +13,16 @@
  Gmail
  Mohmal
 
+Update #24
+
+1. Attorneys tasks to be completed now will be automagically blocked untill they have sent file to corresponding location
+2. When this last chore it's done, attorneys will be able to report that task as completed
+3. Random fixes
+
 Update #23
 
-1. Mail warnings about files sended to place are now working as expected
+1. Mail warnings about files sended to location are now working as expected
+2. This last point is an individual warning to each file sended when user sends file/s, this warning has nothing to do with the other type of warning (global warning about tasks expiration date and whatever)
 
 Update #22
 

@@ -37,6 +37,8 @@ module.exports.getMyFilesToAssign = getMyFilesToAssign
 module.exports.getAssignedFilesToLocation = getAssignedFilesToLocation
 module.exports.assignFilesToLocation = assignFilesToLocation
 module.exports.getTasks = getTasks
+module.exports.getTaskToBeCompleted = getTaskToBeCompleted
+module.exports.unblockTask = unblockTask
 /******************************************************************** */
 const fs = require("fs");
 const path = require('path');
@@ -942,7 +944,9 @@ function addTaskToFile(data, cbOK) {
             var db = mongoClient.db("ProcuraYaDatabase");
             var files = db.collection("files");
             data.tasks.forEach(t => {
-                t.state = 'No realizada';
+                t.id = Math.floor(Math.random() * 900000000000000) + 1
+                t.isDone = false;
+                t.isBloqued = true;
                 t.expired = false;
             })
             files.updateMany({ "fileID": { $in: data.files } }, { $push: { "tasks": { $each: data.tasks } } }, function (err, result) {
@@ -977,8 +981,8 @@ function completeTask(name, taskData, cbOK) {
                     //console.log(data[0]);
                     //console.log(data[0].tasks)
                     data[0].tasks.forEach(e => {
-                        if (e.taskName === taskData.taskName && e.expirationDate === taskData.expirationDate) {
-                            e.state = 'Realizada';
+                        if (e.id == taskData.taskid) {
+                            e.isDone = true;
                             e.completedBy = name;
                             e.completedDate = Date.now();
                         }
@@ -1423,6 +1427,79 @@ function getTasks(fileID, cbOK) {
         }
     })
 }
+function getTaskToBeCompleted(arr, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var files = db.collection("files");
+            files.find({ "fileID": { $in: arr } }).project({ "_id": 0.0, "fileID": 1.0, "tasks": 1.0 }).toArray((err, data) => {
+                if (err) {
+                    console.log(err)
+                    cbOK(500)
+                } else if (data) {
+                    //console.log(data)
+
+                    let fileAndTask = []
+
+                    data.forEach(file => {
+
+                        let tasksArr = [];
+
+                        file.tasks.forEach(t => {
+                            t.expirationDate = new Date(t.expirationDate).getTime()
+                            if (!t.isDone) {
+                                tasksArr.push(t);
+                            }
+                        })
+                        tasksArr.sort(function (a, b) {
+                            return a.expirationDate - b.expirationDate
+                        })
+                        //console.log(tasksArr)
+                        fileAndTask.push({
+                            fileID: file.fileID,
+                            tasksToUnblock: tasksArr[0].id,
+                        })
+                    })
+                    //console.log(fileAndTask);
+                    cbOK(fileAndTask)
+                }
+
+            })
+
+        }
+    })
+}
+function unblockTask(fileID, taskID, cbOK) {
+    mongoClient.connect(err => {
+        if (err) {
+            cbError('No se pudo conectar a la DB ' + err);
+        } else {
+            var db = mongoClient.db("ProcuraYaDatabase");
+            var files = db.collection("files");
+            files.find({ "fileID": fileID }).project({ "_id": 0.0, "tasks": 1.0 }).toArray((err, data) => {
+                if (err) {
+                    console.log(err)
+                    cbOK(500)
+                } else if (data) {
+                    let Newtasks = []
+                    data[0].tasks.forEach(t => {
+                        if (t.id == taskID) {
+                            t.isBloqued = false;
+                        }
+                        Newtasks.push(t)
+                    })
+                    files.updateOne({ "fileID": fileID }, { $set: { "tasks": Newtasks } })
+                    cbOK(200)
+                }
+
+            })
+
+        }
+    })
+}
+
 
 
 
