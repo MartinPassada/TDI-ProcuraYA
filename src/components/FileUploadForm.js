@@ -248,12 +248,12 @@ export default class FileUploadForm extends Component {
 
                                 <label class='FileHeaderLabels'>
                                     Dependencia:
-                                    <input maxLength='15' type="text" placeholder="Dependencia" class='FileHeaderInputs' id='locationRoom'></input>
+                                    <input maxLength='25' type="text" placeholder="Dependencia" class='FileHeaderInputs' id='locationRoom'></input>
                                 </label>
 
                                 <label class='FileHeaderLabels'>
                                     Situacion Actual:
-                                    <input maxLength='20' type="text" placeholder="Situacion Actual" class='FileHeaderInputs' id='fileState'></input>
+                                    <input maxLength='25' type="text" placeholder="Situacion Actual" class='FileHeaderInputs' id='fileState'></input>
                                 </label>
 
                                 <label class='FileHeaderLabels'>
@@ -263,7 +263,7 @@ export default class FileUploadForm extends Component {
 
                                 <label class='FileHeaderLabels'>
                                     Año:
-                                    <input maxLength='60' type="text" placeholder="Año" class='FileHeaderInputs' id='fileYear'></input>
+                                    <input maxLength='4' type="text" placeholder="Año" class='FileHeaderInputs' id='fileYear'></input>
                                 </label>
 
                             </Card.Body>
