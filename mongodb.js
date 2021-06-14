@@ -50,7 +50,7 @@ var mongoClient = '';
 if (usingOnlineCluster) {
     //Online Mongo BD Atlas
     mongodb = require("mongodb").MongoClient;
-    mongoURL = "mongodb+srv://Tincho:76UdKBJtXvX4JkGU@procurayadatabase-ghqe3.mongodb.net/ProcuraYaDatabase?retryWrites=true&w=majority";
+    mongoURL = "";
     mongoClient = new mongodb(mongoURL, { useNewUrlParser: true }, { useUnifiedTopology: true });
 } else {
     // New Local Mongo DB config
