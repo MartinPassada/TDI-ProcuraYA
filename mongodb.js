@@ -40,6 +40,7 @@ module.exports.getTasks = getTasks
 module.exports.getTaskToBeCompleted = getTaskToBeCompleted
 module.exports.unblockTask = unblockTask
 /******************************************************************** */
+dotenv.config();
 const fs = require("fs");
 const path = require('path');
 var usingOnlineCluster = true;
@@ -50,7 +51,7 @@ var mongoClient = '';
 if (usingOnlineCluster) {
     //Online Mongo BD Atlas
     mongodb = require("mongodb").MongoClient;
-    mongoURL = "mongodb+srv://Tincho:76UdKBJtXvX4JkGU@procurayadatabase-ghqe3.mongodb.net/ProcuraYaDatabase?retryWrites=true&w=majority";
+    mongoURL = process.env.DBURL;
     mongoClient = new mongodb(mongoURL, { useNewUrlParser: true }, { useUnifiedTopology: true });
 } else {
     // New Local Mongo DB config
