@@ -40,6 +40,7 @@ module.exports.getTasks = getTasks
 module.exports.getTaskToBeCompleted = getTaskToBeCompleted
 module.exports.unblockTask = unblockTask
 /******************************************************************** */
+const dotenv = require("dotenv");
 dotenv.config();
 const fs = require("fs");
 const path = require('path');
