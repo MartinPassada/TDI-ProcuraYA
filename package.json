@@ -49,7 +49,7 @@
     "react-transition-group": "^1.2.1",
     "redis": "^3.0.2",
     "sendmail": "^1.6.1",
-    "sharp": "^0.25.4",
+    "sharp": "^0.30.5",
     "suneditor-react": "^2.12.2",
     "svg-captcha": "^1.4.0",
     "sweetalert2": "^9.15.1",
