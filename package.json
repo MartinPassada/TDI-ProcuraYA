@@ -30,7 +30,7 @@
     "flexbox-react": "^4.4.0",
     "handlebars": "^4.7.6",
     "jquery": "^3.5.1",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "jss-plugin-vendor-prefixer": "^10.4.0",
     "lottie-web": "^5.7.0",
     "mdbreact": "^4.27.0",
